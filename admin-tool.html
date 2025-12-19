@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Management Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 25px;
+            color: #856404;
+        }
+
+        .warning strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-section h2 {
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .input-group small {
+            display: block;
+            margin-top: 5px;
+            color: #666;
+            font-size: 12px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s, opacity 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            margin-top: 10px;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result.success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+
+        .result.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+
+        .result.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 2px solid #bee5eb;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .divider {
+            height: 1px;
+            background: #e0e0e0;
+            margin: 30px 0;
+        }
+
+        .quick-fill {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .quick-fill p {
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .quick-fill button {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .quick-fill button:hover {
+            background: #5a6268;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🔐 Admin Management Tool</h1>
+        <p class="subtitle">Promote or demote users to admin</p>
+
+        <div class="warning">
+            <strong>⚠️ Security Notice</strong>
+            This tool requires a secret key. Keep it safe and don't share it!
+        </div>
+
+        <div class="quick-fill">
+            <p><strong>Quick Fill:</strong></p>
+            <button onclick="fillMyEmail()">Use My Email (soumil.lathey@gmail.com)</button>
+            <button onclick="fillSecret()">Fill Secret Key</button>
+        </div>
+
+        <!-- Promote to Admin -->
+        <div class="form-section">
+            <h2>➕ Promote User to Admin</h2>
+
+            <div class="input-group">
+                <label>User Email</label>
+                <input type="email" id="promoteEmail" placeholder="user@example.com">
+                <small>Enter the email of the user you want to make admin</small>
+            </div>
+
+            <div class="input-group">
+                <label>Secret Key</label>
+                <input type="password" id="promoteSecret" placeholder="Your admin secret key">
+                <small>Default: lwt-admin-secret-2024-change-me</small>
+            </div>
+
+            <button class="btn" onclick="promoteUser()">
+                <span id="promoteBtn">Make Admin</span>
+            </button>
+
+            <div id="promoteResult" class="result"></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Demote from Admin -->
+        <div class="form-section">
+            <h2>➖ Remove Admin Access</h2>
+
+            <div class="input-group">
+                <label>User Email</label>
+                <input type="email" id="demoteEmail" placeholder="user@example.com">
+                <small>Enter the email of the admin you want to demote</small>
+            </div>
+
+            <div class="input-group">
+                <label>Secret Key</label>
+                <input type="password" id="demoteSecret" placeholder="Your admin secret key">
+                <small>Default: lwt-admin-secret-2024-change-me</small>
+            </div>
+
+            <button class="btn btn-secondary" onclick="demoteUser()">
+                <span id="demoteBtn">Remove Admin</span>
+            </button>
+
+            <div id="demoteResult" class="result"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://lwt-backend.onrender.com';
+        const DEFAULT_SECRET = 'lwt-admin-secret-2024-change-me';
+
+        function fillMyEmail() {
+            document.getElementById('promoteEmail').value = 'soumil.lathey@gmail.com';
+        }
+
+        function fillSecret() {
+            document.getElementById('promoteSecret').value = DEFAULT_SECRET;
+            document.getElementById('demoteSecret').value = DEFAULT_SECRET;
+        }
+
+        async function promoteUser() {
+            const email = document.getElementById('promoteEmail').value;
+            const secret = document.getElementById('promoteSecret').value;
+            const resultDiv = document.getElementById('promoteResult');
+            const btnText = document.getElementById('promoteBtn');
+
+            if (!email || !secret) {
+                showResult(resultDiv, 'error', 'Please fill in both email and secret key');
+                return;
+            }
+
+            btnText.innerHTML = '<span class="loading"></span>Promoting...';
+            resultDiv.className = 'result';
+            resultDiv.style.display = 'none';
+
+            try {
+                const response = await fetch(`${API_URL}/api/admin/promote`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, secret })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showResult(resultDiv, 'success', `
+                        <strong>✅ Success!</strong><br>
+                        ${data.message}<br><br>
+                        <strong>User Details:</strong><br>
+                        Name: ${data.user.name}<br>
+                        Email: ${data.user.email}<br>
+                        Admin: ${data.user.isAdmin ? 'YES ✅' : 'NO'}<br><br>
+                        <strong>Next Steps:</strong><br>
+                        1. User must logout from the website<br>
+                        2. Login again to see admin features<br>
+                        3. Admin Panel will appear in the menu
+                    `);
+                } else {
+                    showResult(resultDiv, 'error', `
+                        <strong>❌ Error</strong><br>
+                        ${data.error}<br><br>
+                        ${data.error.includes('Invalid secret') ?
+                            '<strong>Tip:</strong> Make sure you\'re using the correct secret key' :
+                            data.error.includes('not found') ?
+                                '<strong>Tip:</strong> User must sign up first at your website' :
+                                ''}
+                    `);
+                }
+            } catch (error) {
+                showResult(resultDiv, 'error', `
+                    <strong>❌ Connection Error</strong><br>
+                    ${error.message}<br><br>
+                    <strong>Possible reasons:</strong><br>
+                    • Backend is sleeping (wait 30 seconds and try again)<br>
+                    • No internet connection<br>
+                    • Backend is down
+                `);
+            }
+
+            btnText.textContent = 'Make Admin';
+        }
+
+        async function demoteUser() {
+            const email = document.getElementById('demoteEmail').value;
+            const secret = document.getElementById('demoteSecret').value;
+            const resultDiv = document.getElementById('demoteResult');
+            const btnText = document.getElementById('demoteBtn');
+
+            if (!email || !secret) {
+                showResult(resultDiv, 'error', 'Please fill in both email and secret key');
+                return;
+            }
+
+            btnText.innerHTML = '<span class="loading"></span>Removing...';
+            resultDiv.className = 'result';
+            resultDiv.style.display = 'none';
+
+            try {
+                const response = await fetch(`${API_URL}/api/admin/demote`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, secret })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showResult(resultDiv, 'success', `
+                        <strong>✅ Success!</strong><br>
+                        ${data.message}<br><br>
+                        <strong>User Details:</strong><br>
+                        Name: ${data.user.name}<br>
+                        Email: ${data.user.email}<br>
+                        Admin: ${data.user.isAdmin ? 'YES' : 'NO ❌'}
+                    `);
+                } else {
+                    showResult(resultDiv, 'error', `
+                        <strong>❌ Error</strong><br>
+                        ${data.error}
+                    `);
+                }
+            } catch (error) {
+                showResult(resultDiv, 'error', `
+                    <strong>❌ Connection Error</strong><br>
+                    ${error.message}
+                `);
+            }
+
+            btnText.textContent = 'Remove Admin';
+        }
+
+        function showResult(element, type, message) {
+            element.className = `result ${type} show`;
+            element.innerHTML = message;
+        }
+    </script>
+</body>
+
+</html>

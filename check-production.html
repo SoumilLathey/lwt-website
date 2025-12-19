@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Production Backend Checker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .status-box {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #ddd;
+        }
+
+        .status-item.checking {
+            border-left-color: #ffc107;
+        }
+
+        .status-item.success {
+            border-left-color: #28a745;
+        }
+
+        .status-item.error {
+            border-left-color: #dc3545;
+        }
+
+        .status-icon {
+            font-size: 24px;
+        }
+
+        .status-text {
+            flex: 1;
+        }
+
+        .status-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .status-detail {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .test-login {
+            margin-top: 20px;
+            padding: 20px;
+            background: #e3f2fd;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .test-login.show {
+            display: block;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .result.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .result.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Production Backend Checker</h1>
+        <p class="subtitle">Diagnose your admin login issues</p>
+
+        <div class="status-box">
+            <div class="status-item checking" id="status-backend">
+                <div class="status-icon">⏳</div>
+                <div class="status-text">
+                    <div class="status-label">Backend Status</div>
+                    <div class="status-detail">Checking if backend is awake...</div>
+                </div>
+            </div>
+
+            <div class="status-item checking" id="status-database">
+                <div class="status-icon">⏳</div>
+                <div class="status-text">
+                    <div class="status-label">Database Connection</div>
+                    <div class="status-detail">Waiting for backend...</div>
+                </div>
+            </div>
+
+            <div class="status-item checking" id="status-auth">
+                <div class="status-icon">⏳</div>
+                <div class="status-text">
+                    <div class="status-label">Authentication Service</div>
+                    <div class="status-detail">Waiting for backend...</div>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn" id="checkBtn" onclick="runDiagnostics()">
+            <span id="btnText">Run Diagnostics</span>
+        </button>
+
+        <div class="test-login" id="testLogin">
+            <h3 style="margin-bottom: 15px; color: #333;">Test Login</h3>
+            <div class="input-group">
+                <label>Email</label>
+                <input type="email" id="email" placeholder="your.email@gmail.com">
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="password" placeholder="Your password">
+            </div>
+            <button class="btn" onclick="testLogin()">Test Login</button>
+            <div id="loginResult"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://lwt-backend.onrender.com';
+
+        async function runDiagnostics() {
+            const btn = document.getElementById('checkBtn');
+            const btnText = document.getElementById('btnText');
+            btn.disabled = true;
+            btnText.innerHTML = '<span class="loading"></span> Running diagnostics...';
+
+            // Reset statuses
+            updateStatus('status-backend', 'checking', '⏳', 'Checking backend...', 'Please wait...');
+            updateStatus('status-database', 'checking', '⏳', 'Checking database...', 'Waiting...');
+            updateStatus('status-auth', 'checking', '⏳', 'Checking auth...', 'Waiting...');
+
+            // Check 1: Backend Health
+            try {
+                const startTime = Date.now();
+                const response = await fetch(`${API_URL}/api/health`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const responseTime = Date.now() - startTime;
+
+                if (response.ok) {
+                    updateStatus('status-backend', 'success', '✅', 'Backend is ONLINE', 
+                        `Response time: ${responseTime}ms ${responseTime > 5000 ? '(was sleeping, now awake!)' : ''}`);
+                    
+                    // Check 2: Database (try to verify endpoint)
+                    try {
+                        const verifyResponse = await fetch(`${API_URL}/api/auth/verify`, {
+                            method: 'GET',
+                            headers: { 
+                                'Content-Type': 'application/json',
+                                'Authorization': 'Bearer invalid-token'
+                            }
+                        });
+                        
+                        // We expect 403 or 401, which means auth is working
+                        if (verifyResponse.status === 403 || verifyResponse.status === 401) {
+                            updateStatus('status-database', 'success', '✅', 'Database Connected', 
+                                'Database is accessible and responding');
+                            updateStatus('status-auth', 'success', '✅', 'Auth Service Working', 
+                                'Authentication endpoints are functional');
+                            
+                            // Show test login form
+                            document.getElementById('testLogin').classList.add('show');
+                        } else {
+                            updateStatus('status-database', 'error', '❌', 'Database Issue', 
+                                'Unexpected response from auth endpoint');
+                        }
+                    } catch (error) {
+                        updateStatus('status-database', 'error', '❌', 'Database Error', 
+                            error.message);
+                    }
+                } else {
+                    updateStatus('status-backend', 'error', '❌', 'Backend Error', 
+                        `HTTP ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                updateStatus('status-backend', 'error', '❌', 'Backend OFFLINE', 
+                    `Cannot connect: ${error.message}`);
+                updateStatus('status-database', 'error', '❌', 'Cannot Check', 
+                    'Backend is not responding');
+                updateStatus('status-auth', 'error', '❌', 'Cannot Check', 
+                    'Backend is not responding');
+            }
+
+            btn.disabled = false;
+            btnText.textContent = 'Run Diagnostics Again';
+        }
+
+        async function testLogin() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const resultDiv = document.getElementById('loginResult');
+
+            if (!email || !password) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = 'Please enter both email and password';
+                return;
+            }
+
+            resultDiv.className = 'result';
+            resultDiv.textContent = 'Testing login...';
+
+            try {
+                const response = await fetch(`${API_URL}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `
+                        <strong>✅ Login Successful!</strong><br>
+                        User: ${data.user.name}<br>
+                        Email: ${data.user.email}<br>
+                        Admin: ${data.user.isAdmin ? 'YES ✅' : 'NO ❌'}<br>
+                        ${data.user.isAdmin ? '<br><strong>You have admin access!</strong>' : '<br><em>This account is not an admin. Need to make it admin?</em>'}
+                    `;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.innerHTML = `
+                        <strong>❌ Login Failed</strong><br>
+                        ${data.error || 'Unknown error'}<br><br>
+                        <strong>Possible reasons:</strong><br>
+                        • Wrong email or password<br>
+                        • Account doesn't exist (need to sign up first)<br>
+                        • Password was corrupted in database
+                    `;
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `Error: ${error.message}`;
+            }
+        }
+
+        function updateStatus(id, status, icon, label, detail) {
+            const element = document.getElementById(id);
+            element.className = `status-item ${status}`;
+            element.querySelector('.status-icon').textContent = icon;
+            element.querySelector('.status-label').textContent = label;
+            element.querySelector('.status-detail').textContent = detail;
+        }
+
+        // Auto-run on page load
+        window.addEventListener('load', () => {
+            setTimeout(runDiagnostics, 500);
+        });
+    </script>
+</body>
+</html>
