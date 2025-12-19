@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { AlertCircle, Mail, Phone, CheckCircle, Clock, XCircle, RefreshCw } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import API_URL from '../config/api';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
@@ -25,8 +26,8 @@ const AdminDashboard = () => {
             };
 
             const [complaintsRes, enquiriesRes] = await Promise.all([
-                fetch('http://localhost:5000/api/complaints/all', { headers }),
-                fetch('http://localhost:5000/api/enquiries', { headers })
+                fetch(`${API_URL}/api/complaints/all`, { headers }),
+                fetch(`${API_URL}/api/enquiries`, { headers })
             ]);
 
             if (complaintsRes.ok) setComplaints(await complaintsRes.json());
@@ -40,7 +41,7 @@ const AdminDashboard = () => {
 
     const updateComplaintStatus = async (complaintId, newStatus) => {
         try {
-            const response = await fetch(`http://localhost:5000/api/complaints/${complaintId}`, {
+            const response = await fetch(`${API_URL}/api/complaints/${complaintId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',

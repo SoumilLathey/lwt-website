@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { User, MapPin, Phone, Mail, Zap, AlertCircle, Send, CheckCircle, Clock, XCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import API_URL from '../config/api';
 import './UserDashboard.css';
 
 const UserDashboard = () => {
@@ -26,9 +27,9 @@ const UserDashboard = () => {
             };
 
             const [profileRes, installationsRes, complaintsRes] = await Promise.all([
-                fetch('http://localhost:5000/api/users/profile', { headers }),
-                fetch('http://localhost:5000/api/users/installations', { headers }),
-                fetch('http://localhost:5000/api/complaints/user', { headers })
+                fetch(`${API_URL}/api/users/profile`, { headers }),
+                fetch(`${API_URL}/api/users/installations`, { headers }),
+                fetch(`${API_URL}/api/complaints/user`, { headers })
             ]);
 
             if (profileRes.ok) setProfile(await profileRes.json());
@@ -46,7 +47,7 @@ const UserDashboard = () => {
         setSubmitStatus('loading');
 
         try {
-            const response = await fetch('http://localhost:5000/api/complaints', {
+            const response = await fetch(`${API_URL}/api/complaints`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

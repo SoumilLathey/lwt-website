@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { motion } from 'framer-motion';
+import API_URL from '../config/api';
 import './Contact.css';
 
 const Contact = () => {
@@ -28,7 +29,7 @@ const Contact = () => {
         setSubmitStatus(null);
 
         try {
-            const response = await fetch('http://localhost:5000/api/enquiries', {
+            const response = await fetch(`${API_URL}/api/enquiries`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
