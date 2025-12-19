@@ -1,0 +1,132 @@
+import React, { useState } from 'react';
+import { Menu, X, ChevronDown, Phone, Scale, Sun, User, LogOut, LayoutDashboard } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import './Header.css';
+
+const Header = () => {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [showUserMenu, setShowUserMenu] = useState(false);
+    const { user, logout, isAdmin } = useAuth();
+    const navigate = useNavigate();
+
+    const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
+    const handleLogout = () => {
+        logout();
+        setShowUserMenu(false);
+        navigate('/');
+    };
+
+    return (
+        <header className="header-main">
+            <div className="container header-container">
+                {/* Logo */}
+                <Link to="/" className="logo-group no-underline hover:opacity-90 transition-opacity">
+                    <span style={{ color: '#24528F', fontWeight: '900', fontSize: '28px', fontFamily: 'Outfit, sans-serif' }}>LWT</span>
+                    <span style={{ color: '#94a3b8', margin: '0 12px', fontWeight: '300', fontSize: '28px' }}>|</span>
+                    <span style={{ color: '#24528F', fontWeight: '600', fontSize: '20px', fontFamily: 'Outfit, sans-serif', letterSpacing: '0.5px' }}>Lathey Weigh Trix</span>
+                </Link>
+
+                {/* Desktop Navigation */}
+                <nav className="nav-desktop">
+                    <Link to="/" className="nav-link">Home</Link>
+                    <Link to="/about" className="nav-link">About Us</Link>
+
+                    <div className="nav-item-dropdown">
+                        <span className="nav-link flex items-center gap-1">
+                            Products <ChevronDown size={14} />
+                        </span>
+                        {/* Dropdown */}
+                        <div className="dropdown-menu">
+                            <Link to="/products" className="dropdown-link">All Products</Link>
+                            <Link to="/weighbridges" className="dropdown-link">Weighbridges</Link>
+                            <Link to="/scales" className="dropdown-link">Industrial Scales</Link>
+                            <Link to="/automation" className="dropdown-link">Automation</Link>
+                        </div>
+                    </div>
+
+                    <Link to="/solar-epc" className="nav-link flex items-center gap-1">
+                        <Sun size={16} className="text-secondary" /> Solar EPC
+                    </Link>
+
+                    <Link to="/contact" className="nav-link">Contact</Link>
+                </nav>
+
+                {/* Auth Menu */}
+                <div className="header-cta">
+                    {user ? (
+                        <div className="user-menu-container">
+                            <button
+                                className="user-menu-button"
+                                onClick={() => setShowUserMenu(!showUserMenu)}
+                            >
+                                <User size={18} />
+                                {user.name}
+                                <ChevronDown size={14} />
+                            </button>
+                            {showUserMenu && (
+                                <div className="user-dropdown">
+                                    <Link
+                                        to="/dashboard"
+                                        className="user-dropdown-link"
+                                        onClick={() => setShowUserMenu(false)}
+                                    >
+                                        <LayoutDashboard size={16} />
+                                        Dashboard
+                                    </Link>
+                                    {isAdmin && (
+                                        <Link
+                                            to="/admin"
+                                            className="user-dropdown-link"
+                                            onClick={() => setShowUserMenu(false)}
+                                        >
+                                            <LayoutDashboard size={16} />
+                                            Admin Panel
+                                        </Link>
+                                    )}
+                                    <button
+                                        className="user-dropdown-link logout-btn"
+                                        onClick={handleLogout}
+                                    >
+                                        <LogOut size={16} />
+                                        Logout
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    ) : (
+                        <div className="auth-buttons">
+                            <Link to="/login" className="btn btn-secondary">
+                                Login
+                            </Link>
+                            <Link to="/signup" className="btn btn-primary">
+                                Sign Up
+                            </Link>
+                        </div>
+                    )}
+                </div>
+
+                {/* Mobile Menu Button */}
+                <button className="mobile-toggle" onClick={toggleMenu}>
+                    {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                </button>
+            </div>
+
+            {/* Mobile Menu Overlay */}
+            {isMenuOpen && (
+                <div className="mobile-menu">
+                    <Link to="/" className="mobile-link" onClick={toggleMenu}>Home</Link>
+                    <Link to="/about" className="mobile-link" onClick={toggleMenu}>About Us</Link>
+                    <Link to="/products" className="mobile-link" onClick={toggleMenu}>Products</Link>
+                    <Link to="/solar-epc" className="mobile-link" onClick={toggleMenu}>Solar EPC</Link>
+                    <Link to="/contact" className="btn btn-primary justify-center" onClick={toggleMenu}>
+                        Get Quote
+                    </Link>
+                </div>
+            )}
+        </header>
+    );
+};
+
+export default Header;

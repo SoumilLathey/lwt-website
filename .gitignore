@@ -1,0 +1,14 @@
+# Environment Variables
+.env
+
+# Database
+server/database.sqlite
+
+# Dependencies
+node_modules
+
+# Build
+dist
+
+# Logs
+*.log
