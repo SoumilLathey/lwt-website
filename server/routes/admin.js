@@ -1,5 +1,7 @@
 import express from 'express';
-import { runQuery, getQuery } from '../database.js';
+import bcrypt from 'bcryptjs';
+import { runQuery, getQuery, allQuery } from '../database.js';
+import { authenticateToken, isAdmin } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -139,4 +141,144 @@ router.get('/check/:email', async (req, res) => {
     }
 });
 
+// Create new employee (admin only)
+router.post('/employees', authenticateToken, isAdmin, async (req, res) => {
+    try {
+        const { email, password, name, phone, department } = req.body;
+
+        if (!email || !password || !name) {
+            return res.status(400).json({ error: 'Email, password, and name are required' });
+        }
+
+        // Check if employee already exists
+        const existingEmployee = await getQuery('SELECT id FROM employees WHERE email = ?', [email]);
+        if (existingEmployee) {
+            return res.status(400).json({ error: 'Employee with this email already exists' });
+        }
+
+        // Hash password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Create employee
+        const result = await runQuery(
+            'INSERT INTO employees (email, password, name, phone, department) VALUES (?, ?, ?, ?, ?)',
+            [email, hashedPassword, name, phone, department]
+        );
+
+        res.status(201).json({
+            message: 'Employee created successfully',
+            employeeId: result.id
+        });
+    } catch (error) {
+        console.error('Create employee error:', error);
+        res.status(500).json({ error: 'Failed to create employee' });
+    }
+});
+
+// Get all employees (admin only)
+router.get('/employees', authenticateToken, isAdmin, async (req, res) => {
+    try {
+        const employees = await allQuery(
+            'SELECT id, email, name, phone, department, isActive, createdAt FROM employees ORDER BY name ASC'
+        );
+
+        res.json(employees);
+    } catch (error) {
+        console.error('Get employees error:', error);
+        res.status(500).json({ error: 'Failed to fetch employees' });
+    }
+});
+
+// Assign complaint to employee (admin only)
+router.post('/complaints/:id/assign', authenticateToken, isAdmin, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { employeeId } = req.body;
+
+        if (!employeeId) {
+            return res.status(400).json({ error: 'Employee ID is required' });
+        }
+
+        // Verify employee exists
+        const employee = await getQuery('SELECT id FROM employees WHERE id = ? AND isActive = 1', [employeeId]);
+        if (!employee) {
+            return res.status(404).json({ error: 'Employee not found or inactive' });
+        }
+
+        // Verify complaint exists
+        const complaint = await getQuery('SELECT id FROM complaints WHERE id = ?', [id]);
+        if (!complaint) {
+            return res.status(404).json({ error: 'Complaint not found' });
+        }
+
+        await runQuery(
+            'UPDATE complaints SET assignedTo = ?, updatedAt = CURRENT_TIMESTAMP WHERE id = ?',
+            [employeeId, id]
+        );
+
+        res.json({ message: 'Complaint assigned successfully' });
+    } catch (error) {
+        console.error('Assign complaint error:', error);
+        res.status(500).json({ error: 'Failed to assign complaint' });
+    }
+});
+
+// Assign enquiry to employee (admin only)
+router.post('/enquiries/:id/assign', authenticateToken, isAdmin, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { employeeId } = req.body;
+
+        if (!employeeId) {
+            return res.status(400).json({ error: 'Employee ID is required' });
+        }
+
+        // Verify employee exists
+        const employee = await getQuery('SELECT id FROM employees WHERE id = ? AND isActive = 1', [employeeId]);
+        if (!employee) {
+            return res.status(404).json({ error: 'Employee not found or inactive' });
+        }
+
+        // Verify enquiry exists
+        const enquiry = await getQuery('SELECT id FROM enquiries WHERE id = ?', [id]);
+        if (!enquiry) {
+            return res.status(404).json({ error: 'Enquiry not found' });
+        }
+
+        await runQuery(
+            'UPDATE enquiries SET assignedTo = ? WHERE id = ?',
+            [employeeId, id]
+        );
+
+        res.json({ message: 'Enquiry assigned successfully' });
+    } catch (error) {
+        console.error('Assign enquiry error:', error);
+        res.status(500).json({ error: 'Failed to assign enquiry' });
+    }
+});
+
+// Toggle employee active status (admin only)
+router.patch('/employees/:id/toggle', authenticateToken, isAdmin, async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const employee = await getQuery('SELECT isActive FROM employees WHERE id = ?', [id]);
+        if (!employee) {
+            return res.status(404).json({ error: 'Employee not found' });
+        }
+
+        const newStatus = employee.isActive === 1 ? 0 : 1;
+        await runQuery('UPDATE employees SET isActive = ? WHERE id = ?', [newStatus, id]);
+
+        res.json({
+            message: `Employee ${newStatus === 1 ? 'activated' : 'deactivated'} successfully`,
+            isActive: newStatus === 1
+        });
+    } catch (error) {
+        console.error('Toggle employee status error:', error);
+        res.status(500).json({ error: 'Failed to update employee status' });
+    }
+});
+
 export default router;
+

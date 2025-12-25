@@ -177,6 +177,24 @@
     color: white;
 }
 
+.btn-outline-secondary {
+    background: transparent;
+    color: var(--color-secondary);
+    border: 2px solid var(--color-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 14px;
+    padding: 0.625rem 1rem;
+}
+
+.btn-outline-secondary:hover {
+    background: var(--color-secondary);
+    color: white;
+    border-color: var(--color-secondary);
+}
+
+
 .user-menu-container {
     position: relative;
 }

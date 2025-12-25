@@ -68,14 +68,51 @@ router.post('/', async (req, res) => {
 // Get all enquiries (admin only)
 router.get('/', authenticateToken, isAdmin, async (req, res) => {
     try {
-        const enquiries = await allQuery(
-            'SELECT * FROM enquiries ORDER BY createdAt DESC'
-        );
+        const enquiries = await allQuery(`
+            SELECT e.*, emp.name as assignedEmployeeName, emp.id as assignedEmployeeId
+            FROM enquiries e
+            LEFT JOIN employees emp ON e.assignedTo = emp.id
+            ORDER BY e.createdAt DESC
+        `);
+
+        // Get images for each enquiry
+        for (let enquiry of enquiries) {
+            const images = await allQuery(
+                'SELECT * FROM enquiry_images WHERE enquiryId = ? ORDER BY createdAt DESC',
+                [enquiry.id]
+            );
+            enquiry.images = images;
+        }
 
         res.json(enquiries);
     } catch (error) {
         console.error('Get enquiries error:', error);
         res.status(500).json({ error: 'Failed to fetch enquiries' });
+    }
+});
+
+// Create enquiry (admin)
+router.post('/admin', authenticateToken, isAdmin, async (req, res) => {
+    try {
+        console.log('Admin creating enquiry:', req.body);
+        const { name, email, phone, service, message } = req.body;
+
+        if (!name || !email || !message) {
+            return res.status(400).json({ error: 'Name, email, and message are required' });
+        }
+
+        const result = await runQuery(
+            'INSERT INTO enquiries (name, email, phone, service, message, createdBy) VALUES (?, ?, ?, ?, ?, ?)',
+            [name, email, phone, service, message, req.user.userId]
+        );
+
+        res.status(201).json({
+            message: 'Enquiry created successfully',
+            enquiryId: result.id
+        });
+    } catch (error) {
+        console.error('Admin create enquiry error:', error);
+        res.status(500).json({ error: 'Failed to create enquiry' });
     }
 });
 

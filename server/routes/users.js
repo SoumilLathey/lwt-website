@@ -1,8 +1,21 @@
 import express from 'express';
 import { getQuery, allQuery, runQuery } from '../database.js';
-import { authenticateToken } from '../middleware/auth.js';
+import { authenticateToken, isAdmin } from '../middleware/auth.js';
 
 const router = express.Router();
+
+// Get all users (admin only)
+router.get('/all', authenticateToken, isAdmin, async (req, res) => {
+    try {
+        const users = await allQuery(
+            'SELECT id, name, email FROM users ORDER BY name ASC'
+        );
+        res.json(users);
+    } catch (error) {
+        console.error('Get all users error:', error);
+        res.status(500).json({ error: 'Failed to fetch users' });
+    }
+});
 
 // Get user profile
 router.get('/profile', authenticateToken, async (req, res) => {

@@ -97,6 +97,10 @@ const Header = () => {
                         </div>
                     ) : (
                         <div className="auth-buttons">
+                            <Link to="/employee/login" className="btn btn-outline-secondary" title="Employee Portal">
+                                <User size={16} />
+                                Employee
+                            </Link>
                             <Link to="/login" className="btn btn-secondary">
                                 Login
                             </Link>
@@ -120,9 +124,21 @@ const Header = () => {
                     <Link to="/about" className="mobile-link" onClick={toggleMenu}>About Us</Link>
                     <Link to="/products" className="mobile-link" onClick={toggleMenu}>Products</Link>
                     <Link to="/solar-epc" className="mobile-link" onClick={toggleMenu}>Solar EPC</Link>
-                    <Link to="/contact" className="btn btn-primary justify-center" onClick={toggleMenu}>
-                        Get Quote
-                    </Link>
+                    <Link to="/contact" className="mobile-link" onClick={toggleMenu}>Contact</Link>
+
+                    {!user && (
+                        <>
+                            <div style={{ borderTop: '1px solid #e2e8f0', margin: '8px 0' }}></div>
+                            <Link to="/employee/login" className="mobile-link" onClick={toggleMenu}>
+                                <User size={16} style={{ display: 'inline', marginRight: '8px' }} />
+                                Employee Login
+                            </Link>
+                            <Link to="/login" className="mobile-link" onClick={toggleMenu}>Customer Login</Link>
+                            <Link to="/signup" className="btn btn-primary justify-center" onClick={toggleMenu}>
+                                Sign Up
+                            </Link>
+                        </>
+                    )}
                 </div>
             )}
         </header>

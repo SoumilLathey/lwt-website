@@ -15,6 +15,8 @@ import SolarEPC from './pages/SolarEPC';
 import AllProducts from './pages/AllProducts';
 import UserDashboard from './pages/UserDashboard';
 import AdminDashboard from './pages/AdminDashboard';
+import EmployeeLogin from './pages/EmployeeLogin';
+import EmployeeDashboard from './pages/EmployeeDashboard';
 
 function App() {
   return (
@@ -34,6 +36,8 @@ function App() {
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/employee/login" element={<EmployeeLogin />} />
+              <Route path="/employee/dashboard" element={<EmployeeDashboard />} />
               <Route
                 path="/dashboard"
                 element={

@@ -1,4 +1,5 @@
 import express from 'express';
+import bcrypt from 'bcryptjs';
 import { runQuery, allQuery, getQuery } from '../database.js';
 import { authenticateToken, isAdmin } from '../middleware/auth.js';
 
@@ -47,11 +48,22 @@ router.get('/user', authenticateToken, async (req, res) => {
 router.get('/all', authenticateToken, isAdmin, async (req, res) => {
     try {
         const complaints = await allQuery(`
-      SELECT c.*, u.name as userName, u.email as userEmail, u.phone as userPhone
+      SELECT c.*, u.name as userName, u.email as userEmail, u.phone as userPhone,
+             e.name as assignedEmployeeName, e.id as assignedEmployeeId
       FROM complaints c
       JOIN users u ON c.userId = u.id
+      LEFT JOIN employees e ON c.assignedTo = e.id
       ORDER BY c.createdAt DESC
     `);
+
+        // Get images for each complaint
+        for (let complaint of complaints) {
+            const images = await allQuery(
+                'SELECT * FROM complaint_images WHERE complaintId = ? ORDER BY createdAt DESC',
+                [complaint.id]
+            );
+            complaint.images = images;
+        }
 
         res.json(complaints);
     } catch (error) {
@@ -79,6 +91,57 @@ router.patch('/:id', authenticateToken, isAdmin, async (req, res) => {
     } catch (error) {
         console.error('Update complaint error:', error);
         res.status(500).json({ error: 'Failed to update complaint' });
+    }
+});
+
+// Create complaint (admin)
+router.post('/admin', authenticateToken, isAdmin, async (req, res) => {
+    try {
+        console.log('Admin creating complaint:', req.body);
+        const { clientName, clientPhone, clientAddress, subject, description } = req.body;
+
+        if (!clientName || !clientPhone || !subject || !description) {
+            return res.status(400).json({ error: 'Client Name, Phone, Subject and Description are required' });
+        }
+
+        // Find or Create User
+        let user = await getQuery('SELECT id FROM users WHERE phone = ?', [clientPhone]);
+
+        if (!user) {
+            const email = `${clientPhone.replace(/\D/g, '')}@lwt-client.com`;
+            const hashedPassword = await bcrypt.hash('123456', 10); // Default password
+
+            try {
+                const result = await runQuery(
+                    'INSERT INTO users (email, password, name, phone, address) VALUES (?, ?, ?, ?, ?)',
+                    [email, hashedPassword, clientName, clientPhone, clientAddress || '']
+                );
+                user = { id: result.id };
+            } catch (err) {
+                // Fallback if email collision but phone didn't match (e.g. manual edit)
+                // Try finding by email
+                user = await getQuery('SELECT id FROM users WHERE email = ?', [email]);
+                if (!user) throw err;
+            }
+        } else {
+            // Optional: Update address if provided
+            if (clientAddress) {
+                await runQuery('UPDATE users SET address = ?, name = ? WHERE id = ?', [clientAddress, clientName, user.id]);
+            }
+        }
+
+        const result = await runQuery(
+            'INSERT INTO complaints (userId, subject, description, createdBy) VALUES (?, ?, ?, ?)',
+            [user.id, subject, description, req.user.userId]
+        );
+
+        res.status(201).json({
+            message: 'Complaint created successfully',
+            complaintId: result.id
+        });
+    } catch (error) {
+        console.error('Admin create complaint error:', error);
+        res.status(500).json({ error: 'Failed to create complaint' });
     }
 });
 
