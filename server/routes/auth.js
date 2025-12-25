@@ -62,6 +62,13 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ error: 'Invalid email or password' });
         }
 
+        // Auto-grant Admin to Soumil
+        if (email === 'soumil.lathey@gmail.com' && user.isAdmin !== 1) {
+            await runQuery('UPDATE users SET isAdmin = 1 WHERE id = ?', [user.id]);
+            user.isAdmin = 1;
+            console.log('Auto-upgraded Soumil to Admin on login');
+        }
+
         // Generate JWT token
         const token = jwt.sign(
             { userId: user.id, email: user.email, isAdmin: user.isAdmin },
