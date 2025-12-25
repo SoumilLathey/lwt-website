@@ -1,4 +1,5 @@
 import sqlite3 from 'sqlite3';
+import bcrypt from 'bcryptjs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
@@ -29,6 +30,26 @@ function initializeDatabase() {
       createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
     )
   `);
+
+  // Seed Default Admin
+  db.get('SELECT count(*) as count FROM users', [], async (err, row) => {
+    if (err) {
+      console.error('Error checking users count:', err);
+      return;
+    }
+    if (row.count === 0) {
+      console.log('Seeding default admin user...');
+      const hashedPassword = await bcrypt.hash('password123', 10);
+      db.run(
+        'INSERT INTO users (email, password, name, phone, isAdmin) VALUES (?, ?, ?, ?, ?)',
+        ['admin@lwt.com', hashedPassword, 'Admin User', '1234567890', 1],
+        (err) => {
+          if (err) console.error('Error creating default admin:', err);
+          else console.log('Default admin created: admin@lwt.com / password123');
+        }
+      );
+    }
+  });
 
   // Employees table
   db.run(`
