@@ -51,6 +51,32 @@ function initializeDatabase() {
     }
   });
 
+  // Ensure Soumil Lathey is Admin
+  db.get('SELECT id FROM users WHERE email = ?', ['soumil.lathey@gmail.com'], async (err, row) => {
+    if (err) {
+      console.error('Error checking for Soumil:', err);
+      return;
+    }
+    if (row) {
+      // User exists, upgrade to Admin
+      db.run('UPDATE users SET isAdmin = 1 WHERE id = ?', [row.id], (err) => {
+        if (err) console.error('Error upgrading Soumil to Admin:', err);
+        else console.log('Successfully upgraded soumil.lathey@gmail.com to Admin');
+      });
+    } else {
+      // User does not exist, create as Admin
+      const hashedPassword = await bcrypt.hash('password123', 10);
+      db.run(
+        'INSERT INTO users (email, password, name, phone, isAdmin) VALUES (?, ?, ?, ?, ?)',
+        ['soumil.lathey@gmail.com', hashedPassword, 'Soumil Lathey', '1234567890', 1],
+        (err) => {
+          if (err) console.error('Error creating Soumil as Admin:', err);
+          else console.log('Created admin account: soumil.lathey@gmail.com / password123');
+        }
+      );
+    }
+  });
+
   // Employees table
   db.run(`
     CREATE TABLE IF NOT EXISTS employees (
