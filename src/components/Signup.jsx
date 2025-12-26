@@ -93,7 +93,7 @@ const Signup = () => {
                             className="success-message"
                         >
                             <CheckCircle size={18} />
-                            <span>Account created successfully! Redirecting to login...</span>
+                            <span>Account created! Please wait for admin verification before logging in.</span>
                         </motion.div>
                     )}
 

@@ -27,9 +27,34 @@ function initializeDatabase() {
       address TEXT,
       pincode TEXT,
       isAdmin INTEGER DEFAULT 0,
+      isVerified INTEGER DEFAULT 0,
       createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
     )
   `);
+
+  // Migration: Add isVerified column if it doesn't exist (for existing databases)
+  db.all("PRAGMA table_info(users)", (err, rows) => {
+    if (err) {
+      console.error("Error checking table info:", err);
+      return;
+    }
+    const hasIsVerified = rows.some(row => row.name === 'isVerified');
+    if (!hasIsVerified) {
+      console.log("Migrating database: Adding isVerified column to users table...");
+      db.run("ALTER TABLE users ADD COLUMN isVerified INTEGER DEFAULT 0", (err) => {
+        if (err) {
+          console.error("Error adding isVerified column:", err);
+        } else {
+          console.log("Successfully added isVerified column. Updating existing users to verified...");
+          // Set existing users (especially admin) to verified so they aren't locked out
+          db.run("UPDATE users SET isVerified = 1", (err) => {
+            if (err) console.error("Error updating existing users verification status:", err);
+            else console.log("All existing users marked as verified.");
+          });
+        }
+      });
+    }
+  });
 
   // Seed Default Admin
   db.get('SELECT count(*) as count FROM users', [], async (err, row) => {

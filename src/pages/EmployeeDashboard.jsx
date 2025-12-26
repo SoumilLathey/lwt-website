@@ -52,9 +52,13 @@ const EmployeeDashboard = () => {
         });
     };
 
-    const getAuthHeader = () => ({
-        'Authorization': `Bearer ${employeeToken}`
-    });
+    const getAuthHeader = () => {
+        if (!employeeToken) {
+            console.warn('getAuthHeader: No employeeToken found');
+            return {};
+        }
+        return { 'Authorization': `Bearer ${employeeToken}` };
+    };
 
     const fetchData = async () => {
         setLoading(true);

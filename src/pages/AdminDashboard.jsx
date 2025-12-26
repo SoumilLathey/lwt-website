@@ -11,6 +11,7 @@ const AdminDashboard = () => {
     const [enquiries, setEnquiries] = useState([]);
     const [employees, setEmployees] = useState([]);
     const [projects, setProjects] = useState([]);
+    const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [updateStatus, setUpdateStatus] = useState(null);
     const [showEmployeeForm, setShowEmployeeForm] = useState(false);
@@ -67,17 +68,19 @@ const AdminDashboard = () => {
                 ...getAuthHeader()
             };
 
-            const [complaintsRes, enquiriesRes, employeesRes, projectsRes] = await Promise.all([
+            const [complaintsRes, enquiriesRes, employeesRes, projectsRes, usersRes] = await Promise.all([
                 fetch(`${API_URL}/api/complaints/all`, { headers }),
                 fetch(`${API_URL}/api/enquiries`, { headers }),
                 fetch(`${API_URL}/api/admin/employees`, { headers }),
-                fetch(`${API_URL}/api/projects`, { headers })
+                fetch(`${API_URL}/api/projects`, { headers }),
+                fetch(`${API_URL}/api/admin/users`, { headers })
             ]);
 
             if (complaintsRes.ok) setComplaints(await complaintsRes.json());
             if (enquiriesRes.ok) setEnquiries(await enquiriesRes.json());
             if (employeesRes.ok) setEmployees(await employeesRes.json());
             if (projectsRes.ok) setProjects(await projectsRes.json());
+            if (usersRes.ok) setUsers(await usersRes.json());
         } catch (error) {
             console.error('Error fetching admin data:', error);
         } finally {
@@ -221,6 +224,28 @@ const AdminDashboard = () => {
             }
         } catch (error) {
             console.error('Error toggling employee status:', error);
+        }
+    };
+
+    const toggleUserVerification = async (userId, currentStatus) => {
+        try {
+            const response = await fetch(`${API_URL}/api/admin/users/${userId}/verify`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...getAuthHeader()
+                },
+                body: JSON.stringify({ isVerified: !currentStatus })
+            });
+
+            if (response.ok) {
+                fetchData();
+                alert(`User ${!currentStatus ? 'verified' : 'unverified'} successfully`);
+            } else {
+                alert('Failed to update verification status');
+            }
+        } catch (error) {
+            console.error('Error toggling user verification:', error);
         }
     };
 
@@ -436,6 +461,13 @@ const AdminDashboard = () => {
                     >
                         <Briefcase size={18} />
                         Projects ({projects.length})
+                    </button>
+                    <button
+                        className={`tab ${activeTab === 'users' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('users')}
+                    >
+                        <UserCheck size={18} />
+                        Users ({users.length})
                     </button>
                 </div>
 
@@ -1268,6 +1300,70 @@ const AdminDashboard = () => {
                                     ))}
                                 </div>
                             )}
+                        </motion.div>
+                    )}
+
+                    {activeTab === 'users' && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="users-section"
+                        >
+                            <h2>User Verification</h2>
+                            <div className="users-list">
+                                {users.length === 0 ? (
+                                    <div className="empty-state">
+                                        <Users size={48} />
+                                        <p>No users found</p>
+                                    </div>
+                                ) : (
+                                    <div className="table-responsive">
+                                        <table className="admin-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Email</th>
+                                                    <th>Phone</th>
+                                                    <th>Joined</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {users.map((user) => (
+                                                    <tr key={user.id}>
+                                                        <td>{user.name}</td>
+                                                        <td>{user.email}</td>
+                                                        <td>{user.phone || '-'}</td>
+                                                        <td>{new Date(user.createdAt).toLocaleDateString()}</td>
+                                                        <td>
+                                                            <span className={`status-badge ${user.isVerified ? 'resolved' : 'pending'}`}>
+                                                                {user.isVerified ? 'Verified' : 'Pending'}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <button
+                                                                className={`action-btn ${user.isVerified ? 'danger' : 'success'}`}
+                                                                onClick={() => toggleUserVerification(user.id, user.isVerified)}
+                                                            >
+                                                                {user.isVerified ? (
+                                                                    <>
+                                                                        <UserX size={16} /> Unverify
+                                                                    </>
+                                                                ) : (
+                                                                    <>
+                                                                        <UserCheck size={16} /> Verify
+                                                                    </>
+                                                                )}
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                )}
+                            </div>
                         </motion.div>
                     )}
                 </div>

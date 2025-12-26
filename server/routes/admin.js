@@ -296,5 +296,51 @@ router.patch('/employees/:id/reset-password', authenticateToken, isAdmin, async 
     }
 });
 
+// Get all users (admin only)
+router.get('/users', authenticateToken, isAdmin, async (req, res) => {
+    try {
+        const { status } = req.query;
+        let query = 'SELECT id, email, name, phone, isAdmin, isVerified, createdAt FROM users WHERE isAdmin = 0';
+        const params = [];
+
+        if (status === 'pending') {
+            query += ' AND isVerified = 0';
+        } else if (status === 'verified') {
+            query += ' AND isVerified = 1';
+        }
+
+        query += ' ORDER BY createdAt DESC';
+
+        const users = await allQuery(query, params);
+        res.json(users);
+    } catch (error) {
+        console.error('Get users error:', error);
+        res.status(500).json({ error: 'Failed to fetch users' });
+    }
+});
+
+// Verify user (admin only)
+router.patch('/users/:id/verify', authenticateToken, isAdmin, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { isVerified } = req.body; // Expect boolean or 1/0
+
+        const user = await getQuery('SELECT id FROM users WHERE id = ?', [id]);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        await runQuery('UPDATE users SET isVerified = ? WHERE id = ?', [isVerified ? 1 : 0, id]);
+
+        res.json({
+            message: `User ${isVerified ? 'verified' : 'unverified'} successfully`,
+            isVerified: !!isVerified
+        });
+    } catch (error) {
+        console.error('Verify user error:', error);
+        res.status(500).json({ error: 'Failed to update verification status' });
+    }
+});
+
 export default router;
 

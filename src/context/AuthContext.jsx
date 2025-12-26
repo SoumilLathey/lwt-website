@@ -100,7 +100,11 @@ export const AuthProvider = ({ children }) => {
 
     const getAuthHeader = () => {
         const token = localStorage.getItem('token');
-        return token ? { 'Authorization': `Bearer ${token}` } : {};
+        if (!token) {
+            console.warn('getAuthHeader: No token found in localStorage');
+            return {};
+        }
+        return { 'Authorization': `Bearer ${token}` };
     };
 
     const value = {

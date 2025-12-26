@@ -62,6 +62,11 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ error: 'Invalid email or password' });
         }
 
+        // Check verification status
+        if (user.isVerified !== 1) {
+            return res.status(403).json({ error: 'Account pending verification by admin' });
+        }
+
         // Auto-grant Admin to Soumil
         if (email === 'soumil.lathey@gmail.com' && user.isAdmin !== 1) {
             await runQuery('UPDATE users SET isAdmin = 1 WHERE id = ?', [user.id]);
