@@ -100,6 +100,24 @@ function runMigration() {
         }
     });
 
+    // Add closureOtp column to complaints table
+    db.run(`ALTER TABLE complaints ADD COLUMN closureOtp TEXT`, (err) => {
+        if (err && !err.message.includes('duplicate column')) {
+            console.error('Error adding closureOtp to complaints:', err.message);
+        } else {
+            console.log('✓ Added closureOtp column to complaints table');
+        }
+    });
+
+    // Add closureOtpExpiresAt column to complaints table
+    db.run(`ALTER TABLE complaints ADD COLUMN closureOtpExpiresAt DATETIME`, (err) => {
+        if (err && !err.message.includes('duplicate column')) {
+            console.error('Error adding closureOtpExpiresAt to complaints:', err.message);
+        } else {
+            console.log('✓ Added closureOtpExpiresAt column to complaints table');
+        }
+    });
+
     // Wait a bit for all operations to complete
     setTimeout(() => {
         console.log('\n✅ Migration completed successfully!');

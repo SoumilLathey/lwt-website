@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { AlertCircle, Mail, Phone, CheckCircle, Clock, XCircle, RefreshCw, Users, Plus, UserCheck, UserX, Briefcase, ChevronDown, ChevronUp } from 'lucide-react';
+import { AlertCircle, Mail, Phone, CheckCircle, Clock, XCircle, RefreshCw, Users, Plus, UserCheck, UserX, Briefcase, ChevronDown, ChevronUp, Key } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import API_URL from '../config/api';
 import './AdminDashboard.css';
@@ -33,7 +33,9 @@ const AdminDashboard = () => {
         endDate: '',
         employeeIds: []
     });
-    const [newComplaint, setNewComplaint] = useState({ clientName: '', clientPhone: '', clientAddress: '', subject: '', description: '' });
+    const [newComplaint, setNewComplaint] = useState({ clientName: '', clientPhone: '', clientEmail: '', clientAddress: '', subject: '', description: '' });
+    const [complaintImages, setComplaintImages] = useState([]);
+    const [imageType, setImageType] = useState('before'); // 'before' or 'after'
     const [newEnquiry, setNewEnquiry] = useState({ name: '', email: '', phone: '', service: '', message: '' });
     const { getAuthHeader } = useAuth();
 
@@ -145,6 +147,32 @@ const AdminDashboard = () => {
         }
     };
 
+    const resetEmployeePassword = async (employeeId, employeeName) => {
+        const newPassword = prompt(`Enter new password for ${employeeName}:`);
+        if (!newPassword) return;
+
+        try {
+            const response = await fetch(`${API_URL}/api/admin/employees/${employeeId}/reset-password`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...getAuthHeader()
+                },
+                body: JSON.stringify({ password: newPassword })
+            });
+
+            if (response.ok) {
+                alert('Password reset successfully!');
+            } else {
+                const data = await response.json();
+                alert(data.error || 'Failed to reset password');
+            }
+        } catch (error) {
+            console.error('Error resetting password:', error);
+            alert('Failed to reset password');
+        }
+    };
+
     const createEmployee = async (e) => {
         e.preventDefault();
         try {
@@ -205,8 +233,26 @@ const AdminDashboard = () => {
                 body: JSON.stringify(newComplaint)
             });
             if (response.ok) {
+                // Upload images if any
+                if (complaintImages.length > 0) {
+                    const complaintId = (await response.json()).complaintId;
+
+                    for (let i = 0; i < complaintImages.length; i++) {
+                        const formData = new FormData();
+                        formData.append('image', complaintImages[i]);
+                        formData.append('type', imageType);
+
+                        await fetch(`${API_URL}/api/complaints/admin/${complaintId}/images`, {
+                            method: 'POST',
+                            headers: getAuthHeader(), // No Content-Type for FormData
+                            body: formData
+                        });
+                    }
+                }
+
                 setShowComplaintForm(false);
-                setNewComplaint({ clientName: '', clientPhone: '', clientAddress: '', subject: '', description: '' });
+                setNewComplaint({ clientName: '', clientPhone: '', clientEmail: '', clientAddress: '', subject: '', description: '' });
+                setComplaintImages([]);
                 fetchData();
                 alert('Complaint created successfully!');
             } else {
@@ -470,6 +516,16 @@ const AdminDashboard = () => {
                                                         placeholder="Phone Number"
                                                     />
                                                 </div>
+                                                <div className="form-group">
+                                                    <label>Client Email</label>
+                                                    <input
+                                                        type="email"
+                                                        value={newComplaint.clientEmail}
+                                                        onChange={(e) => setNewComplaint({ ...newComplaint, clientEmail: e.target.value })}
+                                                        className="form-input"
+                                                        placeholder="client@example.com (Required for OTP)"
+                                                    />
+                                                </div>
                                                 <div className="form-group" style={{ gridColumn: '1 / -1' }}>
                                                     <label>Client Address</label>
                                                     <input
@@ -502,6 +558,27 @@ const AdminDashboard = () => {
                                                     rows="4"
                                                     placeholder="Detailed description of the issue..."
                                                 />
+                                            </div>
+                                            <div className="form-group">
+                                                <label>Upload Images</label>
+                                                <input
+                                                    type="file"
+                                                    multiple
+                                                    accept="image/*"
+                                                    onChange={(e) => setComplaintImages([...e.target.files])}
+                                                    className="form-input"
+                                                />
+                                            </div>
+                                            <div className="form-group">
+                                                <label>Image Type</label>
+                                                <select
+                                                    value={imageType}
+                                                    onChange={(e) => setImageType(e.target.value)}
+                                                    className="form-input"
+                                                >
+                                                    <option value="before">Before Complaint (Issue)</option>
+                                                    <option value="after">After Complaint (Resolution)</option>
+                                                </select>
                                             </div>
                                             <div className="form-actions">
                                                 <button type="submit" className="submit-btn">Create Complaint</button>
@@ -952,6 +1029,27 @@ const AdminDashboard = () => {
                                                 <div className="detail-item">
                                                     <small>Joined: {new Date(employee.createdAt).toLocaleDateString()}</small>
                                                 </div>
+                                                <button
+                                                    onClick={() => resetEmployeePassword(employee.id, employee.name)}
+                                                    style={{
+                                                        marginTop: '10px',
+                                                        width: '100%',
+                                                        padding: '8px',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        gap: '8px',
+                                                        background: '#e0e7ff',
+                                                        color: '#4338ca',
+                                                        border: 'none',
+                                                        borderRadius: '6px',
+                                                        cursor: 'pointer',
+                                                        fontWeight: '500'
+                                                    }}
+                                                >
+                                                    <Key size={16} />
+                                                    Reset Password
+                                                </button>
                                             </div>
                                         </div>
                                     ))}

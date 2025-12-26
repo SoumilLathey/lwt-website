@@ -16,6 +16,10 @@ const EmployeeDashboard = () => {
     const [loading, setLoading] = useState(true);
     const [uploadingImage, setUploadingImage] = useState(null);
     const [selectedImages, setSelectedImages] = useState({});
+    const [otpActionId, setOtpActionId] = useState(null);
+    const [otpValue, setOtpValue] = useState('');
+    const [sendingOtp, setSendingOtp] = useState(false);
+    const [verifyingOtp, setVerifyingOtp] = useState(false);
     const navigate = useNavigate();
 
     const employeeData = JSON.parse(localStorage.getItem('employeeData') || '{}');
@@ -76,18 +80,25 @@ const EmployeeDashboard = () => {
         }
     };
 
-    const handleImageUpload = async (type, id) => {
+    const handleImageUpload = async (type, id, specificType = null) => {
         // Check if image already exists
         const item = type === 'complaint'
             ? complaints.find(c => c.id === id)
             : enquiries.find(e => e.id === id);
 
-        if (item?.images && item.images.length > 0) {
+        if (type === 'complaint' && specificType) {
+            const existingImg = item?.images?.find(img => img.imageType === specificType);
+            if (existingImg) {
+                alert(`Photo for "${specificType}" already exists.`);
+                return;
+            }
+        } else if (item?.images && item.images.length > 0) {
+            // For enquiries or generic uploads, limit to 1
             alert('Only one photo can be uploaded per ' + type + '. Photo already exists.');
             return;
         }
 
-        const description = prompt('Enter a description for this photo (optional):') || 'Photo with client';
+        const description = prompt('Enter a description for this photo (optional):') || ((specificType ? specificType.toUpperCase() + ' - ' : '') + 'Photo');
 
         const fileInput = document.createElement('input');
         fileInput.type = 'file';
@@ -100,8 +111,11 @@ const EmployeeDashboard = () => {
             const formData = new FormData();
             formData.append('image', file);
             formData.append('description', description);
+            if (specificType) {
+                formData.append('type', specificType);
+            }
 
-            setUploadingImage(`${type}-${id}`);
+            setUploadingImage(`${type}-${id}${specificType ? '-' + specificType : ''}`);
 
             try {
                 const endpoint = type === 'complaint'
@@ -217,6 +231,71 @@ const EmployeeDashboard = () => {
             console.error('Error updating project status:', error);
             alert('Failed to update status');
         }
+    };
+
+    const requestOtp = async (id) => {
+        if (!confirm('This will send an OTP to the client\'s email. Proceed?')) return;
+
+        setSendingOtp(true);
+        try {
+            const response = await fetch(`${API_URL}/api/employees/complaints/${id}/send-otp`, {
+                method: 'POST',
+                headers: getAuthHeader()
+            });
+
+            if (response.ok) {
+                setOtpActionId(id);
+                setOtpValue('');
+                alert('OTP sent to client email. Please enter it to close the complaint.');
+            } else {
+                const data = await response.json();
+                alert(data.error || 'Failed to send OTP');
+            }
+        } catch (error) {
+            console.error('Error sending OTP:', error);
+            alert('Failed to send OTP');
+        } finally {
+            setSendingOtp(false);
+        }
+    };
+
+    const verifyOtpAndClose = async (id) => {
+        if (!otpValue || otpValue.length !== 6) {
+            alert('Please enter a valid 6-digit OTP');
+            return;
+        }
+
+        setVerifyingOtp(true);
+        try {
+            const response = await fetch(`${API_URL}/api/employees/complaints/${id}/verify-closure`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...getAuthHeader()
+                },
+                body: JSON.stringify({ otp: otpValue })
+            });
+
+            if (response.ok) {
+                alert('Complaint resolved successfully!');
+                setOtpActionId(null);
+                setOtpValue('');
+                fetchData();
+            } else {
+                const data = await response.json();
+                alert(data.error || 'Invalid OTP');
+            }
+        } catch (error) {
+            console.error('Error verifying OTP:', error);
+            alert('Failed to verify OTP');
+        } finally {
+            setVerifyingOtp(false);
+        }
+    };
+
+    const cancelOtpAction = () => {
+        setOtpActionId(null);
+        setOtpValue('');
     };
 
     const handleProjectUploadSubmit = async (e) => {
@@ -400,32 +479,62 @@ const EmployeeDashboard = () => {
                                                     </div>
 
                                                     <div className="image-section">
-                                                        <h4>Photo with Client</h4>
-                                                        {complaint.images && complaint.images.length > 0 ? (
-                                                            <div className="uploaded-images">
-                                                                {complaint.images.map(img => (
-                                                                    <button
-                                                                        key={img.id}
-                                                                        className="image-preview"
-                                                                        onClick={() => viewImage(img.imagePath)}
-                                                                    >
-                                                                        <ImageIcon size={16} />
-                                                                        View Photo
-                                                                        {img.imageType && <small>{img.imageType}</small>}
-                                                                    </button>
-                                                                ))}
-                                                            </div>
-                                                        ) : (
-                                                            <button
-                                                                className="upload-btn"
-                                                                onClick={() => handleImageUpload('complaint', complaint.id)}
-                                                                disabled={uploadingImage === `complaint-${complaint.id}`}
-                                                            >
-                                                                <Upload size={16} />
-                                                                {uploadingImage === `complaint-${complaint.id}` ? 'Uploading...' : 'Upload Photo'}
-                                                            </button>
-                                                        )}
+                                                        <div className="image-group">
+                                                            <h4>Before Service</h4>
+                                                            {complaint.images && complaint.images.filter(img => img.imageType === 'before').length > 0 ? (
+                                                                <div className="uploaded-images">
+                                                                    {complaint.images.filter(img => img.imageType === 'before').map(img => (
+                                                                        <button
+                                                                            key={img.id}
+                                                                            className="image-preview"
+                                                                            onClick={() => viewImage(img.imagePath)}
+                                                                        >
+                                                                            <ImageIcon size={16} />
+                                                                            View Image
+                                                                        </button>
+                                                                    ))}
+                                                                </div>
+                                                            ) : (
+                                                                <button
+                                                                    className="upload-btn"
+                                                                    onClick={() => handleImageUpload('complaint', complaint.id, 'before')}
+                                                                    disabled={uploadingImage === `complaint-${complaint.id}-before`}
+                                                                >
+                                                                    <Upload size={16} />
+                                                                    {uploadingImage === `complaint-${complaint.id}-before` ? 'Uploading...' : 'Upload Before Image'}
+                                                                </button>
+                                                            )}
+                                                        </div>
+
+                                                        <div className="image-group" style={{ marginTop: '15px' }}>
+                                                            <h4>After Service</h4>
+                                                            {complaint.images && complaint.images.filter(img => img.imageType === 'after').length > 0 ? (
+                                                                <div className="uploaded-images">
+                                                                    {complaint.images.filter(img => img.imageType === 'after').map(img => (
+                                                                        <button
+                                                                            key={img.id}
+                                                                            className="image-preview"
+                                                                            onClick={() => viewImage(img.imagePath)}
+                                                                        >
+                                                                            <ImageIcon size={16} />
+                                                                            View Image
+                                                                        </button>
+                                                                    ))}
+                                                                </div>
+                                                            ) : (
+                                                                <button
+                                                                    className="upload-btn"
+                                                                    onClick={() => handleImageUpload('complaint', complaint.id, 'after')}
+                                                                    disabled={uploadingImage === `complaint-${complaint.id}-after`}
+                                                                >
+                                                                    <Upload size={16} />
+                                                                    {uploadingImage === `complaint-${complaint.id}-after` ? 'Uploading...' : 'Upload After Image'}
+                                                                </button>
+                                                            )}
+                                                        </div>
                                                     </div>
+
+
 
                                                     <div className="status-actions">
                                                         <button
@@ -444,7 +553,11 @@ const EmployeeDashboard = () => {
                                                         </button>
                                                         <button
                                                             className="status-btn resolved"
-                                                            onClick={() => updateStatus('complaint', complaint.id, 'Resolved')}
+                                                            onClick={() => {
+                                                                if (confirm('Are you sure you want to mark this complaint as Resolved?')) {
+                                                                    updateStatus('complaint', complaint.id, 'Resolved');
+                                                                }
+                                                            }}
                                                             disabled={complaint.status === 'Resolved'}
                                                         >
                                                             Resolved
@@ -724,7 +837,7 @@ const EmployeeDashboard = () => {
                     )}
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

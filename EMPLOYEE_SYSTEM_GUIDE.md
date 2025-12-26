@@ -135,6 +135,13 @@ The admin panel now includes:
    - Options: Pending, In Progress, Resolved/Completed
    - Click the appropriate status to update
 
+5. **Complaint Closure with OTP**
+   - When you complete a job, click **"Complete Work"** on the complaint card.
+   - This triggers an **OTP email** sent to the client's registered email address.
+   - Ask the client for the 6-digit code they received.
+   - Enter the code in the dashboard and click **"Verify & Close"**.
+   - This verifies the work is done and closes the complaint.
+
 ## File Structure
 
 ### Backend Files:

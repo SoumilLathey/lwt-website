@@ -195,28 +195,26 @@ router.post('/complaints/:id/assign', authenticateToken, isAdmin, async (req, re
         const { id } = req.params;
         const { employeeId } = req.body;
 
-        if (!employeeId) {
-            return res.status(400).json({ error: 'Employee ID is required' });
-        }
-
-        // Verify employee exists
-        const employee = await getQuery('SELECT id FROM employees WHERE id = ? AND isActive = 1', [employeeId]);
-        if (!employee) {
-            return res.status(404).json({ error: 'Employee not found or inactive' });
-        }
-
         // Verify complaint exists
         const complaint = await getQuery('SELECT id FROM complaints WHERE id = ?', [id]);
         if (!complaint) {
             return res.status(404).json({ error: 'Complaint not found' });
         }
 
+        if (employeeId) {
+            // Verify employee exists and is active
+            const employee = await getQuery('SELECT id FROM employees WHERE id = ? AND isActive = 1', [employeeId]);
+            if (!employee) {
+                return res.status(404).json({ error: 'Employee not found or inactive' });
+            }
+        }
+
         await runQuery(
             'UPDATE complaints SET assignedTo = ?, updatedAt = CURRENT_TIMESTAMP WHERE id = ?',
-            [employeeId, id]
+            [employeeId || null, id]
         );
 
-        res.json({ message: 'Complaint assigned successfully' });
+        res.json({ message: employeeId ? 'Complaint assigned successfully' : 'Complaint unassigned successfully' });
     } catch (error) {
         console.error('Assign complaint error:', error);
         res.status(500).json({ error: 'Failed to assign complaint' });
@@ -229,28 +227,26 @@ router.post('/enquiries/:id/assign', authenticateToken, isAdmin, async (req, res
         const { id } = req.params;
         const { employeeId } = req.body;
 
-        if (!employeeId) {
-            return res.status(400).json({ error: 'Employee ID is required' });
-        }
-
-        // Verify employee exists
-        const employee = await getQuery('SELECT id FROM employees WHERE id = ? AND isActive = 1', [employeeId]);
-        if (!employee) {
-            return res.status(404).json({ error: 'Employee not found or inactive' });
-        }
-
         // Verify enquiry exists
         const enquiry = await getQuery('SELECT id FROM enquiries WHERE id = ?', [id]);
         if (!enquiry) {
             return res.status(404).json({ error: 'Enquiry not found' });
         }
 
+        if (employeeId) {
+            // Verify employee exists and is active
+            const employee = await getQuery('SELECT id FROM employees WHERE id = ? AND isActive = 1', [employeeId]);
+            if (!employee) {
+                return res.status(404).json({ error: 'Employee not found or inactive' });
+            }
+        }
+
         await runQuery(
             'UPDATE enquiries SET assignedTo = ? WHERE id = ?',
-            [employeeId, id]
+            [employeeId || null, id]
         );
 
-        res.json({ message: 'Enquiry assigned successfully' });
+        res.json({ message: employeeId ? 'Enquiry assigned successfully' : 'Enquiry unassigned successfully' });
     } catch (error) {
         console.error('Assign enquiry error:', error);
         res.status(500).json({ error: 'Failed to assign enquiry' });
@@ -277,6 +273,26 @@ router.patch('/employees/:id/toggle', authenticateToken, isAdmin, async (req, re
     } catch (error) {
         console.error('Toggle employee status error:', error);
         res.status(500).json({ error: 'Failed to update employee status' });
+    }
+});
+
+// Reset employee password (admin only)
+router.patch('/employees/:id/reset-password', authenticateToken, isAdmin, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { password } = req.body;
+
+        if (!password) {
+            return res.status(400).json({ error: 'New password is required' });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        await runQuery('UPDATE employees SET password = ? WHERE id = ?', [hashedPassword, id]);
+
+        res.json({ message: 'Password reset successfully' });
+    } catch (error) {
+        console.error('Reset employee password error:', error);
+        res.status(500).json({ error: 'Failed to reset password' });
     }
 });
 
