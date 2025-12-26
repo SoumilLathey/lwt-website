@@ -7,7 +7,9 @@ export const authenticateToken = (req, res, next) => {
     const token = authHeader && authHeader.split(' ')[1];
 
     if (!token) {
-        console.log('Auth Middleware: Access token required. AuthHeader:', authHeader);
+        console.log('Auth Middleware: Access token required.');
+        console.log('Headers received:', JSON.stringify(req.headers));
+        // console.log('Auth header:', authHeader);
         return res.status(401).json({ error: 'Access token required' });
     }
 

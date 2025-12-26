@@ -55,7 +55,13 @@ app.get('/api/health', (req, res) => {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-    console.error(err.stack);
+    console.error(err); // Log the full error
+    if (err.name === 'MulterError') {
+        return res.status(400).json({ error: `Upload error: ${err.message}` });
+    }
+    if (err.message === 'Only image files are allowed!') {
+        return res.status(400).json({ error: err.message });
+    }
     res.status(500).json({ error: 'Something went wrong!' });
 });
 

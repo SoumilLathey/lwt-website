@@ -126,9 +126,16 @@ const EmployeeDashboard = () => {
                     ? `${API_URL}/api/employees/complaints/${id}/images`
                     : `${API_URL}/api/employees/enquiries/${id}/images`;
 
+                const freshToken = localStorage.getItem('employeeToken');
+                if (!freshToken) {
+                    throw new Error('No access token found. Please log in again.');
+                }
+
                 const response = await fetch(endpoint, {
                     method: 'POST',
-                    headers: getAuthHeader(),
+                    headers: {
+                        'Authorization': `Bearer ${freshToken}`
+                    },
                     body: formData
                 });
 
@@ -137,11 +144,16 @@ const EmployeeDashboard = () => {
                     alert('Image uploaded successfully!');
                 } else {
                     const data = await response.json();
-                    alert(data.error || 'Failed to upload image');
+                    console.error('Upload failed with status:', response.status, data);
+                    if (response.status === 401 || response.status === 403) {
+                        alert(`Authentication Error: ${data.error || 'Access denied'}. Please log in again.`);
+                    } else {
+                        alert(data.error || 'Failed to upload image');
+                    }
                 }
             } catch (error) {
                 console.error('Upload error:', error);
-                alert('Failed to upload image');
+                alert(error.message || 'Failed to upload image');
             } finally {
                 setUploadingImage(null);
             }
@@ -326,9 +338,16 @@ const EmployeeDashboard = () => {
         setUploadingImage(`project-${activeUploadProject}`);
 
         try {
+            const freshToken = localStorage.getItem('employeeToken');
+            if (!freshToken) {
+                throw new Error('No access token found. Please log in again.');
+            }
+
             const response = await fetch(`${API_URL}/api/employees/projects/${activeUploadProject}/images`, {
                 method: 'POST',
-                headers: getAuthHeader(),
+                headers: {
+                    'Authorization': `Bearer ${freshToken}`
+                },
                 body: formData
             });
 
@@ -339,7 +358,12 @@ const EmployeeDashboard = () => {
                 cancelUpload();
             } else {
                 const data = await response.json();
-                alert(data.error || 'Failed to upload image');
+                console.error('Project upload failed:', response.status, data);
+                if (response.status === 401 || response.status === 403) {
+                    alert(`Authentication Error: ${data.error || 'Access denied'}. Please log in again.`);
+                } else {
+                    alert(data.error || 'Failed to upload image');
+                }
             }
         } catch (error) {
             console.error('Upload error:', error);
