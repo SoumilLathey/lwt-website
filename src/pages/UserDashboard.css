@@ -29,20 +29,29 @@
 }
 
 .dashboard-header {
-    text-align: center;
+    background: white !important;
+    color: #1e293b !important;
+    /* Navy Blue */
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     margin-bottom: 2rem;
+    text-align: center;
+    border: 1px solid #e2e8f0;
 }
 
 .dashboard-header h1 {
     font-size: 2.5rem;
-    color: var(--text-primary);
+    color: #1e293b !important;
+    /* Navy Blue */
     margin-bottom: 0.5rem;
 }
 
 .dashboard-header p {
-    color: var(--text-secondary);
-    /* Force Slate 500 */
+    color: #64748b !important;
+    /* Slate 500 */
     font-size: 1.1rem;
+    margin: 0;
 }
 
 .dashboard-tabs {
