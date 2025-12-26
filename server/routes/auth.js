@@ -62,8 +62,9 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ error: 'Invalid email or password' });
         }
 
-        // Check verification status
-        if (user.isVerified !== 1) {
+        // Check verification status (skip for known admins)
+        const allowedEmails = ['admin@lwt.com', 'soumil.lathey@gmail.com'];
+        if (user.isVerified !== 1 && !allowedEmails.includes(user.email)) {
             return res.status(403).json({ error: 'Account pending verification by admin' });
         }
 

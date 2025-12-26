@@ -66,33 +66,39 @@ function initializeDatabase() {
       console.log('Seeding default admin user...');
       const hashedPassword = await bcrypt.hash('password123', 10);
       db.run(
-        'INSERT INTO users (email, password, name, phone, isAdmin) VALUES (?, ?, ?, ?, ?)',
+        'INSERT INTO users (email, password, name, phone, isAdmin, isVerified) VALUES (?, ?, ?, ?, ?, 1)',
         ['admin@lwt.com', hashedPassword, 'Admin User', '1234567890', 1],
         (err) => {
           if (err) console.error('Error creating default admin:', err);
           else console.log('Default admin created: admin@lwt.com / password123');
         }
       );
+    } else {
+      // Ensure admin@lwt.com is verified if it exists
+      db.run("UPDATE users SET isVerified = 1 WHERE email = 'admin@lwt.com'", (err) => {
+        if (err) console.error("Error ensuring admin@lwt.com is verified:", err);
+        // else console.log("Ensured admin@lwt.com is verified.");
+      });
     }
   });
 
-  // Ensure Soumil Lathey is Admin
+  // Ensure Soumil Lathey is Admin and Verified
   db.get('SELECT id FROM users WHERE email = ?', ['soumil.lathey@gmail.com'], async (err, row) => {
     if (err) {
       console.error('Error checking for Soumil:', err);
       return;
     }
     if (row) {
-      // User exists, upgrade to Admin
-      db.run('UPDATE users SET isAdmin = 1 WHERE id = ?', [row.id], (err) => {
+      // User exists, upgrade to Admin and Verify
+      db.run('UPDATE users SET isAdmin = 1, isVerified = 1 WHERE id = ?', [row.id], (err) => {
         if (err) console.error('Error upgrading Soumil to Admin:', err);
-        else console.log('Successfully upgraded soumil.lathey@gmail.com to Admin');
+        else console.log('Successfully upgraded soumil.lathey@gmail.com to Admin and Verified');
       });
     } else {
       // User does not exist, create as Admin
       const hashedPassword = await bcrypt.hash('password123', 10);
       db.run(
-        'INSERT INTO users (email, password, name, phone, isAdmin) VALUES (?, ?, ?, ?, ?)',
+        'INSERT INTO users (email, password, name, phone, isAdmin, isVerified) VALUES (?, ?, ?, ?, ?, 1)',
         ['soumil.lathey@gmail.com', hashedPassword, 'Soumil Lathey', '1234567890', 1],
         (err) => {
           if (err) console.error('Error creating Soumil as Admin:', err);
