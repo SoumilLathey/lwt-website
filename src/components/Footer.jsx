@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Phone, MapPin, Linkedin, Facebook, Twitter, Sun, Scale } from 'lucide-react';
+import { Mail, Phone, MapPin, Linkedin, Instagram } from 'lucide-react';
 import './Footer.css';
 
 const Footer = () => {
@@ -10,20 +10,14 @@ const Footer = () => {
                 <div className="footer-grid">
                     {/* Brand Column */}
                     <div className="footer-col footer-brand">
-                        <div className="flex items-center gap-2 mb-4">
-                            <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center text-white">
-                                <Scale size={18} />
-                            </div>
-                            <h2 className="!m-0 text-xl">LATHEY</h2>
-                        </div>
+                        <h2 className="!m-0 text-xl mb-4">LWT</h2>
                         <p>
                             Pioneering industrial precision and sustainable energy solutions.
                             We manufacture excellence for a smarter tomorrow.
                         </p>
                         <div className="flex gap-4">
-                            <a href="#" className="text-slate-400 hover:text-white transition-colors"><Linkedin size={20} /></a>
-                            <a href="#" className="text-slate-400 hover:text-white transition-colors"><Facebook size={20} /></a>
-                            <a href="#" className="text-slate-400 hover:text-white transition-colors"><Twitter size={20} /></a>
+                            <a href="https://www.linkedin.com/in/hareelathey/" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors"><Linkedin size={20} /></a>
+                            <a href="https://www.instagram.com/lwtsolar/" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors"><Instagram size={20} /></a>
                         </div>
                     </div>
 

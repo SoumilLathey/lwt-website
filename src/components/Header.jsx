@@ -35,7 +35,7 @@ const Header = () => {
 
                     <div className="nav-item-dropdown">
                         <span className="nav-link flex items-center gap-1">
-                            Products <ChevronDown size={14} />
+                            Weighing Equipments <ChevronDown size={14} />
                         </span>
                         {/* Dropdown */}
                         <div className="dropdown-menu">
@@ -122,7 +122,7 @@ const Header = () => {
                 <div className="mobile-menu">
                     <Link to="/" className="mobile-link" onClick={toggleMenu}>Home</Link>
                     <Link to="/about" className="mobile-link" onClick={toggleMenu}>About Us</Link>
-                    <Link to="/products" className="mobile-link" onClick={toggleMenu}>Products</Link>
+                    <Link to="/products" className="mobile-link" onClick={toggleMenu}>Weighing Equipments</Link>
                     <Link to="/solar-epc" className="mobile-link" onClick={toggleMenu}>Solar EPC</Link>
                     <Link to="/contact" className="mobile-link" onClick={toggleMenu}>Contact</Link>
 

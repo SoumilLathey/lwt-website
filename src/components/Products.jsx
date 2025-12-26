@@ -100,7 +100,7 @@ const Products = () => {
                     ))}
                 </div>
 
-                <div className="text-center mt-12">
+                <div className="text-center" style={{ marginTop: '3rem' }}>
                     <Link to="/products" className="btn btn-outline">
                         View All Products
                     </Link>
