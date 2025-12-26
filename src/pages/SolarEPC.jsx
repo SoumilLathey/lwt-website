@@ -102,7 +102,10 @@ const SolarEPC = () => {
                             { name: 'Reliance New Energy', logo: '/reliance-logo.png' },
                             { name: 'Tata Power Solar', logo: '/tata-logo.png' },
                             { name: 'Havells', logo: '/havells-logo.png' },
-                            { name: 'Adani Solar', logo: '/adani-logo.png' }
+                            { name: 'Adani Solar', logo: '/adani-logo.png' },
+                            { name: 'Deye', logo: '/deye-logo.png' },
+                            { name: 'Hitachi Energy', logo: '/hitachi-logo.png' },
+                            { name: 'Smarten', logo: '/smarten-logo.png' }
                         ].map((brand, index) => (
                             <motion.div
                                 key={index}
