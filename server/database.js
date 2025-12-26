@@ -259,6 +259,25 @@ function initializeDatabase() {
     )
   `);
 
+  // Weighing Equipment table
+  db.run(`
+    CREATE TABLE IF NOT EXISTS weighing_equipment (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      userId INTEGER NOT NULL,
+      equipmentType TEXT NOT NULL,
+      model TEXT NOT NULL,
+      capacity TEXT NOT NULL,
+      serialNumber TEXT,
+      installationDate DATE,
+      location TEXT,
+      status TEXT DEFAULT 'Active',
+      notes TEXT,
+      createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (userId) REFERENCES users(id)
+    )
+  `);
+
   console.log('Database tables initialized');
 }
 
