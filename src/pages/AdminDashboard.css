@@ -769,12 +769,14 @@
 
 .admin-table th {
     background-color: #f8f9fa;
-    color: var(--text-primary);
+    color: #334155 !important;
+    /* Force Slate 700 */
     font-weight: 600;
 }
 
 .admin-table td {
-    color: var(--text-secondary);
+    color: #475569 !important;
+    /* Force Slate 600 */
 }
 
 .admin-table tr:hover td {

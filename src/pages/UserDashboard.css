@@ -143,11 +143,17 @@
 }
 
 .installation-card {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    background: #f8f9fa;
+    color: #334155;
     padding: 1.5rem;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    border: 1px solid #e2e8f0;
+    box-shadow: none;
+}
+
+.installation-card .status-badge {
+    background: white;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .installation-header {
