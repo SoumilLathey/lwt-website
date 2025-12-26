@@ -70,6 +70,74 @@ const SolarEPC = () => {
                     ))}
                 </div>
             </section>
+
+            {/* Authorised Reseller Section */}
+            <section className="section" style={{ background: '#F8FAFC', paddingTop: '60px', paddingBottom: '60px' }}>
+                <div className="container">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6 }}
+                        style={{ textAlign: 'center', marginBottom: '3rem' }}
+                    >
+                        <h2 style={{ fontSize: '2rem', fontWeight: '700', color: '#24528F', marginBottom: '1rem' }}>
+                            Authorised Reseller
+                        </h2>
+                        <p style={{ color: '#64748B', fontSize: '1.1rem' }}>
+                            Trusted partners in solar excellence
+                        </p>
+                    </motion.div>
+
+                    <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                        gap: '2rem',
+                        alignItems: 'center',
+                        maxWidth: '1000px',
+                        margin: '0 auto'
+                    }}>
+                        {[
+                            { name: 'Waaree', logo: '/waaree-logo.png' },
+                            { name: 'Reliance New Energy', logo: '/reliance-logo.png' },
+                            { name: 'Tata Power Solar', logo: '/tata-logo.png' },
+                            { name: 'Havells', logo: '/havells-logo.png' },
+                            { name: 'Adani Solar', logo: '/adani-logo.png' }
+                        ].map((brand, index) => (
+                            <motion.div
+                                key={index}
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.5, delay: index * 0.1 }}
+                                whileHover={{ scale: 1.05 }}
+                                style={{
+                                    background: 'white',
+                                    padding: '2rem',
+                                    borderRadius: '12px',
+                                    boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    minHeight: '120px',
+                                    transition: 'all 0.3s ease',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                <img
+                                    src={brand.logo}
+                                    alt={brand.name}
+                                    style={{
+                                        maxWidth: '100%',
+                                        maxHeight: '80px',
+                                        objectFit: 'contain'
+                                    }}
+                                />
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
         </div>
     );
 };
