@@ -38,6 +38,26 @@ const AdminDashboard = () => {
     const [complaintImages, setComplaintImages] = useState([]);
     const [imageType, setImageType] = useState('before'); // 'before' or 'after'
     const [newEnquiry, setNewEnquiry] = useState({ name: '', email: '', phone: '', service: '', message: '' });
+
+    // User Editing State
+    const [showEditUserModal, setShowEditUserModal] = useState(false);
+    const [showSolarModal, setShowSolarModal] = useState(false);
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [editUserForm, setEditUserForm] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        address: '',
+        pincode: ''
+    });
+    const [userSolarInstallations, setUserSolarInstallations] = useState([]);
+    const [newSolar, setNewSolar] = useState({
+        capacity: '',
+        installationDate: '',
+        address: '',
+        status: 'Active'
+    });
+
     const { getAuthHeader } = useAuth();
 
     const toggleExpand = (id) => {
@@ -239,16 +259,122 @@ const AdminDashboard = () => {
             });
 
             if (response.ok) {
-                fetchData();
-                alert(`User ${!currentStatus ? 'verified' : 'unverified'} successfully`);
+                const data = await response.json();
+                setUsers(users.map(u => u.id === userId ? { ...u, isVerified: data.isVerified } : u));
+                setUpdateStatus({ show: true, success: true, message: data.message });
             } else {
-                alert('Failed to update verification status');
+                throw new Error('Failed to update status');
             }
         } catch (error) {
-            console.error('Error toggling user verification:', error);
+            console.error('Error verifying user:', error);
+            setUpdateStatus({ show: true, success: false, message: 'Failed to update user status' });
+        }
+        setTimeout(() => setUpdateStatus(null), 3000);
+    };
+
+    const handleUpdateUser = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch(`${API_URL}/api/admin/users/${selectedUser.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...getAuthHeader()
+                },
+                body: JSON.stringify(editUserForm)
+            });
+
+            if (response.ok) {
+                const updatedUser = await response.json();
+                setUsers(users.map(u => u.id === selectedUser.id ? { ...u, ...editUserForm } : u));
+                setShowEditUserModal(false);
+                setUpdateStatus({ show: true, success: true, message: 'User updated successfully' });
+            } else {
+                throw new Error('Failed to update user');
+            }
+        } catch (error) {
+            console.error('Error updating user:', error);
+            setUpdateStatus({ show: true, success: false, message: 'Failed to update user' });
+        }
+        setTimeout(() => setUpdateStatus(null), 3000);
+    };
+
+    const handleShowSolarModal = async (user) => {
+        setSelectedUser(user);
+        setNewSolar({
+            capacity: '',
+            installationDate: '',
+            address: user.address || '',
+            status: 'Active'
+        });
+
+        try {
+            const response = await fetch(`${API_URL}/api/admin/solar-installations/user/${user.id}`, {
+                headers: getAuthHeader()
+            });
+            if (response.ok) {
+                const data = await response.json();
+                setUserSolarInstallations(data);
+                setShowSolarModal(true);
+            }
+        } catch (error) {
+            console.error('Error fetching solar installations:', error);
         }
     };
 
+    const handleAddSolar = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch(`${API_URL}/api/admin/solar-installations`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...getAuthHeader()
+                },
+                body: JSON.stringify({ ...newSolar, userId: selectedUser.id })
+            });
+
+            if (response.ok) {
+                const createdSolar = await response.json();
+                setUserSolarInstallations([createdSolar, ...userSolarInstallations]);
+                setNewSolar({
+                    capacity: '',
+                    installationDate: '',
+                    address: selectedUser.address || '',
+                    status: 'Active'
+                });
+                setUpdateStatus({ show: true, success: true, message: 'Solar installation added successfully' });
+            } else {
+                throw new Error('Failed to add installation');
+            }
+        } catch (error) {
+            console.error('Error adding solar installation:', error);
+            setUpdateStatus({ show: true, success: false, message: 'Failed to add solar installation' });
+        }
+        setTimeout(() => setUpdateStatus(null), 3000);
+    };
+
+    const handleDeleteSolar = async (solarId) => {
+        if (!confirm('Are you sure you want to delete this installation?')) return;
+
+        try {
+            const response = await fetch(`${API_URL}/api/admin/solar-installations/${solarId}`, {
+                method: 'DELETE',
+                headers: getAuthHeader()
+            });
+
+            if (response.ok) {
+                setUserSolarInstallations(userSolarInstallations.filter(s => s.id !== solarId));
+                setUpdateStatus({ show: true, success: true, message: 'Installation deleted successfully' });
+            } else {
+                throw new Error('Failed to delete');
+            }
+        } catch (error) {
+            console.error('Error deleting solar installation:', error);
+            setUpdateStatus({ show: true, success: false, message: 'Failed to delete installation' });
+        }
+        setTimeout(() => setUpdateStatus(null), 3000);
+    };
     const createComplaint = async (e) => {
         e.preventDefault();
         try {
@@ -1309,7 +1435,7 @@ const AdminDashboard = () => {
                             animate={{ opacity: 1 }}
                             className="users-section"
                         >
-                            <h2>User Verification</h2>
+                            <h2>User Management</h2>
                             <div className="users-list">
                                 {users.length === 0 ? (
                                     <div className="empty-state">
@@ -1324,9 +1450,8 @@ const AdminDashboard = () => {
                                                     <th>Name</th>
                                                     <th>Email</th>
                                                     <th>Phone</th>
-                                                    <th>Joined</th>
                                                     <th>Status</th>
-                                                    <th>Action</th>
+                                                    <th>Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -1335,27 +1460,47 @@ const AdminDashboard = () => {
                                                         <td>{user.name}</td>
                                                         <td>{user.email}</td>
                                                         <td>{user.phone || '-'}</td>
-                                                        <td>{new Date(user.createdAt).toLocaleDateString()}</td>
                                                         <td>
                                                             <span className={`status-badge ${user.isVerified ? 'resolved' : 'pending'}`}>
                                                                 {user.isVerified ? 'Verified' : 'Pending'}
                                                             </span>
                                                         </td>
                                                         <td>
-                                                            <button
-                                                                className={`action-btn ${user.isVerified ? 'danger' : 'success'}`}
-                                                                onClick={() => toggleUserVerification(user.id, user.isVerified)}
-                                                            >
-                                                                {user.isVerified ? (
-                                                                    <>
-                                                                        <UserX size={16} /> Unverify
-                                                                    </>
-                                                                ) : (
-                                                                    <>
-                                                                        <UserCheck size={16} /> Verify
-                                                                    </>
-                                                                )}
-                                                            </button>
+                                                            <div className="action-buttons" style={{ display: 'flex', gap: '8px' }}>
+                                                                <button
+                                                                    className={`action-btn ${user.isVerified ? 'danger' : 'success'}`}
+                                                                    onClick={() => toggleUserVerification(user.id, user.isVerified)}
+                                                                    title={user.isVerified ? "Unverify User" : "Verify User"}
+                                                                >
+                                                                    {user.isVerified ? <UserX size={16} /> : <UserCheck size={16} />}
+                                                                </button>
+                                                                <button
+                                                                    className="action-btn"
+                                                                    onClick={() => {
+                                                                        setSelectedUser(user);
+                                                                        setEditUserForm({
+                                                                            name: user.name,
+                                                                            email: user.email,
+                                                                            phone: user.phone || '',
+                                                                            address: user.address || '',
+                                                                            pincode: user.pincode || ''
+                                                                        });
+                                                                        setShowEditUserModal(true);
+                                                                    }}
+                                                                    title="Edit User Details"
+                                                                    style={{ background: '#e0e7ff', color: '#4338ca' }}
+                                                                >
+                                                                    Edit
+                                                                </button>
+                                                                <button
+                                                                    className="action-btn"
+                                                                    onClick={() => handleShowSolarModal(user)}
+                                                                    title="Manage Solar Installation"
+                                                                    style={{ background: '#fef3c7', color: '#d97706' }}
+                                                                >
+                                                                    <Zap size={16} /> Solar
+                                                                </button>
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                 ))}
@@ -1367,6 +1512,186 @@ const AdminDashboard = () => {
                         </motion.div>
                     )}
                 </div>
+
+                {/* Edit User Modal */}
+                {showEditUserModal && selectedUser && (
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="modal-overlay">
+                        <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="modal-content">
+                            <div className="modal-header">
+                                <h2>Edit User: {selectedUser.name}</h2>
+                                <button className="close-btn" onClick={() => setShowEditUserModal(false)}>
+                                    <XCircle size={24} />
+                                </button>
+                            </div>
+                            <form onSubmit={handleUpdateUser} className="create-form">
+                                <div className="form-grid">
+                                    <div className="form-group">
+                                        <label>Full Name</label>
+                                        <input
+                                            type="text"
+                                            value={editUserForm.name}
+                                            onChange={(e) => setEditUserForm({ ...editUserForm, name: e.target.value })}
+                                            required
+                                            className="form-input"
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Email</label>
+                                        <input
+                                            type="email"
+                                            value={editUserForm.email}
+                                            onChange={(e) => setEditUserForm({ ...editUserForm, email: e.target.value })}
+                                            required
+                                            className="form-input"
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Phone</label>
+                                        <input
+                                            type="tel"
+                                            value={editUserForm.phone}
+                                            onChange={(e) => setEditUserForm({ ...editUserForm, phone: e.target.value })}
+                                            className="form-input"
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Address</label>
+                                        <input
+                                            type="text"
+                                            value={editUserForm.address}
+                                            onChange={(e) => setEditUserForm({ ...editUserForm, address: e.target.value })}
+                                            className="form-input"
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Pincode</label>
+                                        <input
+                                            type="text"
+                                            value={editUserForm.pincode}
+                                            onChange={(e) => setEditUserForm({ ...editUserForm, pincode: e.target.value })}
+                                            className="form-input"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="form-actions">
+                                    <button type="submit" className="submit-btn">Update User</button>
+                                    <button type="button" className="cancel-btn" onClick={() => setShowEditUserModal(false)}>Cancel</button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </motion.div>
+                )}
+
+                {/* Solar Installation Modal */}
+                {showSolarModal && selectedUser && (
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="modal-overlay">
+                        <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="modal-content" style={{ maxWidth: '800px' }}>
+                            <div className="modal-header">
+                                <h2>Solar Installations: {selectedUser.name}</h2>
+                                <button className="close-btn" onClick={() => setShowSolarModal(false)}>
+                                    <XCircle size={24} />
+                                </button>
+                            </div>
+
+                            <div className="solar-installations-list" style={{ marginBottom: '2rem' }}>
+                                <h3>Existing Installations</h3>
+                                {userSolarInstallations.length === 0 ? (
+                                    <p>No solar installations found for this user.</p>
+                                ) : (
+                                    <div className="table-responsive">
+                                        <table className="admin-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Capacity</th>
+                                                    <th>Date</th>
+                                                    <th>Location</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {userSolarInstallations.map((solar) => (
+                                                    <tr key={solar.id}>
+                                                        <td>{solar.capacity}</td>
+                                                        <td>{new Date(solar.installationDate).toLocaleDateString()}</td>
+                                                        <td>{solar.address}</td>
+                                                        <td>{solar.status}</td>
+                                                        <td>
+                                                            <button
+                                                                className="action-btn danger"
+                                                                onClick={() => handleDeleteSolar(solar.id)}
+                                                                title="Delete Installation"
+                                                            >
+                                                                <XCircle size={16} />
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                )}
+                            </div>
+
+                            <form onSubmit={handleAddSolar} className="create-form" style={{ borderTop: '1px solid #eee', paddingTop: '1rem' }}>
+                                <h3>Add New Installation</h3>
+                                <div className="form-grid">
+                                    <div className="form-group">
+                                        <label>Capacity (kW) *</label>
+                                        <input
+                                            type="text"
+                                            value={newSolar.capacity}
+                                            onChange={(e) => setNewSolar({ ...newSolar, capacity: e.target.value })}
+                                            required
+                                            placeholder="e.g. 5kW"
+                                            className="form-input"
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Installation Date *</label>
+                                        <input
+                                            type="date"
+                                            value={newSolar.installationDate}
+                                            onChange={(e) => setNewSolar({ ...newSolar, installationDate: e.target.value })}
+                                            required
+                                            className="form-input"
+                                        />
+                                    </div>
+                                    <div className="form-group" style={{ gridColumn: '1 / -1' }}>
+                                        <label>Installation Address / Location *</label>
+                                        <input
+                                            type="text"
+                                            value={newSolar.address}
+                                            onChange={(e) => setNewSolar({ ...newSolar, address: e.target.value })}
+                                            required
+                                            placeholder="Full address where solar is installed"
+                                            className="form-input"
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Status</label>
+                                        <select
+                                            value={newSolar.status}
+                                            onChange={(e) => setNewSolar({ ...newSolar, status: e.target.value })}
+                                            className="form-input"
+                                        >
+                                            <option value="Active">Active</option>
+                                            <option value="Maintenance">Maintenance</option>
+                                            <option value="Inactive">Inactive</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className="form-actions">
+                                    <button type="submit" className="submit-btn" style={{ background: '#d97706' }}>
+                                        <Zap size={18} style={{ marginRight: '8px' }} />
+                                        Add Installation
+                                    </button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </motion.div>
+                )}
+
             </div>
         </div>
     );

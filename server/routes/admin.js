@@ -342,5 +342,77 @@ router.patch('/users/:id/verify', authenticateToken, isAdmin, async (req, res) =
     }
 });
 
+// Update user details (admin only)
+router.put('/users/:id', authenticateToken, isAdmin, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, email, phone, address, pincode } = req.body;
+
+        const user = await getQuery('SELECT id FROM users WHERE id = ?', [id]);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        await runQuery(
+            'UPDATE users SET name = ?, email = ?, phone = ?, address = ?, pincode = ? WHERE id = ?',
+            [name, email, phone, address, pincode, id]
+        );
+
+        res.json({ id, name, email, phone, address, pincode });
+    } catch (error) {
+        console.error('Update user error:', error);
+        res.status(500).json({ error: 'Failed to update user' });
+    }
+});
+
+// Get solar installations for a specific user (admin only)
+router.get('/solar-installations/user/:userId', authenticateToken, isAdmin, async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const installations = await allQuery(
+            'SELECT * FROM solar_installations WHERE userId = ? ORDER BY installationDate DESC',
+            [userId]
+        );
+        res.json(installations);
+    } catch (error) {
+        console.error('Get user solar installations error:', error);
+        res.status(500).json({ error: 'Failed to fetch solar installations' });
+    }
+});
+
+// Add solar installation (admin only)
+router.post('/solar-installations', authenticateToken, isAdmin, async (req, res) => {
+    try {
+        const { userId, capacity, installationDate, address, status } = req.body;
+
+        if (!userId || !capacity || !installationDate || !address) {
+            return res.status(400).json({ error: 'Missing required fields' });
+        }
+
+        const result = await runQuery(
+            'INSERT INTO solar_installations (userId, capacity, installationDate, address, status) VALUES (?, ?, ?, ?, ?)',
+            [userId, capacity, installationDate, address, status || 'Active']
+        );
+
+        const newInstallation = await getQuery('SELECT * FROM solar_installations WHERE id = ?', [result.id]);
+        res.status(201).json(newInstallation);
+    } catch (error) {
+        console.error('Add solar installation error:', error);
+        res.status(500).json({ error: 'Failed to add solar installation' });
+    }
+});
+
+// Delete solar installation (admin only)
+router.delete('/solar-installations/:id', authenticateToken, isAdmin, async (req, res) => {
+    try {
+        const { id } = req.params;
+        await runQuery('DELETE FROM solar_installations WHERE id = ?', [id]);
+        res.json({ message: 'Installation deleted successfully' });
+    } catch (error) {
+        console.error('Delete solar installation error:', error);
+        res.status(500).json({ error: 'Failed to delete installation' });
+    }
+});
+
 export default router;
 
