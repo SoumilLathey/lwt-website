@@ -1,0 +1,170 @@
+.popup-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 9998;
+}
+
+.popup-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: 24px;
+    padding: 40px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    z-index: 9999;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.popup-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #f1f5f9;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #64748b;
+}
+
+.popup-close:hover {
+    background: #e2e8f0;
+    color: #334155;
+    transform: rotate(90deg);
+}
+
+.popup-header {
+    margin-bottom: 30px;
+}
+
+.popup-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.popup-content {
+    text-align: center;
+}
+
+.popup-icon {
+    margin: 0 auto 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.popup-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #24528F;
+    margin-bottom: 8px;
+    line-height: 1.2;
+}
+
+.popup-title-hindi {
+    font-size: 24px;
+    font-weight: 600;
+    color: #22c55e;
+    margin-bottom: 20px;
+}
+
+.popup-description {
+    font-size: 18px;
+    color: #334155;
+    margin-bottom: 30px;
+    font-weight: 500;
+}
+
+.popup-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.popup-cta-text {
+    font-size: 16px;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.popup-btn {
+    background: #F59E0B;
+    color: white;
+    padding: 14px 32px;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.3);
+}
+
+.popup-btn:hover {
+    background: #D97706;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(245, 158, 11, 0.4);
+}
+
+/* Mobile Responsive */
+@media (max-width: 640px) {
+    .popup-modal {
+        padding: 30px 20px;
+        border-radius: 16px;
+    }
+
+    .popup-logo span:first-child {
+        font-size: 24px !important;
+    }
+
+    .popup-logo span:last-child {
+        font-size: 18px !important;
+    }
+
+    .popup-title {
+        font-size: 22px;
+    }
+
+    .popup-title-hindi {
+        font-size: 20px;
+    }
+
+    .popup-description {
+        font-size: 16px;
+    }
+
+    .popup-icon svg {
+        width: 100px;
+        height: 100px;
+    }
+
+    .popup-cta {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .popup-btn {
+        width: 100%;
+        padding: 12px 24px;
+        font-size: 16px;
+    }
+}

@@ -1,11 +1,13 @@
 import React from 'react';
 import PageHeader from '../components/PageHeader';
+import SolarPopup from '../components/SolarPopup';
 import { motion } from 'framer-motion';
 import { Sun, Check, Zap, Home, Factory, Droplets } from 'lucide-react';
 
 const SolarEPC = () => {
     return (
         <div className="page-solar">
+            <SolarPopup />
             <PageHeader
                 badge="Empanelled Channel Partner: MNRE & UPNEDA"
                 title="Solar EPC Services"
