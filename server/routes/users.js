@@ -68,4 +68,19 @@ router.put('/profile', authenticateToken, async (req, res) => {
     }
 });
 
+// Get user's weighing equipment (read-only)
+router.get('/weighing-equipment', authenticateToken, async (req, res) => {
+    try {
+        const equipment = await allQuery(
+            'SELECT * FROM weighing_equipment WHERE userId = ? ORDER BY createdAt DESC',
+            [req.user.userId]
+        );
+
+        res.json(equipment);
+    } catch (error) {
+        console.error('Get weighing equipment error:', error);
+        res.status(500).json({ error: 'Failed to fetch weighing equipment' });
+    }
+});
+
 export default router;

@@ -31,21 +31,16 @@ const UserDashboard = () => {
                 fetch(`${API_URL}/api/users/profile`, { headers }),
                 fetch(`${API_URL}/api/users/installations`, { headers }),
                 fetch(`${API_URL}/api/complaints/user`, { headers }),
-                fetch(`${API_URL}/api/admin/weighing-equipment/user/${profile?.id || 'temp'}`, { headers })
+                fetch(`${API_URL}/api/users/weighing-equipment`, { headers })
             ]);
 
             if (profileRes.ok) {
                 const profileData = await profileRes.json();
                 setProfile(profileData);
-
-                // Fetch equipment with the actual user ID
-                if (profileData?.id) {
-                    const equipRes = await fetch(`${API_URL}/api/admin/weighing-equipment/user/${profileData.id}`, { headers });
-                    if (equipRes.ok) setWeighingEquipment(await equipRes.json());
-                }
             }
             if (installationsRes.ok) setInstallations(await installationsRes.json());
             if (complaintsRes.ok) setComplaints(await complaintsRes.json());
+            if (equipmentRes.ok) setWeighingEquipment(await equipmentRes.json());
         } catch (error) {
             console.error('Error fetching user data:', error);
         } finally {
