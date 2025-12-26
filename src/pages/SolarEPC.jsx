@@ -1,7 +1,7 @@
 import React from 'react';
 import PageHeader from '../components/PageHeader';
 import { motion } from 'framer-motion';
-import { Sun, Check, Zap, Home, Factory } from 'lucide-react';
+import { Sun, Check, Zap, Home, Factory, Droplets } from 'lucide-react';
 
 const SolarEPC = () => {
     return (
@@ -48,11 +48,12 @@ const SolarEPC = () => {
                     </motion.div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {[
                         { icon: Factory, title: "Industrial Rooftop", desc: "Reduce operational costs with high-capacity rooftop solar plants for factories." },
                         { icon: Zap, title: "Ground Mounted", desc: "Large scale solar parks and ground-mounted systems for utility power." },
-                        { icon: Home, title: "Residential Solutions", desc: "Sustainable energy for modern homes with net-metering support." }
+                        { icon: Home, title: "Residential Solutions", desc: "Sustainable energy for modern homes with net-metering support." },
+                        { icon: Droplets, title: "Agricultural Solar", desc: "Solar-powered water irrigation pumps for sustainable farming and agriculture." }
                     ].map((service, index) => (
                         <motion.div
                             key={index}
