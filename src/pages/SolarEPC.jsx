@@ -7,6 +7,7 @@ const SolarEPC = () => {
     return (
         <div className="page-solar">
             <PageHeader
+                badge="Empanelled Channel Partner: MNRE & UPNEDA"
                 title="Solar EPC Services"
                 description="End-to-end solar energy solutions for industrial, commercial, and residential needs."
             />
