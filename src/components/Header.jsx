@@ -23,7 +23,7 @@ const Header = () => {
             <div className="container header-container">
                 {/* Logo */}
                 <Link to="/" className="logo-group no-underline hover:opacity-90 transition-opacity">
-                    <span style={{ color: '#24528F', fontWeight: '800', fontSize: '28px', fontFamily: 'Montserrat, sans-serif' }}>LWT</span>
+                    <span style={{ color: '#24528F', fontWeight: '900', fontSize: '28px', fontFamily: 'Outfit, sans-serif' }}>LWT</span>
                     <span style={{ color: '#94a3b8', margin: '0 12px', fontWeight: '300', fontSize: '28px' }}>|</span>
                     <span style={{ color: '#24528F', fontWeight: '600', fontSize: '20px', fontFamily: 'Outfit, sans-serif', letterSpacing: '0.5px' }}>Lathey Weigh Trix</span>
                 </Link>
