@@ -1,6 +1,20 @@
-# 🎉 Deployment Complete!
+# 🚀 Deployment Complete - Weighing Equipment Feature Added!
 
-## Your Live URLs
+## ✅ Latest Update (December 26, 2025)
+
+### New Feature Deployed: Weighing Equipment Management
+Clients can now manage their weighing equipment directly from their dashboard!
+
+**What's New:**
+- ✅ New "Weighing Equipment" tab in User Dashboard
+- ✅ Add equipment details (type, model, capacity, serial number, etc.)
+- ✅ View all registered equipment
+- ✅ Delete equipment with confirmation
+- ✅ Secure ownership verification on all operations
+
+---
+
+## 🌐 Your Live URLs
 
 ### Frontend (Vercel)
 **Main Production URL:** https://lwt-website-lake.vercel.app ⭐
@@ -14,15 +28,18 @@
 
 ---
 
-## ✅ What Was Fixed
+## 🎯 Testing the New Feature
 
-1. **Fixed `vercel.json`** - Removed invalid JSON comment that was causing deployment failures
-2. **Created API Configuration** - Added centralized API URL management (`src/config/api.js`)
-3. **Updated All Components** - Modified all files to use the production backend URL:
-   - `src/context/AuthContext.jsx`
-   - `src/components/Contact.jsx`
-   - `src/pages/UserDashboard.jsx`
-   - `src/pages/AdminDashboard.jsx`
+1. Visit: https://lwt-website-lake.vercel.app
+2. Log in as a client (not admin)
+3. Go to User Dashboard
+4. Click on the **"Weighing Equipment"** tab
+5. Add your weighing equipment:
+   - Select equipment type (Platform Scale, Weighbridge, etc.)
+   - Enter model and capacity
+   - Optionally add serial number, installation date, location, and notes
+6. View your equipment list
+7. Delete equipment if needed
 
 ---
 
@@ -36,6 +53,7 @@ Your team can now:
 - ✅ Login and access dashboards
 - ✅ Submit complaints (logged-in users)
 - ✅ Send enquiries (anyone)
+- ✅ **Manage weighing equipment (clients)** 🆕
 - ✅ Admins can manage everything
 
 ---
@@ -60,13 +78,13 @@ When someone first visits the site after the backend has been sleeping, they mig
 
 ---
 
-## 🔄 Future Deployments
+## 🔄 Automatic Deployments
 
-Whenever you push code to GitHub (`main` branch), Vercel will automatically:
-1. Detect the push
-2. Build the new version
-3. Deploy it to production
-4. Update your URL
+Whenever you push code to GitHub (`main` branch):
+1. ✅ Vercel automatically detects the push
+2. ✅ Builds the new version
+3. ✅ Deploys to production
+4. ✅ Updates your live URL
 
 **No manual steps needed!**
 
@@ -80,6 +98,8 @@ Use a free service like [UptimeRobot](https://uptimerobot.com):
 2. Add a monitor for: `https://lwt-backend.onrender.com/api/health`
 3. Set it to ping every 10 minutes
 4. Your backend will never sleep!
+
+See `UPTIMEROBOT_COMPLETE_SETUP.md` for detailed instructions.
 
 ### Custom Domain (Optional)
 You can add your own domain (like `www.latheyweightrix.com`) in Vercel:
@@ -96,6 +116,11 @@ You can add your own domain (like `www.latheyweightrix.com`) in Vercel:
 - Wait 30 seconds, then try again
 - After wake-up, everything is fast
 
+**If the new weighing equipment feature doesn't appear:**
+1. Hard refresh the page (Ctrl + Shift + R)
+2. Clear browser cache
+3. Check that you're logged in as a client (not admin)
+
 **If something doesn't work:**
 1. Check the browser console for errors (F12)
 2. Verify the backend is awake by visiting: https://lwt-backend.onrender.com
@@ -109,6 +134,31 @@ To access the admin dashboard:
 1. Login with an admin account
 2. Go to `/admin` or click "Admin Dashboard" in the menu
 
+**Admin Accounts:**
+- admin@lwt.com
+- soumil.lathey@gmail.com
+
 ---
 
-**Congratulations! Your website is now live and accessible to anyone on the internet! 🚀**
+## 📝 Deployment History
+
+### December 26, 2025 - Weighing Equipment Feature
+- Added database table for weighing equipment
+- Created API endpoints for CRUD operations
+- Added new tab in User Dashboard
+- Implemented form to add equipment
+- Added equipment list with delete functionality
+- Full responsive design
+
+### Previous Deployments
+- Employee management system
+- Complaint tracking with image uploads
+- Project management
+- Solar installations tracking
+- Admin dashboard
+
+---
+
+**Congratulations! Your website is live with the new weighing equipment feature! 🚀**
+
+**Live URL:** https://lwt-website-lake.vercel.app

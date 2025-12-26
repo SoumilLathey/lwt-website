@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { AlertCircle, Mail, Phone, CheckCircle, Clock, XCircle, RefreshCw, Users, Plus, UserCheck, UserX, Briefcase, ChevronDown, ChevronUp, Key, Zap } from 'lucide-react';
+import { AlertCircle, Mail, Phone, CheckCircle, Clock, XCircle, RefreshCw, Users, Plus, UserCheck, UserX, Briefcase, ChevronDown, ChevronUp, Key, Zap, Scale, Trash2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import API_URL from '../config/api';
 import './AdminDashboard.css';
@@ -56,6 +56,18 @@ const AdminDashboard = () => {
         installationDate: '',
         address: '',
         status: 'Active'
+    });
+    const [showEquipmentModal, setShowEquipmentModal] = useState(false);
+    const [userWeighingEquipment, setUserWeighingEquipment] = useState([]);
+    const [newEquipment, setNewEquipment] = useState({
+        equipmentType: '',
+        model: '',
+        capacity: '',
+        serialNumber: '',
+        installationDate: '',
+        location: '',
+        status: 'Active',
+        notes: ''
     });
 
     const { getAuthHeader } = useAuth();
@@ -372,6 +384,91 @@ const AdminDashboard = () => {
         } catch (error) {
             console.error('Error deleting solar installation:', error);
             setUpdateStatus({ show: true, success: false, message: 'Failed to delete installation' });
+        }
+        setTimeout(() => setUpdateStatus(null), 3000);
+    };
+
+    const handleShowEquipmentModal = async (user) => {
+        setSelectedUser(user);
+        setNewEquipment({
+            equipmentType: '',
+            model: '',
+            capacity: '',
+            serialNumber: '',
+            installationDate: '',
+            location: user.address || '',
+            status: 'Active',
+            notes: ''
+        });
+
+        try {
+            const response = await fetch(`${API_URL}/api/admin/weighing-equipment/user/${user.id}`, {
+                headers: getAuthHeader()
+            });
+            if (response.ok) {
+                const data = await response.json();
+                setUserWeighingEquipment(data);
+                setShowEquipmentModal(true);
+            }
+        } catch (error) {
+            console.error('Error fetching weighing equipment:', error);
+        }
+    };
+
+    const handleAddEquipment = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch(`${API_URL}/api/admin/weighing-equipment`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...getAuthHeader()
+                },
+                body: JSON.stringify({ ...newEquipment, userId: selectedUser.id })
+            });
+
+            if (response.ok) {
+                const createdEquipment = await response.json();
+                setUserWeighingEquipment([createdEquipment, ...userWeighingEquipment]);
+                setNewEquipment({
+                    equipmentType: '',
+                    model: '',
+                    capacity: '',
+                    serialNumber: '',
+                    installationDate: '',
+                    location: selectedUser.address || '',
+                    status: 'Active',
+                    notes: ''
+                });
+                setUpdateStatus({ show: true, success: true, message: 'Weighing equipment added successfully' });
+            } else {
+                throw new Error('Failed to add equipment');
+            }
+        } catch (error) {
+            console.error('Error adding weighing equipment:', error);
+            setUpdateStatus({ show: true, success: false, message: 'Failed to add weighing equipment' });
+        }
+        setTimeout(() => setUpdateStatus(null), 3000);
+    };
+
+    const handleDeleteEquipment = async (equipmentId) => {
+        if (!confirm('Are you sure you want to delete this equipment?')) return;
+
+        try {
+            const response = await fetch(`${API_URL}/api/admin/weighing-equipment/${equipmentId}`, {
+                method: 'DELETE',
+                headers: getAuthHeader()
+            });
+
+            if (response.ok) {
+                setUserWeighingEquipment(userWeighingEquipment.filter(e => e.id !== equipmentId));
+                setUpdateStatus({ show: true, success: true, message: 'Equipment deleted successfully' });
+            } else {
+                throw new Error('Failed to delete');
+            }
+        } catch (error) {
+            console.error('Error deleting weighing equipment:', error);
+            setUpdateStatus({ show: true, success: false, message: 'Failed to delete equipment' });
         }
         setTimeout(() => setUpdateStatus(null), 3000);
     };
@@ -1500,6 +1597,14 @@ const AdminDashboard = () => {
                                                                 >
                                                                     <Zap size={16} /> Solar
                                                                 </button>
+                                                                <button
+                                                                    className="action-btn"
+                                                                    onClick={() => handleShowEquipmentModal(user)}
+                                                                    title="Manage Weighing Equipment"
+                                                                    style={{ background: '#dbeafe', color: '#1e40af' }}
+                                                                >
+                                                                    <Scale size={16} /> Equipment
+                                                                </button>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -1685,6 +1790,167 @@ const AdminDashboard = () => {
                                     <button type="submit" className="submit-btn" style={{ background: '#d97706' }}>
                                         <Zap size={18} style={{ marginRight: '8px' }} />
                                         Add Installation
+                                    </button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </motion.div>
+                )}
+
+                {/* Weighing Equipment Modal */}
+                {showEquipmentModal && selectedUser && (
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="modal-overlay">
+                        <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="modal-content" style={{ maxWidth: '900px' }}>
+                            <div className="modal-header">
+                                <h2>Weighing Equipment: {selectedUser.name}</h2>
+                                <button className="close-btn" onClick={() => setShowEquipmentModal(false)}>
+                                    <XCircle size={24} />
+                                </button>
+                            </div>
+
+                            <div className="solar-installations-list" style={{ marginBottom: '2rem' }}>
+                                <h3>Existing Equipment</h3>
+                                {userWeighingEquipment.length === 0 ? (
+                                    <p>No weighing equipment found for this user.</p>
+                                ) : (
+                                    <div className="table-responsive">
+                                        <table className="admin-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Type</th>
+                                                    <th>Model</th>
+                                                    <th>Capacity</th>
+                                                    <th>Serial No</th>
+                                                    <th>Location</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {userWeighingEquipment.map((equipment) => (
+                                                    <tr key={equipment.id}>
+                                                        <td>{equipment.equipmentType}</td>
+                                                        <td>{equipment.model}</td>
+                                                        <td>{equipment.capacity}</td>
+                                                        <td>{equipment.serialNumber || '-'}</td>
+                                                        <td>{equipment.location || '-'}</td>
+                                                        <td>{equipment.status}</td>
+                                                        <td>
+                                                            <button
+                                                                className="action-btn danger"
+                                                                onClick={() => handleDeleteEquipment(equipment.id)}
+                                                                title="Delete Equipment"
+                                                            >
+                                                                <Trash2 size={16} />
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                )}
+                            </div>
+
+                            <form onSubmit={handleAddEquipment} className="create-form" style={{ borderTop: '1px solid #eee', paddingTop: '1rem' }}>
+                                <h3>Add New Equipment</h3>
+                                <div className="form-grid">
+                                    <div className="form-group">
+                                        <label>Equipment Type *</label>
+                                        <select
+                                            value={newEquipment.equipmentType}
+                                            onChange={(e) => setNewEquipment({ ...newEquipment, equipmentType: e.target.value })}
+                                            required
+                                            className="form-input"
+                                        >
+                                            <option value="">Select Type</option>
+                                            <option value="Platform Scale">Platform Scale</option>
+                                            <option value="Weighbridge">Weighbridge</option>
+                                            <option value="Bench Scale">Bench Scale</option>
+                                            <option value="Crane Scale">Crane Scale</option>
+                                            <option value="Counting Scale">Counting Scale</option>
+                                            <option value="Analytical Balance">Analytical Balance</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Model *</label>
+                                        <input
+                                            type="text"
+                                            value={newEquipment.model}
+                                            onChange={(e) => setNewEquipment({ ...newEquipment, model: e.target.value })}
+                                            required
+                                            placeholder="e.g., WB-5000"
+                                            className="form-input"
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Capacity *</label>
+                                        <input
+                                            type="text"
+                                            value={newEquipment.capacity}
+                                            onChange={(e) => setNewEquipment({ ...newEquipment, capacity: e.target.value })}
+                                            required
+                                            placeholder="e.g., 5000 kg"
+                                            className="form-input"
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Serial Number</label>
+                                        <input
+                                            type="text"
+                                            value={newEquipment.serialNumber}
+                                            onChange={(e) => setNewEquipment({ ...newEquipment, serialNumber: e.target.value })}
+                                            placeholder="Serial number"
+                                            className="form-input"
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Installation Date</label>
+                                        <input
+                                            type="date"
+                                            value={newEquipment.installationDate}
+                                            onChange={(e) => setNewEquipment({ ...newEquipment, installationDate: e.target.value })}
+                                            className="form-input"
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Status</label>
+                                        <select
+                                            value={newEquipment.status}
+                                            onChange={(e) => setNewEquipment({ ...newEquipment, status: e.target.value })}
+                                            className="form-input"
+                                        >
+                                            <option value="Active">Active</option>
+                                            <option value="Maintenance">Maintenance</option>
+                                            <option value="Inactive">Inactive</option>
+                                        </select>
+                                    </div>
+                                    <div className="form-group" style={{ gridColumn: '1 / -1' }}>
+                                        <label>Installation Location</label>
+                                        <input
+                                            type="text"
+                                            value={newEquipment.location}
+                                            onChange={(e) => setNewEquipment({ ...newEquipment, location: e.target.value })}
+                                            placeholder="Full address where equipment is installed"
+                                            className="form-input"
+                                        />
+                                    </div>
+                                    <div className="form-group" style={{ gridColumn: '1 / -1' }}>
+                                        <label>Notes</label>
+                                        <textarea
+                                            value={newEquipment.notes}
+                                            onChange={(e) => setNewEquipment({ ...newEquipment, notes: e.target.value })}
+                                            placeholder="Additional notes or specifications..."
+                                            rows="3"
+                                            className="form-input"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="form-actions">
+                                    <button type="submit" className="submit-btn" style={{ background: '#1e40af' }}>
+                                        <Scale size={18} style={{ marginRight: '8px' }} />
+                                        Add Equipment
                                     </button>
                                 </div>
                             </form>

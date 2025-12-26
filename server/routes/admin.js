@@ -414,5 +414,57 @@ router.delete('/solar-installations/:id', authenticateToken, isAdmin, async (req
     }
 });
 
+// Get weighing equipment for a specific user (admin only)
+router.get('/weighing-equipment/user/:userId', authenticateToken, isAdmin, async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const equipment = await allQuery(
+            'SELECT * FROM weighing_equipment WHERE userId = ? ORDER BY createdAt DESC',
+            [userId]
+        );
+        res.json(equipment);
+    } catch (error) {
+        console.error('Get user weighing equipment error:', error);
+        res.status(500).json({ error: 'Failed to fetch weighing equipment' });
+    }
+});
+
+// Add weighing equipment (admin only)
+router.post('/weighing-equipment', authenticateToken, isAdmin, async (req, res) => {
+    try {
+        const { userId, equipmentType, model, capacity, serialNumber, installationDate, location, status, notes } = req.body;
+
+        if (!userId || !equipmentType || !model || !capacity) {
+            return res.status(400).json({ error: 'Missing required fields' });
+        }
+
+        const result = await runQuery(
+            `INSERT INTO weighing_equipment 
+            (userId, equipmentType, model, capacity, serialNumber, installationDate, location, status, notes) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [userId, equipmentType, model, capacity, serialNumber, installationDate, location, status || 'Active', notes]
+        );
+
+        const newEquipment = await getQuery('SELECT * FROM weighing_equipment WHERE id = ?', [result.id]);
+        res.status(201).json(newEquipment);
+    } catch (error) {
+        console.error('Add weighing equipment error:', error);
+        res.status(500).json({ error: 'Failed to add weighing equipment' });
+    }
+});
+
+// Delete weighing equipment (admin only)
+router.delete('/weighing-equipment/:id', authenticateToken, isAdmin, async (req, res) => {
+    try {
+        const { id } = req.params;
+        await runQuery('DELETE FROM weighing_equipment WHERE id = ?', [id]);
+        res.json({ message: 'Equipment deleted successfully' });
+    } catch (error) {
+        console.error('Delete weighing equipment error:', error);
+        res.status(500).json({ error: 'Failed to delete equipment' });
+    }
+});
+
 export default router;
+
 

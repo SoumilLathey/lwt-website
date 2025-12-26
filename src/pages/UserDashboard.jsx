@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { User, MapPin, Phone, Mail, Zap, AlertCircle, Send, CheckCircle, Clock, XCircle, Scale, Trash2, Edit } from 'lucide-react';
+import { User, MapPin, Phone, Mail, Zap, AlertCircle, Send, CheckCircle, Clock, XCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import API_URL from '../config/api';
 import './UserDashboard.css';
@@ -10,20 +10,9 @@ const UserDashboard = () => {
     const [profile, setProfile] = useState(null);
     const [installations, setInstallations] = useState([]);
     const [complaints, setComplaints] = useState([]);
-    const [weighingEquipment, setWeighingEquipment] = useState([]);
     const [complaintForm, setComplaintForm] = useState({ subject: '', description: '' });
-    const [equipmentForm, setEquipmentForm] = useState({
-        equipmentType: '',
-        model: '',
-        capacity: '',
-        serialNumber: '',
-        installationDate: '',
-        location: '',
-        notes: ''
-    });
     const [loading, setLoading] = useState(true);
     const [submitStatus, setSubmitStatus] = useState(null);
-    const [equipmentSubmitStatus, setEquipmentSubmitStatus] = useState(null);
     const { getAuthHeader } = useAuth();
 
     useEffect(() => {
@@ -37,17 +26,15 @@ const UserDashboard = () => {
                 ...getAuthHeader()
             };
 
-            const [profileRes, installationsRes, complaintsRes, equipmentRes] = await Promise.all([
+            const [profileRes, installationsRes, complaintsRes] = await Promise.all([
                 fetch(`${API_URL}/api/users/profile`, { headers }),
                 fetch(`${API_URL}/api/users/installations`, { headers }),
-                fetch(`${API_URL}/api/complaints/user`, { headers }),
-                fetch(`${API_URL}/api/users/weighing-equipment`, { headers })
+                fetch(`${API_URL}/api/complaints/user`, { headers })
             ]);
 
             if (profileRes.ok) setProfile(await profileRes.json());
             if (installationsRes.ok) setInstallations(await installationsRes.json());
             if (complaintsRes.ok) setComplaints(await complaintsRes.json());
-            if (equipmentRes.ok) setWeighingEquipment(await equipmentRes.json());
         } catch (error) {
             console.error('Error fetching user data:', error);
         } finally {
@@ -80,62 +67,6 @@ const UserDashboard = () => {
         } catch (error) {
             console.error('Error submitting complaint:', error);
             setSubmitStatus('error');
-        }
-    };
-
-    const handleEquipmentSubmit = async (e) => {
-        e.preventDefault();
-        setEquipmentSubmitStatus('loading');
-
-        try {
-            const response = await fetch(`${API_URL}/api/users/weighing-equipment`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    ...getAuthHeader()
-                },
-                body: JSON.stringify(equipmentForm)
-            });
-
-            if (response.ok) {
-                setEquipmentSubmitStatus('success');
-                setEquipmentForm({
-                    equipmentType: '',
-                    model: '',
-                    capacity: '',
-                    serialNumber: '',
-                    installationDate: '',
-                    location: '',
-                    notes: ''
-                });
-                fetchUserData(); // Refresh equipment
-                setTimeout(() => setEquipmentSubmitStatus(null), 3000);
-            } else {
-                setEquipmentSubmitStatus('error');
-            }
-        } catch (error) {
-            console.error('Error submitting equipment:', error);
-            setEquipmentSubmitStatus('error');
-        }
-    };
-
-    const handleDeleteEquipment = async (id) => {
-        if (!confirm('Are you sure you want to delete this equipment?')) return;
-
-        try {
-            const response = await fetch(`${API_URL}/api/users/weighing-equipment/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    ...getAuthHeader()
-                }
-            });
-
-            if (response.ok) {
-                fetchUserData(); // Refresh equipment
-            }
-        } catch (error) {
-            console.error('Error deleting equipment:', error);
         }
     };
 
@@ -194,13 +125,6 @@ const UserDashboard = () => {
                     >
                         <AlertCircle size={18} />
                         Complaints
-                    </button>
-                    <button
-                        className={`tab ${activeTab === 'equipment' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('equipment')}
-                    >
-                        <Scale size={18} />
-                        Weighing Equipment
                     </button>
                 </div>
 
@@ -361,185 +285,6 @@ const UserDashboard = () => {
                                                     {complaint.updatedAt !== complaint.createdAt && (
                                                         <small>Updated: {new Date(complaint.updatedAt).toLocaleString()}</small>
                                                     )}
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-                        </motion.div>
-                    )}
-
-                    {activeTab === 'equipment' && (
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            className="equipment-section"
-                        >
-                            <div className="equipment-form-card">
-                                <h2>Add Weighing Equipment</h2>
-                                {equipmentSubmitStatus === 'success' && (
-                                    <div className="success-message">
-                                        <CheckCircle size={18} />
-                                        Equipment added successfully!
-                                    </div>
-                                )}
-                                {equipmentSubmitStatus === 'error' && (
-                                    <div className="error-message">
-                                        <XCircle size={18} />
-                                        Failed to add equipment. Please try again.
-                                    </div>
-                                )}
-                                <form onSubmit={handleEquipmentSubmit}>
-                                    <div className="form-row">
-                                        <div className="form-group">
-                                            <label>Equipment Type *</label>
-                                            <select
-                                                value={equipmentForm.equipmentType}
-                                                onChange={(e) => setEquipmentForm({ ...equipmentForm, equipmentType: e.target.value })}
-                                                required
-                                            >
-                                                <option value="">Select Type</option>
-                                                <option value="Platform Scale">Platform Scale</option>
-                                                <option value="Weighbridge">Weighbridge</option>
-                                                <option value="Bench Scale">Bench Scale</option>
-                                                <option value="Crane Scale">Crane Scale</option>
-                                                <option value="Counting Scale">Counting Scale</option>
-                                                <option value="Analytical Balance">Analytical Balance</option>
-                                                <option value="Other">Other</option>
-                                            </select>
-                                        </div>
-                                        <div className="form-group">
-                                            <label>Model *</label>
-                                            <input
-                                                type="text"
-                                                value={equipmentForm.model}
-                                                onChange={(e) => setEquipmentForm({ ...equipmentForm, model: e.target.value })}
-                                                placeholder="e.g., WB-5000"
-                                                required
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="form-row">
-                                        <div className="form-group">
-                                            <label>Capacity *</label>
-                                            <input
-                                                type="text"
-                                                value={equipmentForm.capacity}
-                                                onChange={(e) => setEquipmentForm({ ...equipmentForm, capacity: e.target.value })}
-                                                placeholder="e.g., 5000 kg"
-                                                required
-                                            />
-                                        </div>
-                                        <div className="form-group">
-                                            <label>Serial Number</label>
-                                            <input
-                                                type="text"
-                                                value={equipmentForm.serialNumber}
-                                                onChange={(e) => setEquipmentForm({ ...equipmentForm, serialNumber: e.target.value })}
-                                                placeholder="Serial number"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="form-row">
-                                        <div className="form-group">
-                                            <label>Installation Date</label>
-                                            <input
-                                                type="date"
-                                                value={equipmentForm.installationDate}
-                                                onChange={(e) => setEquipmentForm({ ...equipmentForm, installationDate: e.target.value })}
-                                            />
-                                        </div>
-                                        <div className="form-group">
-                                            <label>Location</label>
-                                            <input
-                                                type="text"
-                                                value={equipmentForm.location}
-                                                onChange={(e) => setEquipmentForm({ ...equipmentForm, location: e.target.value })}
-                                                placeholder="Installation location"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Notes</label>
-                                        <textarea
-                                            value={equipmentForm.notes}
-                                            onChange={(e) => setEquipmentForm({ ...equipmentForm, notes: e.target.value })}
-                                            placeholder="Additional notes or specifications..."
-                                            rows="3"
-                                        />
-                                    </div>
-                                    <button type="submit" className="btn btn-primary" disabled={equipmentSubmitStatus === 'loading'}>
-                                        <Scale size={18} />
-                                        {equipmentSubmitStatus === 'loading' ? 'Adding...' : 'Add Equipment'}
-                                    </button>
-                                </form>
-                            </div>
-
-                            <div className="equipment-list-section">
-                                <h2>Your Weighing Equipment</h2>
-                                {weighingEquipment.length === 0 ? (
-                                    <div className="empty-state">
-                                        <Scale size={48} />
-                                        <p>No weighing equipment registered</p>
-                                        <small>Add your equipment details above</small>
-                                    </div>
-                                ) : (
-                                    <div className="equipment-grid">
-                                        {weighingEquipment.map((equipment) => (
-                                            <div key={equipment.id} className="equipment-card">
-                                                <div className="equipment-header">
-                                                    <div className="equipment-title">
-                                                        <Scale size={24} />
-                                                        <h3>{equipment.equipmentType}</h3>
-                                                    </div>
-                                                    <span className={`status-badge ${equipment.status.toLowerCase()}`}>
-                                                        {equipment.status}
-                                                    </span>
-                                                </div>
-                                                <div className="equipment-details">
-                                                    <div className="detail-row">
-                                                        <strong>Model:</strong>
-                                                        <span>{equipment.model}</span>
-                                                    </div>
-                                                    <div className="detail-row">
-                                                        <strong>Capacity:</strong>
-                                                        <span>{equipment.capacity}</span>
-                                                    </div>
-                                                    {equipment.serialNumber && (
-                                                        <div className="detail-row">
-                                                            <strong>Serial No:</strong>
-                                                            <span>{equipment.serialNumber}</span>
-                                                        </div>
-                                                    )}
-                                                    {equipment.installationDate && (
-                                                        <div className="detail-row">
-                                                            <strong>Installed:</strong>
-                                                            <span>{new Date(equipment.installationDate).toLocaleDateString()}</span>
-                                                        </div>
-                                                    )}
-                                                    {equipment.location && (
-                                                        <div className="detail-row">
-                                                            <strong>Location:</strong>
-                                                            <span>{equipment.location}</span>
-                                                        </div>
-                                                    )}
-                                                    {equipment.notes && (
-                                                        <div className="detail-row notes">
-                                                            <strong>Notes:</strong>
-                                                            <span>{equipment.notes}</span>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                                <div className="equipment-footer">
-                                                    <small>Added: {new Date(equipment.createdAt).toLocaleDateString()}</small>
-                                                    <button
-                                                        className="btn-delete"
-                                                        onClick={() => handleDeleteEquipment(equipment.id)}
-                                                        title="Delete equipment"
-                                                    >
-                                                        <Trash2 size={16} />
-                                                    </button>
                                                 </div>
                                             </div>
                                         ))}
