@@ -32,10 +32,10 @@ function initializeDatabase() {
     )
   `);
 
-  // Migration: Add isVerified column if it doesn't exist (for existing databases)
+  // Migration: Add isVerified column if it doesn't exist
   db.all("PRAGMA table_info(users)", (err, rows) => {
     if (err) {
-      console.error("Error checking table info:", err);
+      console.error("Error checking users table info:", err);
       return;
     }
     const hasIsVerified = rows.some(row => row.name === 'isVerified');
@@ -46,12 +46,24 @@ function initializeDatabase() {
           console.error("Error adding isVerified column:", err);
         } else {
           console.log("Successfully added isVerified column. Updating existing users to verified...");
-          // Set existing users (especially admin) to verified so they aren't locked out
-          db.run("UPDATE users SET isVerified = 1", (err) => {
-            if (err) console.error("Error updating existing users verification status:", err);
-            else console.log("All existing users marked as verified.");
-          });
+          db.run("UPDATE users SET isVerified = 1");
         }
+      });
+    }
+  });
+
+  // Migration: Add description column to complaint_images if it doesn't exist
+  db.all("PRAGMA table_info(complaint_images)", (err, rows) => {
+    if (err) {
+      // Table might not exist yet if it's a fresh install, which is fine
+      return;
+    }
+    const hasDescription = rows.some(row => row.name === 'description');
+    if (!hasDescription) {
+      console.log("Migrating database: Adding description column to complaint_images table...");
+      db.run("ALTER TABLE complaint_images ADD COLUMN description TEXT", (err) => {
+        if (err) console.error("Error adding description column:", err);
+        else console.log("Successfully added description column to complaint_images.");
       });
     }
   });
