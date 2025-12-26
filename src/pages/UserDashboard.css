@@ -35,13 +35,12 @@
 
 .dashboard-header h1 {
     font-size: 2.5rem;
-    color: #1e293b !important;
-    /* Force Dark Slate */
+    color: var(--text-primary);
     margin-bottom: 0.5rem;
 }
 
 .dashboard-header p {
-    color: #64748b !important;
+    color: var(--text-secondary);
     /* Force Slate 500 */
     font-size: 1.1rem;
 }
