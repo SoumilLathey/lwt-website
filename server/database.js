@@ -162,6 +162,7 @@ function initializeDatabase() {
       imageType TEXT NOT NULL,
       imagePath TEXT NOT NULL,
       uploadedBy INTEGER NOT NULL,
+      description TEXT,
       createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (complaintId) REFERENCES complaints(id),
       FOREIGN KEY (uploadedBy) REFERENCES employees(id)
