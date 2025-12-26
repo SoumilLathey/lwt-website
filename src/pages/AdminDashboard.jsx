@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { AlertCircle, Mail, Phone, CheckCircle, Clock, XCircle, RefreshCw, Users, Plus, UserCheck, UserX, Briefcase, ChevronDown, ChevronUp, Key } from 'lucide-react';
+import { AlertCircle, Mail, Phone, CheckCircle, Clock, XCircle, RefreshCw, Users, Plus, UserCheck, UserX, Briefcase, ChevronDown, ChevronUp, Key, Zap } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import API_URL from '../config/api';
 import './AdminDashboard.css';
