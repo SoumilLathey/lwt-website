@@ -12,6 +12,7 @@ import enquiryRoutes from './routes/enquiries.js';
 import adminRoutes from './routes/admin.js';
 import employeeRoutes from './routes/employees.js';
 import projectRoutes from './routes/projects.js';
+import setupRoutes from './routes/setup.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -47,6 +48,7 @@ app.use('/api/enquiries', enquiryRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/employees', employeeRoutes);
 app.use('/api/projects', projectRoutes);
+app.use('/api/setup', setupRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
