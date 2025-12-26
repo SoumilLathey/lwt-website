@@ -126,9 +126,34 @@ const Header = () => {
                     <Link to="/solar-epc" className="mobile-link" onClick={toggleMenu}>Solar EPC</Link>
                     <Link to="/contact" className="mobile-link" onClick={toggleMenu}>Contact</Link>
 
-                    {!user && (
+                    <div style={{ borderTop: '1px solid #e2e8f0', margin: '8px 0' }}></div>
+
+                    {user ? (
                         <>
-                            <div style={{ borderTop: '1px solid #e2e8f0', margin: '8px 0' }}></div>
+                            <div style={{ padding: '8px 12px', color: '#64748b', fontSize: '14px', fontWeight: '600' }}>
+                                {user.name}
+                            </div>
+                            <Link to="/dashboard" className="mobile-link" onClick={toggleMenu}>
+                                <LayoutDashboard size={16} style={{ display: 'inline', marginRight: '8px' }} />
+                                Dashboard
+                            </Link>
+                            {isAdmin && (
+                                <Link to="/admin" className="mobile-link" onClick={toggleMenu}>
+                                    <LayoutDashboard size={16} style={{ display: 'inline', marginRight: '8px' }} />
+                                    Admin Panel
+                                </Link>
+                            )}
+                            <button
+                                className="mobile-link"
+                                onClick={() => { handleLogout(); toggleMenu(); }}
+                                style={{ width: '100%', textAlign: 'left', color: '#dc2626' }}
+                            >
+                                <LogOut size={16} style={{ display: 'inline', marginRight: '8px' }} />
+                                Logout
+                            </button>
+                        </>
+                    ) : (
+                        <>
                             <Link to="/employee/login" className="mobile-link" onClick={toggleMenu}>
                                 <User size={16} style={{ display: 'inline', marginRight: '8px' }} />
                                 Employee Login
