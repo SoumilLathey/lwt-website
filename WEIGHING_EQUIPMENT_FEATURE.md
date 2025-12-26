@@ -1,138 +1,119 @@
-# Weighing Equipment Feature
+# Weighing Equipment Feature - Admin Only
 
 ## Overview
-A new **Weighing Equipment** tab has been added to the client dashboard, allowing clients to add, view, and manage their weighing equipment details.
+Weighing equipment management has been moved to **admin-only access**. Only administrators can add, view, and manage weighing equipment for clients through the Admin Dashboard.
 
-## Features Implemented
+## Changes Made
+
+### Access Control
+- ❌ **Removed** from Client Dashboard - Clients can no longer add their own equipment
+- ✅ **Added** to Admin Dashboard - Admins manage equipment for all clients
+- ✅ **Admin-only API routes** - All equipment endpoints require admin authentication
+
+## Features
 
 ### 1. Database Schema
-- Created `weighing_equipment` table in the database with the following fields:
-  - `id`: Primary key
-  - `userId`: Foreign key to users table
-  - `equipmentType`: Type of weighing equipment (Platform Scale, Weighbridge, etc.)
-  - `model`: Equipment model number
-  - `capacity`: Weight capacity (e.g., "5000 kg")
-  - `serialNumber`: Serial number (optional)
-  - `installationDate`: Date of installation (optional)
-  - `location`: Installation location (optional)
-  - `status`: Equipment status (Active/Inactive)
-  - `notes`: Additional notes or specifications (optional)
-  - `createdAt`: Timestamp when record was created
-  - `updatedAt`: Timestamp when record was last updated
+The `weighing_equipment` table stores:
+- `userId`: Foreign key to users table (which client owns the equipment)
+- `equipmentType`: Type of weighing equipment
+- `model`: Equipment model number
+- `capacity`: Weight capacity
+- `serialNumber`: Serial number (optional)
+- `installationDate`: Date of installation (optional)
+- `location`: Installation location (optional)
+- `status`: Equipment status (Active/Maintenance/Inactive)
+- `notes`: Additional notes (optional)
+- Timestamps for created and updated dates
 
-### 2. Backend API Endpoints
-Added the following routes in `/api/users/weighing-equipment`:
+### 2. Admin API Endpoints
+Located in `/api/admin/weighing-equipment`:
 
-#### GET `/api/users/weighing-equipment`
-- Fetches all weighing equipment for the authenticated user
-- Returns array of equipment records
+#### GET `/api/admin/weighing-equipment/user/:userId`
+- Fetches all weighing equipment for a specific user
+- **Admin only**
 
-#### POST `/api/users/weighing-equipment`
-- Adds new weighing equipment for the authenticated user
-- Required fields: `equipmentType`, `model`, `capacity`
-- Optional fields: `serialNumber`, `installationDate`, `location`, `notes`
+#### POST `/api/admin/weighing-equipment`
+- Adds new weighing equipment for a user
+- Required fields: `userId`, `equipmentType`, `model`, `capacity`
+- **Admin only**
 
-#### PUT `/api/users/weighing-equipment/:id`
-- Updates existing equipment (ownership verified)
-- Can update all fields including status
+#### DELETE `/api/admin/weighing-equipment/:id`
+- Deletes equipment
+- **Admin only**
 
-#### DELETE `/api/users/weighing-equipment/:id`
-- Deletes equipment (ownership verified)
-- Requires confirmation from user
+### 3. Admin Dashboard Features
 
-### 3. Frontend Features
+#### Equipment Button
+- Located in the **Users** tab of Admin Dashboard
+- Each user row has an "Equipment" button (blue)
+- Click to open the equipment management modal
 
-#### New Dashboard Tab
-- Added "Weighing Equipment" tab to the User Dashboard
-- Icon: Scale icon from lucide-react
+#### Equipment Modal
+- **View existing equipment** in a table format showing:
+  - Equipment type, model, capacity
+  - Serial number, location, status
+  - Delete button for each item
+- **Add new equipment** form with fields for:
+  - Equipment type (dropdown with predefined options)
+  - Model, capacity, serial number
+  - Installation date, location
+  - Status (Active/Maintenance/Inactive)
+  - Notes
 
-#### Add Equipment Form
-- Dropdown for equipment type with predefined options:
-  - Platform Scale
-  - Weighbridge
-  - Bench Scale
-  - Crane Scale
-  - Counting Scale
-  - Analytical Balance
-  - Other
-- Input fields for model, capacity, serial number
-- Date picker for installation date
-- Location input field
-- Notes textarea for additional specifications
-- Form validation for required fields
-- Success/error message display
+## How to Use (Admin Only)
 
-#### Equipment List Display
-- Grid layout showing all equipment cards
-- Each card displays:
-  - Equipment type and status badge
-  - Model and capacity
-  - Serial number (if provided)
-  - Installation date (if provided)
-  - Location (if provided)
-  - Notes (if provided)
-  - Creation date
-  - Delete button
-- Empty state when no equipment is registered
-- Hover effects for better UX
+1. Log in as an **admin**
+2. Go to **Admin Dashboard**
+3. Click on the **Users** tab
+4. Find the client you want to manage
+5. Click the blue **"Equipment"** button
+6. In the modal:
+   - View all existing equipment for that client
+   - Add new equipment using the form
+   - Delete equipment if needed
 
-### 4. Styling
-- Consistent design with existing dashboard sections
-- Responsive layout for mobile devices
-- Form rows for better organization
-- Card-based equipment display
-- Status badges for equipment status
-- Delete button with confirmation
+## Equipment Types Available
+- Platform Scale
+- Weighbridge
+- Bench Scale
+- Crane Scale
+- Counting Scale
+- Analytical Balance
+- Other
 
-## User Permissions
-- ✅ Clients can add their own weighing equipment
-- ✅ Clients can view their own equipment
-- ✅ Clients can delete their own equipment
-- ✅ Clients can update their own equipment
-- ✅ Ownership verification on all operations
+## Security
+- ✅ All routes require admin authentication
+- ✅ Only admins can view/add/delete equipment
+- ✅ Clients can no longer self-manage equipment
+- ✅ Equipment is associated with specific users
 
-## How to Use
+## Files Modified
 
-### For Clients:
-1. Log in to your account
-2. Navigate to the User Dashboard
-3. Click on the "Weighing Equipment" tab
-4. Fill out the form to add new equipment:
-   - Select equipment type
-   - Enter model and capacity (required)
-   - Optionally add serial number, installation date, location, and notes
-5. Click "Add Equipment" to save
-6. View all your equipment in the list below
-7. Delete equipment using the trash icon if needed
+### Backend:
+1. **server/routes/admin.js** - Added admin-only equipment routes
+2. **server/routes/users.js** - Removed client equipment routes
+3. **server/database.js** - Table already exists from previous implementation
 
-## Technical Details
+### Frontend:
+1. **src/pages/AdminDashboard.jsx** - Added equipment button and modal
+2. **src/pages/UserDashboard.jsx** - Removed equipment tab and functionality
+3. **src/pages/UserDashboard.css** - Equipment styles remain (unused, can be cleaned up)
 
-### Files Modified:
-1. **Backend:**
-   - `server/database.js` - Added weighing_equipment table
-   - `server/routes/users.js` - Added CRUD endpoints
-
-2. **Frontend:**
-   - `src/pages/UserDashboard.jsx` - Added equipment tab and functionality
-   - `src/pages/UserDashboard.css` - Added styling for equipment section
-
-### Dependencies:
-- No new dependencies required
-- Uses existing authentication middleware
-- Uses existing database connection
+## Deployment
+Changes have been deployed to:
+- **Frontend**: https://lwt-website-lake.vercel.app
+- **Backend**: https://lwt-backend.onrender.com
 
 ## Testing
-To test the feature:
-1. Start the backend server: `cd server && node server.js`
-2. Start the frontend: `npm run dev`
-3. Log in as a client
-4. Navigate to the Weighing Equipment tab
-5. Add, view, and delete equipment
+1. Log in as admin
+2. Navigate to Admin Dashboard → Users tab
+3. Click "Equipment" button for any user
+4. Add/view/delete equipment
+5. Verify clients cannot access equipment management
 
-## Future Enhancements (Optional)
-- Edit functionality for existing equipment
-- Equipment maintenance history
-- Equipment images/photos
-- Export equipment list to PDF/Excel
-- Equipment warranty tracking
-- Service reminder notifications
+## Rationale for Admin-Only Access
+This change ensures:
+- **Data accuracy** - Admins verify equipment details
+- **Quality control** - Prevents incorrect or duplicate entries
+- **Centralized management** - Single source of truth
+- **Professional workflow** - Matches solar installation management pattern

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { User, MapPin, Phone, Mail, Zap, AlertCircle, Send, CheckCircle, Clock, XCircle } from 'lucide-react';
+import { User, MapPin, Phone, Mail, Zap, AlertCircle, Send, CheckCircle, Clock, XCircle, Scale } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import API_URL from '../config/api';
 import './UserDashboard.css';
@@ -10,6 +10,7 @@ const UserDashboard = () => {
     const [profile, setProfile] = useState(null);
     const [installations, setInstallations] = useState([]);
     const [complaints, setComplaints] = useState([]);
+    const [weighingEquipment, setWeighingEquipment] = useState([]);
     const [complaintForm, setComplaintForm] = useState({ subject: '', description: '' });
     const [loading, setLoading] = useState(true);
     const [submitStatus, setSubmitStatus] = useState(null);
@@ -26,13 +27,23 @@ const UserDashboard = () => {
                 ...getAuthHeader()
             };
 
-            const [profileRes, installationsRes, complaintsRes] = await Promise.all([
+            const [profileRes, installationsRes, complaintsRes, equipmentRes] = await Promise.all([
                 fetch(`${API_URL}/api/users/profile`, { headers }),
                 fetch(`${API_URL}/api/users/installations`, { headers }),
-                fetch(`${API_URL}/api/complaints/user`, { headers })
+                fetch(`${API_URL}/api/complaints/user`, { headers }),
+                fetch(`${API_URL}/api/admin/weighing-equipment/user/${profile?.id || 'temp'}`, { headers })
             ]);
 
-            if (profileRes.ok) setProfile(await profileRes.json());
+            if (profileRes.ok) {
+                const profileData = await profileRes.json();
+                setProfile(profileData);
+
+                // Fetch equipment with the actual user ID
+                if (profileData?.id) {
+                    const equipRes = await fetch(`${API_URL}/api/admin/weighing-equipment/user/${profileData.id}`, { headers });
+                    if (equipRes.ok) setWeighingEquipment(await equipRes.json());
+                }
+            }
             if (installationsRes.ok) setInstallations(await installationsRes.json());
             if (complaintsRes.ok) setComplaints(await complaintsRes.json());
         } catch (error) {
@@ -120,6 +131,13 @@ const UserDashboard = () => {
                         Solar Installations
                     </button>
                     <button
+                        className={`tab ${activeTab === 'equipment' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('equipment')}
+                    >
+                        <Scale size={18} />
+                        Weighing Equipment
+                    </button>
+                    <button
                         className={`tab ${activeTab === 'complaints' ? 'active' : ''}`}
                         onClick={() => setActiveTab('complaints')}
                     >
@@ -205,6 +223,52 @@ const UserDashboard = () => {
                                             <p className="installation-address">{installation.address}</p>
                                             <div className="installation-date">
                                                 Installed: {new Date(installation.installationDate).toLocaleDateString()}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </motion.div>
+                    )}
+
+                    {activeTab === 'equipment' && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="installations-section"
+                        >
+                            <h2>Your Weighing Equipment</h2>
+                            {weighingEquipment.length === 0 ? (
+                                <div className="empty-state">
+                                    <Scale size={48} />
+                                    <p>No weighing equipment found</p>
+                                    <small>Contact us for weighing equipment solutions!</small>
+                                </div>
+                            ) : (
+                                <div className="installations-grid">
+                                    {weighingEquipment.map((equipment) => (
+                                        <div key={equipment.id} className="installation-card">
+                                            <div className="installation-header">
+                                                <Scale size={24} />
+                                                <span className={`status-badge ${equipment.status.toLowerCase()}`}>
+                                                    {equipment.status}
+                                                </span>
+                                            </div>
+                                            <h3>{equipment.equipmentType}</h3>
+                                            <div className="equipment-details" style={{ marginTop: '1rem' }}>
+                                                <p><strong>Model:</strong> {equipment.model}</p>
+                                                <p><strong>Capacity:</strong> {equipment.capacity}</p>
+                                                {equipment.serialNumber && (
+                                                    <p><strong>Serial No:</strong> {equipment.serialNumber}</p>
+                                                )}
+                                                {equipment.location && (
+                                                    <p className="installation-address">{equipment.location}</p>
+                                                )}
+                                                {equipment.installationDate && (
+                                                    <div className="installation-date">
+                                                        Installed: {new Date(equipment.installationDate).toLocaleDateString()}
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                     ))}
