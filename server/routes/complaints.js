@@ -78,10 +78,25 @@ router.post('/', authenticateToken, async (req, res) => {
 // Get user's complaints
 router.get('/user', authenticateToken, async (req, res) => {
     try {
-        const complaints = await allQuery(
-            'SELECT * FROM complaints WHERE userId = ? ORDER BY createdAt DESC',
-            [req.user.userId]
-        );
+        const complaints = await allQuery(`
+            SELECT c.*, 
+                   e.name as assignedEmployeeName, 
+                   e.phone as assignedEmployeePhone, 
+                   e.photoPath as assignedEmployeePhoto
+            FROM complaints c
+            LEFT JOIN employees e ON c.assignedTo = e.id
+            WHERE c.userId = ? 
+            ORDER BY c.createdAt DESC
+        `, [req.user.userId]);
+
+        // Get visit schedule for each complaint
+        for (let complaint of complaints) {
+            const schedule = await getQuery(
+                'SELECT * FROM visit_schedules WHERE complaintId = ?',
+                [complaint.id]
+            );
+            complaint.visitSchedule = schedule || null;
+        }
 
         res.json(complaints);
     } catch (error) {
@@ -95,20 +110,27 @@ router.get('/all', authenticateToken, isAdmin, async (req, res) => {
     try {
         const complaints = await allQuery(`
       SELECT c.*, u.name as userName, u.email as userEmail, u.phone as userPhone,
-             e.name as assignedEmployeeName, e.id as assignedEmployeeId
+             e.name as assignedEmployeeName, e.id as assignedEmployeeId, 
+             e.phone as assignedEmployeePhone, e.photoPath as assignedEmployeePhoto
       FROM complaints c
       JOIN users u ON c.userId = u.id
       LEFT JOIN employees e ON c.assignedTo = e.id
       ORDER BY c.createdAt DESC
     `);
 
-        // Get images for each complaint
+        // Get images and visit schedule for each complaint
         for (let complaint of complaints) {
             const images = await allQuery(
                 'SELECT * FROM complaint_images WHERE complaintId = ? ORDER BY createdAt DESC',
                 [complaint.id]
             );
             complaint.images = images;
+
+            const schedule = await getQuery(
+                'SELECT * FROM visit_schedules WHERE complaintId = ?',
+                [complaint.id]
+            );
+            complaint.visitSchedule = schedule || null;
         }
 
         res.json(complaints);

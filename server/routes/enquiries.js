@@ -1,6 +1,6 @@
 import express from 'express';
 import nodemailer from 'nodemailer';
-import { runQuery, allQuery } from '../database.js';
+import { runQuery, allQuery, getQuery } from '../database.js';
 import { authenticateToken, isAdmin } from '../middleware/auth.js';
 
 const router = express.Router();
@@ -69,19 +69,29 @@ router.post('/', async (req, res) => {
 router.get('/', authenticateToken, isAdmin, async (req, res) => {
     try {
         const enquiries = await allQuery(`
-            SELECT e.*, emp.name as assignedEmployeeName, emp.id as assignedEmployeeId
+            SELECT e.*, 
+                   emp.name as assignedEmployeeName, 
+                   emp.id as assignedEmployeeId,
+                   emp.phone as assignedEmployeePhone,
+                   emp.photoPath as assignedEmployeePhoto
             FROM enquiries e
             LEFT JOIN employees emp ON e.assignedTo = emp.id
             ORDER BY e.createdAt DESC
         `);
 
-        // Get images for each enquiry
+        // Get images and visit schedule for each enquiry
         for (let enquiry of enquiries) {
             const images = await allQuery(
                 'SELECT * FROM enquiry_images WHERE enquiryId = ? ORDER BY createdAt DESC',
                 [enquiry.id]
             );
             enquiry.images = images;
+
+            const schedule = await getQuery(
+                'SELECT * FROM visit_schedules WHERE enquiryId = ?',
+                [enquiry.id]
+            );
+            enquiry.visitSchedule = schedule || null;
         }
 
         res.json(enquiries);

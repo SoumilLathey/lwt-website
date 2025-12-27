@@ -1,9 +1,44 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
+import multer from 'multer';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import { runQuery, getQuery, allQuery } from '../database.js';
 import { authenticateToken, isAdmin } from '../middleware/auth.js';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 const router = express.Router();
+
+// Configure multer for employee photo uploads
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, path.join(__dirname, '../uploads'));
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, 'employee-' + uniqueSuffix + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+    fileFilter: (req, file, cb) => {
+        const allowedTypes = /jpeg|jpg|png|gif/;
+        const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+        const mimetype = allowedTypes.test(file.mimetype);
+
+        if (mimetype && extname) {
+            return cb(null, true);
+        } else {
+            cb(new Error('Only image files are allowed!'));
+        }
+    }
+});
+
 
 // Secret key for admin promotion (change this to something secure!)
 const ADMIN_SECRET = process.env.ADMIN_SECRET || 'lwt-admin-secret-2024-change-me';
@@ -142,7 +177,7 @@ router.get('/check/:email', async (req, res) => {
 });
 
 // Create new employee (admin only)
-router.post('/employees', authenticateToken, isAdmin, async (req, res) => {
+router.post('/employees', authenticateToken, isAdmin, upload.single('photo'), async (req, res) => {
     try {
         const { email, password, name, phone, department } = req.body;
 
@@ -159,15 +194,19 @@ router.post('/employees', authenticateToken, isAdmin, async (req, res) => {
         // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        // Get photo path if uploaded
+        const photoPath = req.file ? `/uploads/${req.file.filename}` : null;
+
         // Create employee
         const result = await runQuery(
-            'INSERT INTO employees (email, password, name, phone, department) VALUES (?, ?, ?, ?, ?)',
-            [email, hashedPassword, name, phone, department]
+            'INSERT INTO employees (email, password, name, phone, department, photoPath) VALUES (?, ?, ?, ?, ?, ?)',
+            [email, hashedPassword, name, phone, department, photoPath]
         );
 
         res.status(201).json({
             message: 'Employee created successfully',
-            employeeId: result.id
+            employeeId: result.id,
+            photoPath
         });
     } catch (error) {
         console.error('Create employee error:', error);
@@ -179,7 +218,7 @@ router.post('/employees', authenticateToken, isAdmin, async (req, res) => {
 router.get('/employees', authenticateToken, isAdmin, async (req, res) => {
     try {
         const employees = await allQuery(
-            'SELECT id, email, name, phone, department, isActive, createdAt FROM employees ORDER BY name ASC'
+            'SELECT id, email, name, phone, department, photoPath, isActive, createdAt FROM employees ORDER BY name ASC'
         );
 
         res.json(employees);

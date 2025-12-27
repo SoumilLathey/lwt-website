@@ -129,8 +129,44 @@ function initializeDatabase() {
       name TEXT NOT NULL,
       phone TEXT,
       department TEXT,
+      photoPath TEXT,
       isActive INTEGER DEFAULT 1,
       createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
+  // Migration: Add photoPath column to employees if it doesn't exist
+  db.all("PRAGMA table_info(employees)", (err, rows) => {
+    if (err) {
+      console.error("Error checking employees table info:", err);
+      return;
+    }
+    const hasPhotoPath = rows.some(row => row.name === 'photoPath');
+    if (!hasPhotoPath) {
+      console.log("Migrating database: Adding photoPath column to employees table...");
+      db.run("ALTER TABLE employees ADD COLUMN photoPath TEXT", (err) => {
+        if (err) console.error("Error adding photoPath column:", err);
+        else console.log("Successfully added photoPath column to employees.");
+      });
+    }
+  });
+
+  // Visit Schedules table
+  db.run(`
+    CREATE TABLE IF NOT EXISTS visit_schedules (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      complaintId INTEGER,
+      enquiryId INTEGER,
+      employeeId INTEGER NOT NULL,
+      scheduledDate DATE NOT NULL,
+      scheduledTime TIME NOT NULL,
+      notes TEXT,
+      status TEXT DEFAULT 'Scheduled',
+      createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (complaintId) REFERENCES complaints(id),
+      FOREIGN KEY (enquiryId) REFERENCES enquiries(id),
+      FOREIGN KEY (employeeId) REFERENCES employees(id)
     )
   `);
 

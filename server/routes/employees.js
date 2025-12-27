@@ -494,6 +494,141 @@ router.get('/projects/:id/images', authenticateToken, async (req, res) => {
 // This allows the frontend to stay same if needed, OR I will update frontend next.
 // Actually, modifying frontend is better. I will update this file to remove the OTP specific routes.
 
+// Schedule visit for complaint
+router.post('/complaints/:id/schedule', authenticateToken, async (req, res) => {
+    try {
+        if (!req.user.isEmployee) {
+            return res.status(403).json({ error: 'Employee access required' });
+        }
+
+        const { id } = req.params;
+        const { scheduledDate, scheduledTime, notes } = req.body;
+
+        if (!scheduledDate || !scheduledTime) {
+            return res.status(400).json({ error: 'Scheduled date and time are required' });
+        }
+
+        // Verify complaint is assigned to this employee
+        const complaint = await getQuery('SELECT * FROM complaints WHERE id = ? AND assignedTo = ?', [id, req.user.employeeId]);
+        if (!complaint) {
+            return res.status(404).json({ error: 'Complaint not found or not assigned to you' });
+        }
+
+        // Check if schedule already exists
+        const existingSchedule = await getQuery('SELECT id FROM visit_schedules WHERE complaintId = ?', [id]);
+
+        if (existingSchedule) {
+            // Update existing schedule
+            await runQuery(
+                'UPDATE visit_schedules SET scheduledDate = ?, scheduledTime = ?, notes = ?, updatedAt = CURRENT_TIMESTAMP WHERE id = ?',
+                [scheduledDate, scheduledTime, notes || null, existingSchedule.id]
+            );
+            res.json({ message: 'Visit schedule updated successfully' });
+        } else {
+            // Create new schedule
+            await runQuery(
+                'INSERT INTO visit_schedules (complaintId, employeeId, scheduledDate, scheduledTime, notes) VALUES (?, ?, ?, ?, ?)',
+                [id, req.user.employeeId, scheduledDate, scheduledTime, notes || null]
+            );
+            res.status(201).json({ message: 'Visit scheduled successfully' });
+        }
+    } catch (error) {
+        console.error('Schedule visit error:', error);
+        res.status(500).json({ error: 'Failed to schedule visit' });
+    }
+});
+
+// Schedule visit for enquiry
+router.post('/enquiries/:id/schedule', authenticateToken, async (req, res) => {
+    try {
+        if (!req.user.isEmployee) {
+            return res.status(403).json({ error: 'Employee access required' });
+        }
+
+        const { id } = req.params;
+        const { scheduledDate, scheduledTime, notes } = req.body;
+
+        if (!scheduledDate || !scheduledTime) {
+            return res.status(400).json({ error: 'Scheduled date and time are required' });
+        }
+
+        // Verify enquiry is assigned to this employee
+        const enquiry = await getQuery('SELECT * FROM enquiries WHERE id = ? AND assignedTo = ?', [id, req.user.employeeId]);
+        if (!enquiry) {
+            return res.status(404).json({ error: 'Enquiry not found or not assigned to you' });
+        }
+
+        // Check if schedule already exists
+        const existingSchedule = await getQuery('SELECT id FROM visit_schedules WHERE enquiryId = ?', [id]);
+
+        if (existingSchedule) {
+            // Update existing schedule
+            await runQuery(
+                'UPDATE visit_schedules SET scheduledDate = ?, scheduledTime = ?, notes = ?, updatedAt = CURRENT_TIMESTAMP WHERE id = ?',
+                [scheduledDate, scheduledTime, notes || null, existingSchedule.id]
+            );
+            res.json({ message: 'Visit schedule updated successfully' });
+        } else {
+            // Create new schedule
+            await runQuery(
+                'INSERT INTO visit_schedules (enquiryId, employeeId, scheduledDate, scheduledTime, notes) VALUES (?, ?, ?, ?, ?)',
+                [id, req.user.employeeId, scheduledDate, scheduledTime, notes || null]
+            );
+            res.status(201).json({ message: 'Visit scheduled successfully' });
+        }
+    } catch (error) {
+        console.error('Schedule visit error:', error);
+        res.status(500).json({ error: 'Failed to schedule visit' });
+    }
+});
+
+// Get visit schedule for complaint
+router.get('/complaints/:id/schedule', authenticateToken, async (req, res) => {
+    try {
+        if (!req.user.isEmployee) {
+            return res.status(403).json({ error: 'Employee access required' });
+        }
+
+        const { id } = req.params;
+
+        // Verify complaint is assigned to this employee
+        const complaint = await getQuery('SELECT * FROM complaints WHERE id = ? AND assignedTo = ?', [id, req.user.employeeId]);
+        if (!complaint) {
+            return res.status(404).json({ error: 'Complaint not found or not assigned to you' });
+        }
+
+        const schedule = await getQuery('SELECT * FROM visit_schedules WHERE complaintId = ?', [id]);
+        res.json(schedule || null);
+    } catch (error) {
+        console.error('Get visit schedule error:', error);
+        res.status(500).json({ error: 'Failed to fetch visit schedule' });
+    }
+});
+
+// Get visit schedule for enquiry
+router.get('/enquiries/:id/schedule', authenticateToken, async (req, res) => {
+    try {
+        if (!req.user.isEmployee) {
+            return res.status(403).json({ error: 'Employee access required' });
+        }
+
+        const { id } = req.params;
+
+        // Verify enquiry is assigned to this employee
+        const enquiry = await getQuery('SELECT * FROM enquiries WHERE id = ? AND assignedTo = ?', [id, req.user.employeeId]);
+        if (!enquiry) {
+            return res.status(404).json({ error: 'Enquiry not found or not assigned to you' });
+        }
+
+        const schedule = await getQuery('SELECT * FROM visit_schedules WHERE enquiryId = ?', [id]);
+        res.json(schedule || null);
+    } catch (error) {
+        console.error('Get visit schedule error:', error);
+        res.status(500).json({ error: 'Failed to fetch visit schedule' });
+    }
+});
+
 // Removed send-otp and verify-closure routes content to keep file clean.
+
 
 export default router;
