@@ -17,6 +17,7 @@ import UserDashboard from './pages/UserDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import EmployeeLogin from './pages/EmployeeLogin';
 import EmployeeDashboard from './pages/EmployeeDashboard';
+import SolarROI from './pages/SolarROI';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
               <Route path="/automation" element={<Automation />} />
               <Route path="/products" element={<AllProducts />} />
               <Route path="/solar-epc" element={<SolarEPC />} />
+              <Route path="/solar-roi" element={<SolarROI />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
