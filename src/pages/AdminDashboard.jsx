@@ -925,6 +925,38 @@ const AdminDashboard = () => {
                                                             )}
                                                         </div>
 
+                                                        {/* Visit Schedule Display */}
+                                                        {complaint.visitSchedule && (
+                                                            <div style={{
+                                                                marginTop: '15px',
+                                                                padding: '12px',
+                                                                backgroundColor: '#dcfce7',
+                                                                borderRadius: '6px',
+                                                                border: '1px solid #86efac'
+                                                            }}>
+                                                                <strong style={{ color: '#166534', display: 'block', marginBottom: '8px' }}>
+                                                                    📅 Scheduled Visit
+                                                                </strong>
+                                                                <div style={{ fontSize: '14px', color: '#166534' }}>
+                                                                    <div><strong>Date:</strong> {new Date(complaint.visitSchedule.scheduledDate).toLocaleDateString('en-US', {
+                                                                        weekday: 'long',
+                                                                        year: 'numeric',
+                                                                        month: 'long',
+                                                                        day: 'numeric'
+                                                                    })}</div>
+                                                                    <div><strong>Time:</strong> {complaint.visitSchedule.scheduledTime}</div>
+                                                                    {complaint.visitSchedule.notes && (
+                                                                        <div style={{ marginTop: '5px', fontStyle: 'italic' }}>
+                                                                            <strong>Note:</strong> {complaint.visitSchedule.notes}
+                                                                        </div>
+                                                                    )}
+                                                                    <div style={{ marginTop: '5px', fontSize: '12px', opacity: 0.8 }}>
+                                                                        Scheduled by: {complaint.assignedEmployeeName || 'Employee'}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        )}
+
                                                         {/* Images Display */}
                                                         {complaint.images && complaint.images.length > 0 && (
                                                             <div className="images-display">
@@ -1143,6 +1175,38 @@ const AdminDashboard = () => {
                                                             </span>
                                                         )}
                                                     </div>
+
+                                                    {/* Visit Schedule Display */}
+                                                    {enquiry.visitSchedule && (
+                                                        <div style={{
+                                                            marginTop: '15px',
+                                                            padding: '12px',
+                                                            backgroundColor: '#dcfce7',
+                                                            borderRadius: '6px',
+                                                            border: '1px solid #86efac'
+                                                        }}>
+                                                            <strong style={{ color: '#166534', display: 'block', marginBottom: '8px' }}>
+                                                                📅 Scheduled Visit
+                                                            </strong>
+                                                            <div style={{ fontSize: '14px', color: '#166534' }}>
+                                                                <div><strong>Date:</strong> {new Date(enquiry.visitSchedule.scheduledDate).toLocaleDateString('en-US', {
+                                                                    weekday: 'long',
+                                                                    year: 'numeric',
+                                                                    month: 'long',
+                                                                    day: 'numeric'
+                                                                })}</div>
+                                                                <div><strong>Time:</strong> {enquiry.visitSchedule.scheduledTime}</div>
+                                                                {enquiry.visitSchedule.notes && (
+                                                                    <div style={{ marginTop: '5px', fontStyle: 'italic' }}>
+                                                                        <strong>Note:</strong> {enquiry.visitSchedule.notes}
+                                                                    </div>
+                                                                )}
+                                                                <div style={{ marginTop: '5px', fontSize: '12px', opacity: 0.8 }}>
+                                                                    Scheduled by: {enquiry.assignedEmployeeName || 'Employee'}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )}
 
                                                     {/* Images Display */}
                                                     {enquiry.images && enquiry.images.length > 0 && (
@@ -2026,7 +2090,7 @@ const AdminDashboard = () => {
                 )}
 
             </div>
-        </div>
+        </div >
     );
 };
 
