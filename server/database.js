@@ -16,36 +16,30 @@ const db = new sqlite3.Database(join(__dirname, 'database.sqlite'), (err) => {
 });
 
 function initializeDatabase() {
-  // Use serialize to ensure tables are created before inserting data
-  db.serialize(() => {
-    // Users table
-    db.run(`
-      CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        email TEXT UNIQUE NOT NULL,
-        password TEXT NOT NULL,
-        name TEXT NOT NULL,
-        phone TEXT,
-        address TEXT,
-        pincode TEXT,
-        isAdmin INTEGER DEFAULT 0,
-        isVerified INTEGER DEFAULT 0,
-        createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
-      )
-    `, (err) => {
-      if (err) {
-        console.error('Error creating users table:', err);
-      } else {
-        console.log('Users table ready');
-
-        // Now that table exists, check for migrations and seed data
-        checkMigrationsAndSeedData();
-      }
-    });
+  // Users table
+  db.run(`
+    CREATE TABLE IF NOT EXISTS users (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      email TEXT UNIQUE NOT NULL,
+      password TEXT NOT NULL,
+      name TEXT NOT NULL,
+      phone TEXT,
+      address TEXT,
+      pincode TEXT,
+      isAdmin INTEGER DEFAULT 0,
+      isVerified INTEGER DEFAULT 0,
+      createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `, (err) => {
+    if (err) {
+      console.error('Error creating users table:', err);
+    } else {
+      console.log('Users table created/verified');
+      // Wait a moment then seed admin users
+      setTimeout(seedAdminUsers, 100);
+    }
   });
-}
 
-function checkMigrationsAndSeedData() {
   // Migration: Add isVerified column if it doesn't exist
   db.all("PRAGMA table_info(users)", (err, rows) => {
     if (err) {
@@ -81,7 +75,10 @@ function checkMigrationsAndSeedData() {
       });
     }
   });
+}
 
+// Seed admin users - called after users table is created
+async function seedAdminUsers() {
   // Seed Default Admin
   db.get('SELECT count(*) as count FROM users', [], async (err, row) => {
     if (err) {
@@ -103,7 +100,6 @@ function checkMigrationsAndSeedData() {
       // Ensure admin@lwt.com is verified if it exists
       db.run("UPDATE users SET isVerified = 1 WHERE email = 'admin@lwt.com'", (err) => {
         if (err) console.error("Error ensuring admin@lwt.com is verified:", err);
-        // else console.log("Ensured admin@lwt.com is verified.");
       });
     }
   });
@@ -133,9 +129,9 @@ function checkMigrationsAndSeedData() {
       );
     }
   });
-}
-// Employees table
-db.run(`
+
+  // Employees table
+  db.run(`
     CREATE TABLE IF NOT EXISTS employees (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       email TEXT UNIQUE NOT NULL,
@@ -149,24 +145,24 @@ db.run(`
     )
   `);
 
-// Migration: Add photoPath column to employees if it doesn't exist
-db.all("PRAGMA table_info(employees)", (err, rows) => {
-  if (err) {
-    console.error("Error checking employees table info:", err);
-    return;
-  }
-  const hasPhotoPath = rows.some(row => row.name === 'photoPath');
-  if (!hasPhotoPath) {
-    console.log("Migrating database: Adding photoPath column to employees table...");
-    db.run("ALTER TABLE employees ADD COLUMN photoPath TEXT", (err) => {
-      if (err) console.error("Error adding photoPath column:", err);
-      else console.log("Successfully added photoPath column to employees.");
-    });
-  }
-});
+  // Migration: Add photoPath column to employees if it doesn't exist
+  db.all("PRAGMA table_info(employees)", (err, rows) => {
+    if (err) {
+      console.error("Error checking employees table info:", err);
+      return;
+    }
+    const hasPhotoPath = rows.some(row => row.name === 'photoPath');
+    if (!hasPhotoPath) {
+      console.log("Migrating database: Adding photoPath column to employees table...");
+      db.run("ALTER TABLE employees ADD COLUMN photoPath TEXT", (err) => {
+        if (err) console.error("Error adding photoPath column:", err);
+        else console.log("Successfully added photoPath column to employees.");
+      });
+    }
+  });
 
-// Visit Schedules table
-db.run(`
+  // Visit Schedules table
+  db.run(`
     CREATE TABLE IF NOT EXISTS visit_schedules (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       complaintId INTEGER,
@@ -184,8 +180,8 @@ db.run(`
     )
   `);
 
-// Solar Installations table
-db.run(`
+  // Solar Installations table
+  db.run(`
     CREATE TABLE IF NOT EXISTS solar_installations (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       userId INTEGER NOT NULL,
@@ -198,8 +194,8 @@ db.run(`
     )
   `);
 
-// Complaints table
-db.run(`
+  // Complaints table
+  db.run(`
     CREATE TABLE IF NOT EXISTS complaints (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       userId INTEGER NOT NULL,
@@ -216,8 +212,8 @@ db.run(`
     )
   `);
 
-// Complaint Images table
-db.run(`
+  // Complaint Images table
+  db.run(`
     CREATE TABLE IF NOT EXISTS complaint_images (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       complaintId INTEGER NOT NULL,
@@ -231,8 +227,8 @@ db.run(`
     )
   `);
 
-// Enquiries table
-db.run(`
+  // Enquiries table
+  db.run(`
     CREATE TABLE IF NOT EXISTS enquiries (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
@@ -249,8 +245,8 @@ db.run(`
     )
   `);
 
-// Enquiry Images table
-db.run(`
+  // Enquiry Images table
+  db.run(`
     CREATE TABLE IF NOT EXISTS enquiry_images (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       enquiryId INTEGER NOT NULL,
@@ -263,8 +259,8 @@ db.run(`
     )
   `);
 
-// Projects table
-db.run(`
+  // Projects table
+  db.run(`
     CREATE TABLE IF NOT EXISTS projects (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
@@ -279,8 +275,8 @@ db.run(`
     )
   `);
 
-// Project Team Members table
-db.run(`
+  // Project Team Members table
+  db.run(`
     CREATE TABLE IF NOT EXISTS project_team_members (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       projectId INTEGER NOT NULL,
@@ -293,8 +289,8 @@ db.run(`
     )
   `);
 
-// Project Images table
-db.run(`
+  // Project Images table
+  db.run(`
     CREATE TABLE IF NOT EXISTS project_images (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       projectId INTEGER NOT NULL,
@@ -309,8 +305,8 @@ db.run(`
     )
   `);
 
-// Weighing Equipment table
-db.run(`
+  // Weighing Equipment table
+  db.run(`
     CREATE TABLE IF NOT EXISTS weighing_equipment (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       userId INTEGER NOT NULL,
@@ -328,7 +324,7 @@ db.run(`
     )
   `);
 
-console.log('Database tables initialized');
+  console.log('Database tables initialized');
 }
 
 // Helper functions
