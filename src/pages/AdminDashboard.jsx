@@ -25,8 +25,10 @@ const AdminDashboard = () => {
         password: '',
         name: '',
         phone: '',
-        department: ''
+        department: '',
+        photo: null
     });
+    const [photoPreview, setPhotoPreview] = useState(null);
     const [newProject, setNewProject] = useState({
         name: '',
         description: '',
@@ -208,16 +210,35 @@ const AdminDashboard = () => {
         }
     };
 
+    const handlePhotoChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setNewEmployee({ ...newEmployee, photo: file });
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPhotoPreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     const createEmployee = async (e) => {
         e.preventDefault();
         try {
+            const formData = new FormData();
+            formData.append('email', newEmployee.email);
+            formData.append('password', newEmployee.password);
+            formData.append('name', newEmployee.name);
+            formData.append('phone', newEmployee.phone);
+            formData.append('department', newEmployee.department);
+            if (newEmployee.photo) {
+                formData.append('photo', newEmployee.photo);
+            }
+
             const response = await fetch(`${API_URL}/api/admin/employees`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    ...getAuthHeader()
-                },
-                body: JSON.stringify(newEmployee)
+                headers: getAuthHeader(),
+                body: formData
             });
 
             if (response.ok) {
@@ -227,8 +248,10 @@ const AdminDashboard = () => {
                     password: '',
                     name: '',
                     phone: '',
-                    department: ''
+                    department: '',
+                    photo: null
                 });
+                setPhotoPreview(null);
                 fetchData();
                 alert('Employee created successfully!');
             } else {
@@ -1232,6 +1255,37 @@ const AdminDashboard = () => {
                                             value={newEmployee.department}
                                             onChange={(e) => setNewEmployee({ ...newEmployee, department: e.target.value })}
                                         />
+                                        <div style={{ gridColumn: '1 / -1' }}>
+                                            <label style={{ display: 'block', marginBottom: '8px', color: '#666', fontSize: '14px' }}>
+                                                Employee Photo (Optional)
+                                            </label>
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={handlePhotoChange}
+                                                style={{
+                                                    padding: '8px',
+                                                    border: '1px solid #ddd',
+                                                    borderRadius: '8px',
+                                                    width: '100%'
+                                                }}
+                                            />
+                                            {photoPreview && (
+                                                <div style={{ marginTop: '10px', textAlign: 'center' }}>
+                                                    <img
+                                                        src={photoPreview}
+                                                        alt="Preview"
+                                                        style={{
+                                                            width: '100px',
+                                                            height: '100px',
+                                                            objectFit: 'cover',
+                                                            borderRadius: '50%',
+                                                            border: '3px solid #2563eb'
+                                                        }}
+                                                    />
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                     <div className="form-actions">
                                         <button type="submit" className="submit-btn">Create Employee</button>
@@ -1257,7 +1311,20 @@ const AdminDashboard = () => {
                                         <div key={employee.id} className="employee-card">
                                             <div className="employee-header">
                                                 <div className="employee-avatar">
-                                                    {employee.isActive ? <UserCheck size={24} /> : <UserX size={24} />}
+                                                    {employee.photoPath ? (
+                                                        <img
+                                                            src={`${API_URL}${employee.photoPath}`}
+                                                            alt={employee.name}
+                                                            style={{
+                                                                width: '48px',
+                                                                height: '48px',
+                                                                borderRadius: '50%',
+                                                                objectFit: 'cover'
+                                                            }}
+                                                        />
+                                                    ) : (
+                                                        employee.isActive ? <UserCheck size={24} /> : <UserX size={24} />
+                                                    )}
                                                 </div>
                                                 <div className="employee-info">
                                                     <h3>{employee.name}</h3>

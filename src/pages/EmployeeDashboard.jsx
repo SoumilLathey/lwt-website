@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import {
     AlertCircle, Mail, Upload, CheckCircle, Clock,
-    LogOut, User, Image as ImageIcon, X, Briefcase, ChevronDown, ChevronUp
+    LogOut, User, Image as ImageIcon, X, Briefcase, ChevronDown, ChevronUp, Calendar
 } from 'lucide-react';
 import API_URL from '../config/api';
 import './EmployeeDashboard.css';
@@ -20,6 +20,13 @@ const EmployeeDashboard = () => {
     const [otpValue, setOtpValue] = useState('');
     const [sendingOtp, setSendingOtp] = useState(false);
     const [verifyingOtp, setVerifyingOtp] = useState(false);
+    const [showScheduleModal, setShowScheduleModal] = useState(false);
+    const [selectedTask, setSelectedTask] = useState(null);
+    const [scheduleData, setScheduleData] = useState({
+        scheduledDate: '',
+        scheduledTime: '',
+        notes: ''
+    });
     const navigate = useNavigate();
 
     const employeeData = JSON.parse(localStorage.getItem('employeeData') || '{}');
@@ -370,6 +377,67 @@ const EmployeeDashboard = () => {
             alert('Failed to upload image');
         } finally {
             setUploadingImage(null);
+        }
+    };
+
+    const openScheduleModal = async (task, type) => {
+        setSelectedTask({ ...task, type });
+
+        try {
+            const endpoint = type === 'complaint'
+                ? `/api/employees/complaints/${task.id}/schedule`
+                : `/api/employees/enquiries/${task.id}/schedule`;
+
+            const response = await fetch(`${API_URL}${endpoint}`, {
+                headers: getAuthHeader()
+            });
+
+            if (response.ok) {
+                const schedule = await response.json();
+                if (schedule) {
+                    setScheduleData({
+                        scheduledDate: schedule.scheduledDate,
+                        scheduledTime: schedule.scheduledTime,
+                        notes: schedule.notes || ''
+                    });
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching schedule:', error);
+        }
+
+        setShowScheduleModal(true);
+    };
+
+    const handleScheduleVisit = async (e) => {
+        e.preventDefault();
+
+        try {
+            const endpoint = selectedTask.type === 'complaint'
+                ? `/api/employees/complaints/${selectedTask.id}/schedule`
+                : `/api/employees/enquiries/${selectedTask.id}/schedule`;
+
+            const response = await fetch(`${API_URL}${endpoint}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...getAuthHeader()
+                },
+                body: JSON.stringify(scheduleData)
+            });
+
+            if (response.ok) {
+                alert('Visit scheduled successfully!');
+                setShowScheduleModal(false);
+                setScheduleData({ scheduledDate: '', scheduledTime: '', notes: '' });
+                fetchData();
+            } else {
+                const data = await response.json();
+                alert(data.error || 'Failed to schedule visit');
+            }
+        } catch (error) {
+            console.error('Error scheduling visit:', error);
+            alert('Failed to schedule visit');
         }
     };
 

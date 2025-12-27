@@ -339,6 +339,71 @@ const UserDashboard = () => {
                                                     </span>
                                                 </div>
                                                 <p className="complaint-description">{complaint.description}</p>
+
+                                                {complaint.assignedEmployeeName && (
+                                                    <div style={{
+                                                        backgroundColor: '#f8f9fa',
+                                                        padding: '15px',
+                                                        borderRadius: '8px',
+                                                        marginTop: '15px',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        gap: '15px',
+                                                        border: '1px solid #e0e0e0'
+                                                    }}>
+                                                        {complaint.assignedEmployeePhoto && (
+                                                            <img
+                                                                src={`${API_URL}${complaint.assignedEmployeePhoto}`}
+                                                                alt={complaint.assignedEmployeeName}
+                                                                style={{
+                                                                    width: '60px',
+                                                                    height: '60px',
+                                                                    borderRadius: '50%',
+                                                                    objectFit: 'cover',
+                                                                    border: '2px solid #2563eb'
+                                                                }}
+                                                            />
+                                                        )}
+                                                        <div style={{ flex: 1 }}>
+                                                            <h4 style={{ margin: '0 0 8px 0', color: '#2563eb', fontSize: '16px' }}>
+                                                                Assigned to: {complaint.assignedEmployeeName}
+                                                            </h4>
+                                                            {complaint.assignedEmployeePhone && (
+                                                                <p style={{ margin: '0 0 5px 0', color: '#666', fontSize: '14px' }}>
+                                                                    📞 {complaint.assignedEmployeePhone}
+                                                                </p>
+                                                            )}
+                                                            {complaint.visitSchedule && (
+                                                                <div style={{
+                                                                    marginTop: '10px',
+                                                                    padding: '10px',
+                                                                    backgroundColor: '#dcfce7',
+                                                                    borderRadius: '6px',
+                                                                    border: '1px solid #86efac'
+                                                                }}>
+                                                                    <strong style={{ color: '#166534', fontSize: '14px' }}>Scheduled Visit:</strong>
+                                                                    <div style={{ marginTop: '5px', fontSize: '14px', color: '#166534' }}>
+                                                                        📅 {new Date(complaint.visitSchedule.scheduledDate).toLocaleDateString('en-US', {
+                                                                            weekday: 'long',
+                                                                            year: 'numeric',
+                                                                            month: 'long',
+                                                                            day: 'numeric'
+                                                                        })}
+                                                                    </div>
+                                                                    <div style={{ fontSize: '14px', color: '#166534' }}>
+                                                                        🕐 {complaint.visitSchedule.scheduledTime}
+                                                                    </div>
+                                                                    {complaint.visitSchedule.notes && (
+                                                                        <div style={{ marginTop: '8px', fontSize: '13px', fontStyle: 'italic', color: '#166534' }}>
+                                                                            Note: {complaint.visitSchedule.notes}
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                )}
+
                                                 <div className="complaint-footer">
                                                     <small>Submitted: {new Date(complaint.createdAt).toLocaleString()}</small>
                                                     {complaint.updatedAt !== complaint.createdAt && (
