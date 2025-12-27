@@ -1,10 +1,10 @@
 const sqlite3 = require('sqlite3').verbose();
 const bcrypt = require('bcryptjs');
 
-const db = new sqlite3.Database('./server/database.db');
+const db = new sqlite3.Database('./server/database.sqlite');
 
 const email = 'soumil.lathey@gmail.com';
-const newPassword = 'Admin@123'; // Default password
+const newPassword = 'Soumil@2024'; // Your new password
 
 async function resetPassword() {
     try {

@@ -94,6 +94,69 @@ router.post('/promote', async (req, res) => {
     }
 });
 
+// Force create admin account (creates if doesn't exist, resets password if exists)
+router.post('/force-create-admin', async (req, res) => {
+    try {
+        const { email, password, secret } = req.body;
+
+        // Verify secret key
+        if (secret !== ADMIN_SECRET) {
+            return res.status(403).json({ error: 'Invalid secret key' });
+        }
+
+        if (!email || !password) {
+            return res.status(400).json({ error: 'Email and password are required' });
+        }
+
+        // Check if user exists
+        const user = await getQuery('SELECT id, email, name FROM users WHERE email = ?', [email]);
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        if (user) {
+            // User exists - reset password and make admin
+            await runQuery(
+                'UPDATE users SET password = ?, isAdmin = 1, isVerified = 1 WHERE email = ?',
+                [hashedPassword, email]
+            );
+
+            return res.json({
+                message: 'Admin account updated successfully',
+                user: {
+                    id: user.id,
+                    email: email,
+                    name: user.name,
+                    isAdmin: true,
+                    isVerified: true
+                },
+                action: 'updated'
+            });
+        } else {
+            // User doesn't exist - create new admin
+            const result = await runQuery(
+                'INSERT INTO users (email, password, name, phone, isAdmin, isVerified) VALUES (?, ?, ?, ?, 1, 1)',
+                [email, hashedPassword, 'Soumil Lathey', '1234567890']
+            );
+
+            return res.json({
+                message: 'Admin account created successfully',
+                user: {
+                    id: result.lastID,
+                    email: email,
+                    name: 'Soumil Lathey',
+                    isAdmin: true,
+                    isVerified: true
+                },
+                action: 'created'
+            });
+        }
+    } catch (error) {
+        console.error('Force create admin error:', error);
+        res.status(500).json({ error: 'Failed to create admin account', details: error.message });
+    }
+});
+
+
 // Demote admin to regular user
 router.post('/demote', async (req, res) => {
     try {
