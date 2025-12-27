@@ -343,26 +343,39 @@ const UserDashboard = () => {
                                                 {complaint.assignedEmployeeName && (
                                                     <div style={{
                                                         backgroundColor: '#f8f9fa',
-                                                        padding: '15px',
-                                                        borderRadius: '8px',
-                                                        marginTop: '15px',
+                                                        padding: '20px',
+                                                        borderRadius: '12px',
+                                                        marginTop: '20px',
                                                         display: 'flex',
                                                         alignItems: 'center',
-                                                        gap: '15px',
-                                                        border: '1px solid #e0e0e0'
+                                                        gap: '20px',
+                                                        border: '2px solid #2563eb',
+                                                        boxShadow: '0 4px 6px rgba(37, 99, 235, 0.1)'
                                                     }}>
                                                         {complaint.assignedEmployeePhoto && (
-                                                            <img
-                                                                src={`${API_URL}${complaint.assignedEmployeePhoto}`}
-                                                                alt={complaint.assignedEmployeeName}
-                                                                style={{
-                                                                    width: '60px',
-                                                                    height: '60px',
-                                                                    borderRadius: '50%',
-                                                                    objectFit: 'cover',
-                                                                    border: '2px solid #2563eb'
-                                                                }}
-                                                            />
+                                                            <div style={{ flexShrink: 0 }}>
+                                                                <img
+                                                                    src={`${API_URL}${complaint.assignedEmployeePhoto}`}
+                                                                    alt={complaint.assignedEmployeeName}
+                                                                    style={{
+                                                                        width: '100px',
+                                                                        height: '100px',
+                                                                        borderRadius: '50%',
+                                                                        objectFit: 'cover',
+                                                                        border: '3px solid #2563eb',
+                                                                        boxShadow: '0 4px 8px rgba(0,0,0,0.15)'
+                                                                    }}
+                                                                />
+                                                                <div style={{
+                                                                    textAlign: 'center',
+                                                                    marginTop: '8px',
+                                                                    fontSize: '12px',
+                                                                    color: '#2563eb',
+                                                                    fontWeight: '600'
+                                                                }}>
+                                                                    Your Service Technician
+                                                                </div>
+                                                            </div>
                                                         )}
                                                         <div style={{ flex: 1 }}>
                                                             <h4 style={{ margin: '0 0 8px 0', color: '#2563eb', fontSize: '16px' }}>
