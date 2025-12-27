@@ -630,7 +630,53 @@ const EmployeeDashboard = () => {
                                                         </div>
                                                     </div>
 
+                                                    {/* Visit Schedule Section */}
+                                                    <div style={{ marginTop: '20px', marginBottom: '20px' }}>
+                                                        <button
+                                                            onClick={() => openScheduleModal(complaint, 'complaint')}
+                                                            className="upload-btn"
+                                                            style={{
+                                                                width: '100%',
+                                                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                                                color: 'white',
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                justifyContent: 'center',
+                                                                gap: '8px'
+                                                            }}
+                                                        >
+                                                            <Calendar size={18} />
+                                                            {complaint.visitSchedule ? 'Update Visit Schedule' : 'Schedule Visit'}
+                                                        </button>
 
+                                                        {complaint.visitSchedule && (
+                                                            <div style={{
+                                                                marginTop: '10px',
+                                                                padding: '12px',
+                                                                backgroundColor: '#dcfce7',
+                                                                borderRadius: '6px',
+                                                                border: '1px solid #86efac'
+                                                            }}>
+                                                                <strong style={{ color: '#166534', display: 'block', marginBottom: '8px' }}>
+                                                                    📅 Scheduled Visit
+                                                                </strong>
+                                                                <div style={{ fontSize: '14px', color: '#166534' }}>
+                                                                    <div>Date: {new Date(complaint.visitSchedule.scheduledDate).toLocaleDateString('en-US', {
+                                                                        weekday: 'long',
+                                                                        year: 'numeric',
+                                                                        month: 'long',
+                                                                        day: 'numeric'
+                                                                    })}</div>
+                                                                    <div>Time: {complaint.visitSchedule.scheduledTime}</div>
+                                                                    {complaint.visitSchedule.notes && (
+                                                                        <div style={{ marginTop: '5px', fontStyle: 'italic' }}>
+                                                                            Note: {complaint.visitSchedule.notes}
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </div>
 
                                                     <div className="status-actions">
                                                         <button
@@ -738,6 +784,54 @@ const EmployeeDashboard = () => {
                                                                 <Upload size={16} />
                                                                 {uploadingImage === `enquiry-${enquiry.id}` ? 'Uploading...' : 'Upload Photo'}
                                                             </button>
+                                                        )}
+                                                    </div>
+
+                                                    {/* Visit Schedule Section */}
+                                                    <div style={{ marginTop: '20px', marginBottom: '20px' }}>
+                                                        <button
+                                                            onClick={() => openScheduleModal(enquiry, 'enquiry')}
+                                                            className="upload-btn"
+                                                            style={{
+                                                                width: '100%',
+                                                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                                                color: 'white',
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                justifyContent: 'center',
+                                                                gap: '8px'
+                                                            }}
+                                                        >
+                                                            <Calendar size={18} />
+                                                            {enquiry.visitSchedule ? 'Update Visit Schedule' : 'Schedule Visit'}
+                                                        </button>
+
+                                                        {enquiry.visitSchedule && (
+                                                            <div style={{
+                                                                marginTop: '10px',
+                                                                padding: '12px',
+                                                                backgroundColor: '#dcfce7',
+                                                                borderRadius: '6px',
+                                                                border: '1px solid #86efac'
+                                                            }}>
+                                                                <strong style={{ color: '#166534', display: 'block', marginBottom: '8px' }}>
+                                                                    📅 Scheduled Visit
+                                                                </strong>
+                                                                <div style={{ fontSize: '14px', color: '#166534' }}>
+                                                                    <div>Date: {new Date(enquiry.visitSchedule.scheduledDate).toLocaleDateString('en-US', {
+                                                                        weekday: 'long',
+                                                                        year: 'numeric',
+                                                                        month: 'long',
+                                                                        day: 'numeric'
+                                                                    })}</div>
+                                                                    <div>Time: {enquiry.visitSchedule.scheduledTime}</div>
+                                                                    {enquiry.visitSchedule.notes && (
+                                                                        <div style={{ marginTop: '5px', fontStyle: 'italic' }}>
+                                                                            Note: {enquiry.visitSchedule.notes}
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            </div>
                                                         )}
                                                     </div>
 
@@ -933,7 +1027,86 @@ const EmployeeDashboard = () => {
                     )}
                 </div>
             </div>
-        </div >
+
+            {/* Visit Schedule Modal */}
+            {showScheduleModal && (
+                <div
+                    style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        backgroundColor: 'rgba(0,0,0,0.5)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        zIndex: 1000
+                    }}
+                    onClick={() => setShowScheduleModal(false)}
+                >
+                    <div
+                        style={{
+                            backgroundColor: 'white',
+                            borderRadius: '12px',
+                            padding: '30px',
+                            maxWidth: '500px',
+                            width: '90%',
+                            maxHeight: '90vh',
+                            overflow: 'auto'
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <h3 style={{ marginTop: 0, marginBottom: '20px', color: '#333' }}>Schedule Visit</h3>
+
+                        <form onSubmit={handleScheduleVisit}>
+                            <div style={{ marginBottom: '20px' }}>
+                                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#555' }}>Date *</label>
+                                <input
+                                    type="date"
+                                    value={scheduleData.scheduledDate}
+                                    onChange={(e) => setScheduleData({ ...scheduleData, scheduledDate: e.target.value })}
+                                    required
+                                    min={new Date().toISOString().split('T')[0]}
+                                    style={{ width: '100%', padding: '10px', border: '2px solid #e0e0e0', borderRadius: '6px', fontSize: '16px', boxSizing: 'border-box' }}
+                                />
+                            </div>
+
+                            <div style={{ marginBottom: '20px' }}>
+                                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#555' }}>Time *</label>
+                                <input
+                                    type="time"
+                                    value={scheduleData.scheduledTime}
+                                    onChange={(e) => setScheduleData({ ...scheduleData, scheduledTime: e.target.value })}
+                                    required
+                                    style={{ width: '100%', padding: '10px', border: '2px solid #e0e0e0', borderRadius: '6px', fontSize: '16px', boxSizing: 'border-box' }}
+                                />
+                            </div>
+
+                            <div style={{ marginBottom: '20px' }}>
+                                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#555' }}>Notes (Optional)</label>
+                                <textarea
+                                    value={scheduleData.notes}
+                                    onChange={(e) => setScheduleData({ ...scheduleData, notes: e.target.value })}
+                                    rows="3"
+                                    placeholder="Any special notes about the visit..."
+                                    style={{ width: '100%', padding: '10px', border: '2px solid #e0e0e0', borderRadius: '6px', fontSize: '16px', boxSizing: 'border-box', fontFamily: 'inherit', resize: 'vertical' }}
+                                />
+                            </div>
+
+                            <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+                                <button type="button" onClick={() => setShowScheduleModal(false)} style={{ padding: '10px 20px', border: '2px solid #e0e0e0', borderRadius: '6px', background: 'white', color: '#666', fontSize: '16px', fontWeight: '600', cursor: 'pointer' }}>
+                                    Cancel
+                                </button>
+                                <button type="submit" style={{ padding: '10px 20px', border: 'none', borderRadius: '6px', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', fontSize: '16px', fontWeight: '600', cursor: 'pointer' }}>
+                                    Save Schedule
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+        </div>
     );
 };
 
