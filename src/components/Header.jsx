@@ -46,9 +46,15 @@ const Header = () => {
                         </div>
                     </div>
 
-                    <Link to="/solar-epc" className="nav-link flex items-center gap-1">
-                        <Sun size={16} className="text-secondary" /> Solar EPC
-                    </Link>
+                    <div className="nav-item-dropdown">
+                        <span className="nav-link flex items-center gap-1">
+                            <Sun size={16} className="text-secondary" /> Solar EPC <ChevronDown size={14} />
+                        </span>
+                        <div className="dropdown-menu">
+                            <Link to="/solar-epc" className="dropdown-link">Solar EPC Services</Link>
+                            <Link to="/solar-roi" className="dropdown-link">ROI Calculator</Link>
+                        </div>
+                    </div>
 
                     <Link to="/contact" className="nav-link">Contact</Link>
                 </nav>
@@ -124,6 +130,7 @@ const Header = () => {
                     <Link to="/about" className="mobile-link" onClick={toggleMenu}>About Us</Link>
                     <Link to="/products" className="mobile-link" onClick={toggleMenu}>Weighing Equipments</Link>
                     <Link to="/solar-epc" className="mobile-link" onClick={toggleMenu}>Solar EPC</Link>
+                    <Link to="/solar-roi" className="mobile-link" onClick={toggleMenu}>Solar ROI Calculator</Link>
                     <Link to="/contact" className="mobile-link" onClick={toggleMenu}>Contact</Link>
 
                     <div style={{ borderTop: '1px solid #e2e8f0', margin: '8px 0' }}></div>
