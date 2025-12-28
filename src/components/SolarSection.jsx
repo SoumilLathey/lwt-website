@@ -36,8 +36,31 @@ const SolarSection = () => {
                         transition={{ delay: 0.2 }}
                         className="solar-description"
                     >
-                        We provide end-to-end solar EPC services, covering design, engineering, procurement, installation, and support for solar rooftop systems and ground-mounted solar power plants. Our solar solutions are designed for businesses looking to reduce electricity costs, improve energy reliability, and transition to sustainable power.
+                        We provide end-to-end solar EPC services, covering design, engineering, procurement, installation, and support for solar rooftop systems and ground-mounted solar power plants.
                     </motion.p>
+
+                    <motion.p
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.25 }}
+                        className="solar-description"
+                        style={{ marginTop: '1rem', fontWeight: '600' }}
+                    >
+                        Our solar solutions are designed for businesses looking to:
+                    </motion.p>
+
+                    <motion.ul
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.3 }}
+                        className="solar-benefits-list"
+                    >
+                        <li>Reduce electricity costs</li>
+                        <li>Improve energy reliability</li>
+                        <li>Transition to sustainable power</li>
+                    </motion.ul>
 
                     <div className="benefits-grid">
                         <motion.div

@@ -13,10 +13,10 @@ const UserStories = () => {
         },
         {
             id: 2,
-            name: "Priya Patel",
-            role: "Operations Head, Solar Tech Solutions",
-            quote: "Their Solar EPC services are top-notch. From installation to maintenance, the team was professional and delivered ahead of schedule. Highly recommended!",
-            initials: "PP"
+            name: "Operations Head",
+            role: "Manufacturing Industry",
+            quote: "The accuracy, reliability, and technical support provided by Lathey Weigh Trix have significantly improved our operations.",
+            initials: "OH"
         },
         {
             id: 3,
