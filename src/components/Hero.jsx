@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Sun, Scale } from 'lucide-react';
+import { ArrowRight, Scale, Sun, Calculator } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import './Hero.css';
 

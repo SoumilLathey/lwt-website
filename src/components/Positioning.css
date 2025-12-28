@@ -1,62 +1,66 @@
 .positioning-section {
-    padding: 4rem 0;
-    background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%);
+    padding: 5rem 0;
+    background: #ffffff;
 }
 
 .positioning-content {
-    text-align: center;
-    max-width: 900px;
+    max-width: 1200px;
     margin: 0 auto;
+}
+
+.positioning-label {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+}
+
+.positioning-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+}
+
+.positioning-left {
+    padding-right: 2rem;
 }
 
 .positioning-title {
     font-size: 2.5rem;
     font-weight: 700;
     color: var(--color-primary);
-    margin-bottom: 1.5rem;
-    line-height: 1.2;
+    line-height: 1.3;
+    margin: 0;
+}
+
+.positioning-right {
+    padding-left: 2rem;
 }
 
 .positioning-description {
     font-size: 1.125rem;
-    color: var(--color-muted);
-    margin-bottom: 3rem;
-    line-height: 1.6;
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin: 0;
 }
 
-.positioning-benefits {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    max-width: 600px;
-    margin: 0 auto;
-}
+@media (max-width: 968px) {
+    .positioning-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
 
-.benefit-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem 1.5rem;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
-}
+    .positioning-left,
+    .positioning-right {
+        padding: 0;
+    }
 
-.benefit-item:hover {
-    transform: translateX(8px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.benefit-icon {
-    color: var(--color-secondary);
-    flex-shrink: 0;
-}
-
-.benefit-item span {
-    font-size: 1.125rem;
-    color: var(--color-primary);
-    font-weight: 500;
+    .positioning-title {
+        font-size: 2rem;
+    }
 }
 
 @media (max-width: 768px) {
@@ -65,19 +69,29 @@
     }
 
     .positioning-title {
-        font-size: 1.875rem;
+        font-size: 1.75rem;
     }
 
     .positioning-description {
         font-size: 1rem;
-        margin-bottom: 2rem;
     }
 
-    .benefit-item {
-        padding: 0.875rem 1.25rem;
+    .positioning-label {
+        font-size: 12px;
+        margin-bottom: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .positioning-section {
+        padding: 2.5rem 0;
     }
 
-    .benefit-item span {
-        font-size: 1rem;
+    .positioning-title {
+        font-size: 1.5rem;
+    }
+
+    .positioning-description {
+        font-size: 0.9375rem;
     }
 }
