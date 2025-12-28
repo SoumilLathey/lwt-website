@@ -8,27 +8,33 @@ const products = [
     {
         id: 1,
         title: "Heavy-Duty Weighbridges",
-        category: "Industrial Weighing",
+        category: "Built for demanding industrial and logistics environments",
         image: "/product-weighbridge.png",
-        description: "Built for demanding industrial and logistics environments. Our industrial weighbridges deliver consistent precision for factories, warehouses, and transport hubs.",
+        description: "Our industrial weighbridges are designed to handle heavy vehicle loads with consistent precision, making them ideal for factories, warehouses, transport hubs, and infrastructure projects.",
+        features: ["High load-bearing capacity", "Rugged construction for long service life", "Accurate vehicle weight measurement"],
+        outcomes: ["Reduced material loss", "Improved compliance", "Reliable, repeatable results"],
         featured: true,
         link: "/weighbridges"
     },
     {
         id: 2,
         title: "Digital Platform Scales",
-        category: "Precision Measurement",
+        category: "Precision measurement for controlled industrial operations",
         image: "/product-scale.png",
-        description: "Precision measurement for controlled industrial operations. High-precision digital sensors with seamless workflow integration for faster operations.",
+        description: "Our digital platform scales deliver accurate and efficient weighing for manufacturing, warehousing, and quality control processes.",
+        features: ["High-precision digital sensors", "Easy-to-read displays", "Seamless integration into workflows"],
+        outcomes: ["Faster operations", "Improved quality control", "Reduced manual errors"],
         featured: false,
         link: "/scales"
     },
     {
         id: 3,
         title: "AMC (Annual Maintenance Contract)",
-        category: "Services",
+        category: "Ensure accuracy. Minimize downtime. Extend equipment life.",
         image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800",
-        description: "Ensure accuracy. Minimize downtime. Extend equipment life. Our AMC services keep your weighing systems operating at peak performance.",
+        description: "Our weighbridge AMC services are designed to keep your weighing systems operating at peak performance through regular maintenance, calibration, and priority support.",
+        features: ["Preventive and corrective maintenance", "Calibration and performance verification", "Priority technical support"],
+        outcomes: ["Consistent accuracy", "Lower maintenance costs", "Reduced operational disruptions"],
         featured: false,
         link: "/amc"
     }
@@ -38,6 +44,26 @@ const Products = () => {
     return (
         <section className="products-section">
             <div className="container">
+                <div className="section-header">
+                    <motion.h2
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="section-title"
+                    >
+                        Industrial Weighing Solutions Built for Accuracy & Durability
+                    </motion.h2>
+                    <motion.p
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.1 }}
+                        className="section-description"
+                    >
+                        In high-volume industrial environments, inaccurate weighing leads to financial loss, compliance issues, and operational inefficiencies. Our weighing systems are engineered to eliminate these risks through robust design and consistent accuracy.
+                    </motion.p>
+                </div>
+
                 <div className="products-grid">
                     {products.map((product, index) => (
                         <motion.div

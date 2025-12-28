@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { CheckCircle } from 'lucide-react';
 import './Positioning.css';
 
 const Positioning = () => {
@@ -12,17 +13,26 @@ const Positioning = () => {
                     viewport={{ once: true }}
                     className="positioning-content"
                 >
-                    <div className="positioning-label">WHAT WE DO</div>
-                    <div className="positioning-grid">
-                        <div className="positioning-left">
-                            <h2 className="positioning-title">
-                                Industrial Weighing Solutions Built for Accuracy & Durability
-                            </h2>
+                    <h2 className="positioning-title">
+                        Engineering Solutions That Power Efficiency
+                    </h2>
+                    <p className="positioning-description">
+                        We operate at the intersection of precision engineering and clean energy, serving industries that demand reliability, compliance, and performance at scale.
+                    </p>
+
+                    <div className="positioning-benefits">
+                        <p className="benefits-intro">Our solutions are designed to:</p>
+                        <div className="benefit-item">
+                            <CheckCircle className="benefit-icon" size={20} />
+                            <span>Improve operational accuracy</span>
                         </div>
-                        <div className="positioning-right">
-                            <p className="positioning-description">
-                                In high-volume industrial environments, inaccurate weighing leads to financial loss, compliance issues, and operational inefficiencies. Our weighing systems are engineered to eliminate these risks through robust design and consistent accuracy.
-                            </p>
+                        <div className="benefit-item">
+                            <CheckCircle className="benefit-icon" size={20} />
+                            <span>Reduce energy and operational costs</span>
+                        </div>
+                        <div className="benefit-item">
+                            <CheckCircle className="benefit-icon" size={20} />
+                            <span>Support long-term business sustainability</span>
                         </div>
                     </div>
                 </motion.div>
