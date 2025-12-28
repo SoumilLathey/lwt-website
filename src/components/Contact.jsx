@@ -208,6 +208,29 @@ const Contact = () => {
                         </button>
                     </form>
                 </motion.div>
+
+                {/* Google Maps Section */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.2 }}
+                    className="map-section"
+                >
+                    <h3 className="map-title">Find Us on the Map</h3>
+                    <div className="map-container">
+                        <iframe
+                            src="https://maps.google.com/maps?q=Lathey+Weigh+Trix+Meerut&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                            width="100%"
+                            height="450"
+                            style={{ border: 0, borderRadius: '12px' }}
+                            allowFullScreen=""
+                            loading="lazy"
+                            referrerPolicy="no-referrer-when-downgrade"
+                            title="Lathey Weigh Trix Location"
+                        ></iframe>
+                    </div>
+                </motion.div>
             </div>
         </section>
     );
