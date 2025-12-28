@@ -84,15 +84,39 @@
     }
 }
 
+@media (max-width: 768px) {
+    .footer-section {
+        padding-top: 40px;
+        padding-bottom: 24px;
+    }
+
+    .footer-grid {
+        gap: 32px;
+        margin-bottom: 32px;
+    }
+}
+
 @media (max-width: 640px) {
+    .footer-section {
+        padding-top: 32px;
+        padding-bottom: 20px;
+    }
+
     .footer-grid {
         grid-template-columns: 1fr;
-        gap: 32px;
+        gap: 24px;
+        margin-bottom: 24px;
     }
 
     .footer-bottom {
         flex-direction: column;
-        gap: 16px;
+        gap: 12px;
         text-align: center;
+        padding-top: 24px;
+    }
+
+    .footer-col h3 {
+        font-size: 15px;
+        margin-bottom: 16px;
     }
 }
