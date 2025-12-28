@@ -63,7 +63,7 @@ const Products = () => {
                         transition={{ delay: 0.2 }}
                         className="section-description"
                     >
-                        In high-volume industrial environments, inaccurate weighing leads to financial loss, compliance issues, and operational inefficiencies. Our weighing systems are engineered to eliminate these risks through robust design and consistent accuracy.
+                        In high-volume industrial environments, inaccurate weighing leads to <strong>financial loss, compliance issues, and operational inefficiencies</strong>. Our weighing systems are engineered to eliminate these risks through <strong>robust design and consistent accuracy</strong>.
                     </motion.p>
                 </div>
 

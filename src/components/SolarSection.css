@@ -102,6 +102,15 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.solar-visual-text {
+    text-align: center;
+    color: white;
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 24px;
+    padding: 0 20px;
+}
+
 .solar-image {
     width: 100%;
     height: 100%;

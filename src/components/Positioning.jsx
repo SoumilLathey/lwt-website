@@ -17,7 +17,7 @@ const Positioning = () => {
                         Engineering Solutions That <span className="text-secondary">Power Efficiency</span>
                     </h2>
                     <p className="positioning-description">
-                        We operate at the intersection of precision engineering and clean energy, serving industries that demand reliability, compliance, and performance at scale.
+                        We operate at the intersection of <strong>precision engineering</strong> and <strong>clean energy</strong>, serving industries that demand reliability, compliance, and performance at scale.
                     </p>
 
                     <div className="positioning-benefits">

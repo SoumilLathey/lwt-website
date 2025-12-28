@@ -75,7 +75,7 @@ const Contact = () => {
                 >
                     <div className="contact-info">
                         <h2>Let's Build the Right Solution for Your Business</h2>
-                        <p>Whether you're planning a solar installation, upgrading industrial weighing systems, or securing a maintenance contract, our team is ready to help.</p>
+                        <p>Whether you're planning a <strong>solar installation</strong>, upgrading <strong>industrial weighing systems</strong>, or securing a <strong>maintenance contract</strong>, <strong>our team is ready</strong> to help.</p>
 
                         <div className="info-item">
                             <div className="info-icon"><Phone size={20} /></div>
@@ -195,6 +195,7 @@ const Contact = () => {
                             ></textarea>
                         </div>
 
+
                         <button
                             type="submit"
                             className="btn btn-primary w-full justify-center"
@@ -202,7 +203,7 @@ const Contact = () => {
                         >
                             {loading ? 'Sending...' : (
                                 <>
-                                    Send Message <Send size={18} />
+                                    Get Expert Consultation <Send size={18} />
                                 </>
                             )}
                         </button>

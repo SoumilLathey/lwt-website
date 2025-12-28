@@ -12,7 +12,7 @@ const Footer = () => {
                     <div className="footer-col footer-brand">
                         <h2 className="!m-0 text-xl mb-4">LWT</h2>
                         <p>
-                            Lathey Weigh Trix delivers precision-engineered weighing systems and efficient solar energy solutions that help businesses operate smarter, leaner, and more sustainably.
+                            Lathey Weigh Trix delivers <strong>precision-engineered weighing</strong> <strong>systems</strong> and <strong>efficient solar energy solutions</strong> that help businesses operate smarter, leaner, and more sustainably.
                         </p>
                         <div className="flex gap-4">
                             <a href="https://www.linkedin.com/in/hareelathey/" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors"><Linkedin size={20} /></a>

@@ -42,7 +42,7 @@ const Hero = () => {
                         className="hero-description"
                         style={{ marginBottom: '1.5rem' }}
                     >
-                        Lathey Weigh Trix delivers industrial weighing systems and end-to-end solar EPC solutions built for accuracy, efficiency, and long-term performance. We help businesses streamline operations with high-precision weighbridges and digital scales, while enabling energy independence through solar rooftop installations and ground-mounted solar power systems.
+                        Lathey Weigh Trix delivers <strong>industrial weighing systems</strong> and <strong>end-to-end solar EPC solutions</strong> built for accuracy, efficiency, and long-term performance. We help businesses streamline operations with <strong>high-precision</strong> weighbridges and digital scales, while enabling energy independence through <strong>solar rooftop installations</strong> and <strong>ground-mounted solar power systems</strong>.
                     </motion.p>
 
                     <motion.p
