@@ -11,6 +11,7 @@ import About from './pages/About';
 import Weighbridges from './pages/Weighbridges';
 import Scales from './pages/Scales';
 import Automation from './pages/Automation';
+import AMC from './pages/AMC';
 import SolarEPC from './pages/SolarEPC';
 import AllProducts from './pages/AllProducts';
 import UserDashboard from './pages/UserDashboard';
@@ -32,6 +33,7 @@ function App() {
               <Route path="/weighbridges" element={<Weighbridges />} />
               <Route path="/scales" element={<Scales />} />
               <Route path="/automation" element={<Automation />} />
+              <Route path="/amc" element={<AMC />} />
               <Route path="/products" element={<AllProducts />} />
               <Route path="/solar-epc" element={<SolarEPC />} />
               <Route path="/solar-roi" element={<SolarROI />} />

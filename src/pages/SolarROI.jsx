@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sun, Calculator, TrendingUp, DollarSign, Zap, Calendar } from 'lucide-react';
+import { Sun, Calculator, TrendingUp, IndianRupee, Zap, Calendar } from 'lucide-react';
 import './SolarROI.css';
 
 const SolarROI = () => {
@@ -30,9 +30,9 @@ const SolarROI = () => {
         const avgUnitsPerDay = parseFloat(inputs.avgUnitsPerDay);
         const electricityTariff = parseFloat(inputs.electricityTariff);
 
-        // Calculations
+        // Calculations - Using 335 days to account for rainy/winter periods with low/no production
         const netInvestment = totalCost - subsidy;
-        const annualUnits = plantSize * 365 * avgUnitsPerDay;
+        const annualUnits = plantSize * 335 * avgUnitsPerDay;
         const annualSavings = annualUnits * electricityTariff;
         const paybackPeriod = netInvestment / annualSavings;
         const roiPercentage = (annualSavings / netInvestment) * 100;
@@ -61,31 +61,23 @@ const SolarROI = () => {
 
     const formatNumber = (value) => {
         return new Intl.NumberFormat('en-IN', {
-            maximumFractionDigits: 2
+            maximumFractionDigits: 1
         }).format(value);
     };
 
     return (
         <div className="solar-roi-container">
-            <div className="solar-roi-header">
-                <div className="header-icon">
-                    <Sun size={48} />
-                </div>
-                <h1>Solar ROI Calculator</h1>
-                <p>Calculate your solar investment returns and payback period</p>
-            </div>
-
             <div className="roi-content">
                 <div className="calculator-section">
                     <div className="section-header">
-                        <Calculator size={24} />
-                        <h2>Enter Your Details</h2>
+                        <Sun size={32} />
+                        <h1>Solar ROI Calculator</h1>
                     </div>
 
                     <form onSubmit={calculateROI} className="roi-form">
                         <div className="form-group">
                             <label>
-                                <Zap size={18} />
+                                <Zap size={16} />
                                 Plant Size (kW)
                             </label>
                             <input
@@ -101,8 +93,8 @@ const SolarROI = () => {
 
                         <div className="form-group">
                             <label>
-                                <DollarSign size={18} />
-                                Total Installation Cost (₹)
+                                <IndianRupee size={16} />
+                                Total Cost (₹)
                             </label>
                             <input
                                 type="number"
@@ -117,8 +109,8 @@ const SolarROI = () => {
 
                         <div className="form-group">
                             <label>
-                                <TrendingUp size={18} />
-                                Subsidy Amount (₹)
+                                <TrendingUp size={16} />
+                                Subsidy (₹)
                             </label>
                             <input
                                 type="number"
@@ -133,8 +125,8 @@ const SolarROI = () => {
 
                         <div className="form-group">
                             <label>
-                                <Sun size={18} />
-                                Average Units Per Day (kWh per kW)
+                                <Sun size={16} />
+                                Avg Units/Day (kWh/kW)
                             </label>
                             <input
                                 type="number"
@@ -145,13 +137,12 @@ const SolarROI = () => {
                                 step="0.1"
                                 required
                             />
-                            <small>Typical range: 3.5 - 5 units per kW per day</small>
                         </div>
 
                         <div className="form-group">
                             <label>
-                                <Zap size={18} />
-                                Electricity Tariff (₹ per unit)
+                                <Zap size={16} />
+                                Tariff (₹/unit)
                             </label>
                             <input
                                 type="number"
@@ -165,145 +156,57 @@ const SolarROI = () => {
                         </div>
 
                         <button type="submit" className="calculate-btn">
-                            <Calculator size={20} />
+                            <Calculator size={18} />
                             Calculate ROI
                         </button>
                     </form>
                 </div>
 
                 {results && (
-                    <div className="results-section">
-                        <div className="section-header">
-                            <TrendingUp size={24} />
-                            <h2>Your Investment Analysis</h2>
+                    <div className="results-section simple-view">
+                        <div className="results-header">
+                            <h2>Estimated Returns</h2>
                         </div>
 
-                        <div className="results-grid">
-                            <div className="result-card primary">
-                                <div className="result-icon">
-                                    <DollarSign size={32} />
-                                </div>
-                                <div className="result-content">
-                                    <h3>Net Investment</h3>
-                                    <p className="result-value">{formatCurrency(results.netInvestment)}</p>
-                                    <small>After subsidy deduction</small>
-                                </div>
+                        <div className="primary-metrics">
+                            <div className="metric-hero">
+                                <span className="label">Annual Savings</span>
+                                <span className="value highlight">{formatCurrency(results.annualSavings)}</span>
                             </div>
-
-                            <div className="result-card success">
-                                <div className="result-icon">
-                                    <Zap size={32} />
-                                </div>
-                                <div className="result-content">
-                                    <h3>Annual Energy Generation</h3>
-                                    <p className="result-value">{formatNumber(results.annualUnits)} kWh</p>
-                                    <small>Units generated per year</small>
-                                </div>
-                            </div>
-
-                            <div className="result-card success">
-                                <div className="result-icon">
-                                    <TrendingUp size={32} />
-                                </div>
-                                <div className="result-content">
-                                    <h3>Annual Savings</h3>
-                                    <p className="result-value">{formatCurrency(results.annualSavings)}</p>
-                                    <small>Savings per year</small>
-                                </div>
-                            </div>
-
-                            <div className="result-card info">
-                                <div className="result-icon">
-                                    <Calendar size={32} />
-                                </div>
-                                <div className="result-content">
-                                    <h3>Payback Period</h3>
-                                    <p className="result-value">{formatNumber(results.paybackPeriod)} years</p>
-                                    <small>Time to recover investment</small>
-                                </div>
-                            </div>
-
-                            <div className="result-card warning">
-                                <div className="result-icon">
-                                    <TrendingUp size={32} />
-                                </div>
-                                <div className="result-content">
-                                    <h3>ROI Percentage</h3>
-                                    <p className="result-value">{formatNumber(results.roiPercentage)}%</p>
-                                    <small>Annual return on investment</small>
-                                </div>
-                            </div>
-
-                            <div className={`result-card ${results.isProfitable ? 'profit' : 'loss'}`}>
-                                <div className="result-icon">
-                                    <Sun size={32} />
-                                </div>
-                                <div className="result-content">
-                                    <h3>25-Year Lifetime</h3>
-                                    <p className="result-value">{formatCurrency(results.lifetimeSavings)}</p>
-                                    <small>Total savings over 25 years</small>
-                                </div>
+                            <div className="metric-hero">
+                                <span className="label">Payback Period</span>
+                                <span className="value">{formatNumber(results.paybackPeriod)} Years</span>
                             </div>
                         </div>
 
-                        <div className={`profit-summary ${results.isProfitable ? 'profitable' : 'not-profitable'}`}>
+                        <div className="metrics-divider"></div>
+
+                        <div className="secondary-metrics">
+                            <div className="metric-row">
+                                <span className="metric-label">Net Investment</span>
+                                <span className="metric-value">{formatCurrency(results.netInvestment)}</span>
+                            </div>
+                            <div className="metric-row">
+                                <span className="metric-label">25-Year Total Profit</span>
+                                <span className="metric-value profit">{formatCurrency(results.lifetimeProfit)}</span>
+                            </div>
+                            <div className="metric-row">
+                                <span className="metric-label">Return on Investment (ROI)</span>
+                                <span className="metric-value">{formatNumber(results.roiPercentage)}%</span>
+                            </div>
+                        </div>
+
+                        <div className={`profit-summary-simple ${results.isProfitable ? 'profitable' : ''}`}>
                             {results.isProfitable ? (
-                                <>
-                                    <h3>🎉 Excellent Investment!</h3>
-                                    <p>
-                                        Your solar investment will generate a <strong>profit of {formatCurrency(results.lifetimeProfit)}</strong> over 25 years.
-                                    </p>
-                                    <p>
-                                        You'll recover your investment in just <strong>{formatNumber(results.paybackPeriod)} years</strong> and enjoy free electricity for the remaining years!
-                                    </p>
-                                </>
+                                <p>🎉 <strong>Great Choice!</strong> You recover your cost in just {formatNumber(results.paybackPeriod)} years.</p>
                             ) : (
-                                <>
-                                    <h3>⚠️ Review Your Investment</h3>
-                                    <p>
-                                        Based on current inputs, your lifetime savings of {formatCurrency(results.lifetimeSavings)} are less than your net investment.
-                                    </p>
-                                    <p>
-                                        Consider reviewing the plant size, subsidy options, or electricity tariff to improve returns.
-                                    </p>
-                                </>
+                                <p>⚠️ Consider adjusting your inputs for better returns.</p>
                             )}
-                        </div>
-
-                        <div className="breakdown-section">
-                            <h3>Detailed Breakdown</h3>
-                            <div className="breakdown-table">
-                                <div className="breakdown-row">
-                                    <span>Total Installation Cost:</span>
-                                    <strong>{formatCurrency(parseFloat(inputs.totalCost))}</strong>
-                                </div>
-                                <div className="breakdown-row">
-                                    <span>Less: Subsidy:</span>
-                                    <strong className="subsidy">- {formatCurrency(parseFloat(inputs.subsidy))}</strong>
-                                </div>
-                                <div className="breakdown-row highlight">
-                                    <span>Net Investment:</span>
-                                    <strong>{formatCurrency(results.netInvestment)}</strong>
-                                </div>
-                                <div className="breakdown-row">
-                                    <span>Annual Savings:</span>
-                                    <strong className="savings">+ {formatCurrency(results.annualSavings)}</strong>
-                                </div>
-                                <div className="breakdown-row">
-                                    <span>Lifetime Savings (25 years):</span>
-                                    <strong className="savings">+ {formatCurrency(results.lifetimeSavings)}</strong>
-                                </div>
-                                <div className="breakdown-row total">
-                                    <span>Net Profit/Savings:</span>
-                                    <strong className={results.isProfitable ? 'profit' : 'loss'}>
-                                        {formatCurrency(results.lifetimeProfit)}
-                                    </strong>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 )}
             </div>
+            <div className="note">* Calculation based on 335 productive days/year (accounting for rainy/winter periods)</div>
         </div>
     );
 };

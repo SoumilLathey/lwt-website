@@ -51,7 +51,7 @@ const Hero = () => {
                         className="hero-actions"
                     >
                         <Link to="/products" className="btn btn-primary">
-                            Explore Products <Scale size={18} />
+                            Weighing Equipments <Scale size={18} />
                         </Link>
                         <Link to="/solar-epc" className="btn btn-outline">
                             Solar Solutions <Sun size={18} />

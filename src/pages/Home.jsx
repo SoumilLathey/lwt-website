@@ -2,6 +2,7 @@ import React from 'react';
 import Hero from '../components/Hero';
 import Products from '../components/Products';
 import SolarSection from '../components/SolarSection';
+import UserStories from '../components/UserStories';
 import Contact from '../components/Contact';
 
 const Home = () => {
@@ -10,6 +11,7 @@ const Home = () => {
             <Hero />
             <Products />
             <SolarSection />
+            <UserStories />
             <Contact />
         </div>
     );

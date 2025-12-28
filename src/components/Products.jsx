@@ -25,12 +25,12 @@ const products = [
     },
     {
         id: 3,
-        title: "Tank Weighing Systems",
-        category: "Automation",
-        image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800", // Fallback / placeholder for 3rd item to keep speed
-        description: "Automated tank and hopper weighing modules for accurate inventory and batching control.",
+        title: "AMC (Annual Maintenance Contracts)",
+        category: "Services",
+        image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800",
+        description: "Comprehensive maintenance services including calibration, stamping, and repairs to ensure your weighing equipment runs at peak performance.",
         featured: false,
-        link: "/automation"
+        link: "/amc"
     }
 ];
 

@@ -42,7 +42,7 @@ const Header = () => {
                             <Link to="/products" className="dropdown-link">All Products</Link>
                             <Link to="/weighbridges" className="dropdown-link">Weighbridges</Link>
                             <Link to="/scales" className="dropdown-link">Industrial Scales</Link>
-                            <Link to="/automation" className="dropdown-link">Automation</Link>
+                            <Link to="/amc" className="dropdown-link">AMC (Annual Maintenance Contracts)</Link>
                         </div>
                     </div>
 
