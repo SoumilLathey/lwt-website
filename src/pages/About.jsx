@@ -22,10 +22,10 @@ const About = () => {
                         <h2 className="text-secondary text-lg font-semibold mb-2">Our Story</h2>
                         <h3 className="text-3xl font-bold text-primary mb-4">25+ Years of Engineering Excellence</h3>
                         <p className="text-muted mb-4">
-                            Founded in 2000, Lathey Weigh Trix began as a specialized <strong>electronic weighbridge manufacturing company</strong> focused on accuracy, durability, and affordability. Over time, our capabilities expanded across a comprehensive range of <strong>industrial weighing solutions</strong>, including <strong>weighbridges (5–200 tonnes),</strong> <strong>digital indicators, load cells, and weighing automation systems</strong>.
+                            Founded in 2000, Lathey Weigh Trix began as a specialized electronic weighbridge manufacturing company focused on accuracy, durability, and affordability. Over time, our capabilities expanded across a comprehensive range of industrial weighing solutions, including weighbridges (5–200 tonnes), digital indicators, load cells, and weighing automation systems.
                         </p>
                         <p className="text-muted">
-                            As industries increasingly moved toward cleaner energy, we extended our engineering expertise into <strong>solar EPC services</strong>, offering complete solutions for <strong>solar rooftop installations and ground-mounted solar power systems</strong>. Today, we operate across both precision engineering and clean energy, supporting diverse industrial requirements.
+                            As industries increasingly moved toward cleaner energy, we extended our engineering expertise into solar EPC services, offering complete solutions for solar rooftop installations and ground-mounted solar power systems. Today, we operate across both precision engineering and clean energy, supporting diverse industrial requirements.
                         </p>
                     </motion.div>
                     <motion.div
@@ -49,7 +49,7 @@ const About = () => {
                         <h2 className="text-3xl font-bold text-primary mb-4">What We Do</h2>
                         <p className="text-muted mb-6">Integrated Weighing & Solar EPC Solutions</p>
                         <p className="text-muted">
-                            We provide end-to-end solutions across two core areas: <strong>Precision Weighing Systems</strong> and <strong>Solar EPC Services</strong>. All products are designed to meet <strong>international standards</strong>, ensuring consistent accuracy and long-term reliability.
+                            We provide end-to-end solutions across two core areas: <strong>Precision Weighing Systems</strong> and <strong>Solar EPC Services</strong>. All products are designed to meet international standards, ensuring consistent accuracy and long-term reliability.
                         </p>
                     </div>
 
@@ -78,7 +78,7 @@ const About = () => {
                         >
                             <h4 className="text-xl font-bold mb-3 text-primary">Solar EPC Services</h4>
                             <p className="text-muted mb-3">
-                                As an <strong>Engineering, Procurement, and Construction (EPC)</strong> <strong>solar company</strong>, we manage the complete project lifecycle:
+                                As an Engineering, Procurement, and Construction (EPC) solar company, we manage the complete project lifecycle:
                             </p>
                             <ul className="text-muted space-y-2">
                                 <li>• System design and engineering</li>
