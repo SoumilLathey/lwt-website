@@ -67,11 +67,66 @@ const SolarROI = () => {
 
     return (
         <div className="solar-roi-container">
+            {/* Intro Section */}
+            <div className="roi-intro-section">
+                <div className="roi-intro-content">
+                    <h1 className="roi-main-title">Solar ROI Calculator</h1>
+                    <p className="roi-subtitle">Estimate Your Solar ROI in Minutes</p>
+                    <p className="roi-description">
+                        Use our Solar ROI Calculator to get a quick estimate of your investment, savings, and payback period for a solar rooftop or ground-mounted system. Enter a few basic details to understand how solar can reduce your energy costs over time.
+                    </p>
+                </div>
+            </div>
+
+            {/* How It Works Section */}
+            <div className="roi-explanation-section">
+                <div className="roi-explanation-content">
+                    <h2>How the Calculation Works</h2>
+                    <div className="explanation-grid">
+                        <div className="explanation-item">
+                            <div className="explanation-number">1</div>
+                            <div>
+                                <h4>Energy Generation</h4>
+                                <p>We estimate how much electricity your solar system can produce in a year based on the size of your solar plant, average sunlight available, and typical operating days (335 days, accounting for rainy/winter periods).</p>
+                            </div>
+                        </div>
+                        <div className="explanation-item">
+                            <div className="explanation-number">2</div>
+                            <div>
+                                <h4>Yearly Savings</h4>
+                                <p>We calculate how much money you save by using your own solar power instead of buying electricity from the grid, based on estimated yearly energy generation and your current electricity tariff.</p>
+                            </div>
+                        </div>
+                        <div className="explanation-item">
+                            <div className="explanation-number">3</div>
+                            <div>
+                                <h4>Your Actual Investment</h4>
+                                <p>If any subsidy is applicable, it is deducted from the total system cost to arrive at your net investment.</p>
+                            </div>
+                        </div>
+                        <div className="explanation-item">
+                            <div className="explanation-number">4</div>
+                            <div>
+                                <h4>Payback Period</h4>
+                                <p>The payback period tells you how many years it takes to recover your investment through electricity savings. After this period, the energy generated is essentially free.</p>
+                            </div>
+                        </div>
+                        <div className="explanation-item">
+                            <div className="explanation-number">5</div>
+                            <div>
+                                <h4>Long-Term Benefits</h4>
+                                <p>Solar systems are designed to work for 25 years or more, allowing you to save on electricity costs for many years after the initial investment is recovered.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div className="roi-content">
                 <div className="calculator-section">
                     <div className="section-header">
                         <Sun size={32} />
-                        <h1>Solar ROI Calculator</h1>
+                        <h1>Calculate Your Returns</h1>
                     </div>
 
                     <form onSubmit={calculateROI} className="roi-form">

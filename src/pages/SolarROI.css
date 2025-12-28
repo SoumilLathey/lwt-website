@@ -13,6 +13,100 @@
     align-items: center;
 }
 
+.roi-intro-section {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 60px 24px;
+    text-align: center;
+}
+
+.roi-intro-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.roi-main-title {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+    font-family: 'Outfit', sans-serif;
+}
+
+.roi-subtitle {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.roi-description {
+    font-size: 1.125rem;
+    color: var(--text-muted);
+    line-height: 1.8;
+}
+
+.roi-explanation-section {
+    width: 100%;
+    background: rgba(248, 250, 252, 0.95);
+    padding: 60px 24px;
+}
+
+.roi-explanation-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.roi-explanation-content h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    text-align: center;
+    margin-bottom: 3rem;
+    font-family: 'Outfit', sans-serif;
+}
+
+.explanation-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.explanation-item {
+    display: flex;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.explanation-number {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-family: 'Outfit', sans-serif;
+}
+
+.explanation-item h4 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 0.5rem;
+    font-family: 'Outfit', sans-serif;
+}
+
+.explanation-item p {
+    font-size: 1rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
 .roi-content {
     width: 100%;
     max-width: 1200px;
