@@ -38,35 +38,6 @@ const Products = () => {
     return (
         <section className="products-section">
             <div className="container">
-                <div className="section-header">
-                    <motion.span
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="section-caption text-secondary"
-                    >
-                        What We Do
-                    </motion.span>
-                    <motion.h2
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.1 }}
-                        className="section-title"
-                    >
-                        Industrial Weighing Solutions Built for Accuracy & Durability
-                    </motion.h2>
-                    <motion.p
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.2 }}
-                        className="section-description"
-                    >
-                        In high-volume industrial environments, inaccurate weighing leads to financial loss, compliance issues, and operational inefficiencies. Our weighing systems are engineered to eliminate these risks through robust design and consistent accuracy.
-                    </motion.p>
-                </div>
-
                 <div className="products-grid">
                     {products.map((product, index) => (
                         <motion.div
