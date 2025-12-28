@@ -8,7 +8,7 @@ const About = () => {
         <div className="page-about">
             <PageHeader
                 title="About Us"
-                description="Engineering Precision & Sustainable Solutions Since 2000"
+                description="Lathey Weigh Trix is a manufacturer of electronic weighbridges and a full-service solar EPC company, delivering reliable weighing systems and solar energy solutions for industrial and commercial applications. With over two decades of experience, we combine engineering expertise and modern technology to help businesses operate accurately, efficiently, and sustainably."
             />
 
             <section className="section container">
