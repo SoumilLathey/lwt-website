@@ -32,7 +32,7 @@ const Hero = () => {
                         transition={{ duration: 0.6, delay: 0.2 }}
                         className="hero-title"
                     >
-                        Precision <span className="text-secondary">Weighing</span> & Sustainable <span className="text-secondary">Energy</span>
+                        Precision Weighing & Reliable <span className="text-secondary">Solar Energy Solutions</span>
                     </motion.h1>
 
                     <motion.p
@@ -40,8 +40,19 @@ const Hero = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: 0.4 }}
                         className="hero-description"
+                        style={{ marginBottom: '1.5rem' }}
                     >
-                        Lathey Weigh Trix powers the future of industry with high-precision weighing solutions and advanced Solar EPC services. Engineering excellence for over two decades.
+                        Lathey Weigh Trix delivers industrial weighing systems and end-to-end solar EPC solutions built for accuracy, efficiency, and long-term performance. We help businesses streamline operations with high-precision weighbridges and digital scales, while enabling energy independence through solar rooftop installations and ground-mounted solar power systems.
+                    </motion.p>
+
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.5 }}
+                        className="hero-description"
+                        style={{ fontWeight: '600', marginTop: '0', marginBottom: '2.5rem' }}
+                    >
+                        Trusted engineering. Measurable accuracy. Sustainable impact.
                     </motion.p>
 
                     <motion.div
@@ -51,10 +62,10 @@ const Hero = () => {
                         className="hero-actions"
                     >
                         <Link to="/products" className="btn btn-primary">
-                            Weighing Equipments <Scale size={18} />
+                            Explore Weighing Equipment <Scale size={18} />
                         </Link>
                         <Link to="/solar-epc" className="btn btn-outline">
-                            Solar Solutions <Sun size={18} />
+                            Explore Solar Solutions <Sun size={18} />
                         </Link>
                     </motion.div>
                 </div>

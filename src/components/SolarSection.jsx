@@ -26,7 +26,7 @@ const SolarSection = () => {
                         transition={{ delay: 0.1 }}
                         className="solar-title"
                     >
-                        Powering Industries with <span className="text-secondary">Clean Energy</span>
+                        Clean Energy Solutions for <span className="text-secondary">Long-Term Cost Savings</span>
                     </motion.h2>
 
                     <motion.p
@@ -36,7 +36,7 @@ const SolarSection = () => {
                         transition={{ delay: 0.2 }}
                         className="solar-description"
                     >
-                        We provide end-to-end solar power solutions (EPC) tailored for industrial and commercial excellence. From design to grid integration, we ensure maximum efficiency and ROI.
+                        We provide end-to-end solar EPC services, covering design, engineering, procurement, installation, and support for solar rooftop systems and ground-mounted solar power plants. Our solar solutions are designed for businesses looking to reduce electricity costs, improve energy reliability, and transition to sustainable power.
                     </motion.p>
 
                     <div className="benefits-grid">
@@ -50,7 +50,7 @@ const SolarSection = () => {
                             <div className="benefit-icon"><Leaf size={24} /></div>
                             <div className="benefit-text">
                                 <h4>Eco-Friendly</h4>
-                                <p>Reduce carbon footprint significantly.</p>
+                                <p>Reduce carbon footprint with clean, renewable solar energy</p>
                             </div>
                         </motion.div>
                         <motion.div
@@ -62,8 +62,8 @@ const SolarSection = () => {
                         >
                             <div className="benefit-icon"><Battery size={24} /></div>
                             <div className="benefit-text">
-                                <h4>Cost Savings</h4>
-                                <p>Drastically cut electricity bills.</p>
+                                <h4>Cost Efficient</h4>
+                                <p>Lower long-term energy expenses with optimized solar power systems</p>
                             </div>
                         </motion.div>
                         <motion.div
@@ -75,14 +75,14 @@ const SolarSection = () => {
                         >
                             <div className="benefit-icon"><Zap size={24} /></div>
                             <div className="benefit-text">
-                                <h4>High Efficiency</h4>
-                                <p>Tier-1 PV modules & inverters.</p>
+                                <h4>High Performance</h4>
+                                <p>Engineered for maximum energy generation and durability</p>
                             </div>
                         </motion.div>
                     </div>
 
                     <Link to="/solar-epc" className="btn btn-secondary">
-                        Get Solar Evaluation <ArrowRight size={16} />
+                        Get Expert Consultation <ArrowRight size={16} />
                     </Link>
                 </div>
 

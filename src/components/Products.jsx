@@ -7,28 +7,28 @@ import './Products.css';
 const products = [
     {
         id: 1,
-        title: "Heavy Duty Weighbridges",
-        category: "Industrial",
+        title: "Heavy-Duty Weighbridges",
+        category: "Industrial Weighing",
         image: "/product-weighbridge.png",
-        description: "Rugged, high-precision weighbridges designed for extreme industrial environments. Capacities up to 200 tons.",
+        description: "Built for demanding industrial and logistics environments. Our industrial weighbridges deliver consistent precision for factories, warehouses, and transport hubs.",
         featured: true,
         link: "/weighbridges"
     },
     {
         id: 2,
         title: "Digital Platform Scales",
-        category: "Precision",
+        category: "Precision Measurement",
         image: "/product-scale.png",
-        description: "Stainless steel platform scales with advanced digital indicators for hygiene-sensitive industries.",
+        description: "Precision measurement for controlled industrial operations. High-precision digital sensors with seamless workflow integration for faster operations.",
         featured: false,
         link: "/scales"
     },
     {
         id: 3,
-        title: "AMC (Annual Maintenance Contracts)",
+        title: "AMC (Annual Maintenance Contract)",
         category: "Services",
         image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800",
-        description: "Comprehensive maintenance services including calibration, stamping, and repairs to ensure your weighing equipment runs at peak performance.",
+        description: "Ensure accuracy. Minimize downtime. Extend equipment life. Our AMC services keep your weighing systems operating at peak performance.",
         featured: false,
         link: "/amc"
     }
@@ -45,7 +45,7 @@ const Products = () => {
                         viewport={{ once: true }}
                         className="section-caption text-secondary"
                     >
-                        Our Expertise
+                        What We Do
                     </motion.span>
                     <motion.h2
                         initial={{ opacity: 0, y: 10 }}
@@ -54,7 +54,7 @@ const Products = () => {
                         transition={{ delay: 0.1 }}
                         className="section-title"
                     >
-                        Precision Weighing Solutions
+                        Industrial Weighing Solutions Built for Accuracy & Durability
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 10 }}
@@ -63,7 +63,7 @@ const Products = () => {
                         transition={{ delay: 0.2 }}
                         className="section-description"
                     >
-                        From heavy-duty truck scales to laboratory precision balances, we engineer weighing systems that drive efficiency and accuracy for your business.
+                        In high-volume industrial environments, inaccurate weighing leads to financial loss, compliance issues, and operational inefficiencies. Our weighing systems are engineered to eliminate these risks through robust design and consistent accuracy.
                     </motion.p>
                 </div>
 
@@ -102,7 +102,7 @@ const Products = () => {
 
                 <div className="text-center" style={{ marginTop: '3rem' }}>
                     <Link to="/products" className="btn btn-outline">
-                        View All Products
+                        View All Weighing Solutions
                     </Link>
                 </div>
             </div>

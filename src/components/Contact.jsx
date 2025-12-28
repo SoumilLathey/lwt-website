@@ -74,8 +74,8 @@ const Contact = () => {
                     className="contact-wrapper"
                 >
                     <div className="contact-info">
-                        <h2>Get in Touch</h2>
-                        <p>Have a project in mind or need a quote for our weighing or solar solutions? Reach out to our expert team.</p>
+                        <h2>Let's Build the Right Solution for Your Business</h2>
+                        <p>Whether you're planning a solar installation, upgrading industrial weighing systems, or securing a maintenance contract, our team is ready to help.</p>
 
                         <div className="info-item">
                             <div className="info-icon"><Phone size={20} /></div>

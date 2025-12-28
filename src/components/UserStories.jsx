@@ -109,7 +109,7 @@ const UserStories = () => {
                 <div className="user-stories-header">
                     <h2 className="user-stories-title">Client Success Stories</h2>
                     <p className="user-stories-subtitle">
-                        Discover how we help businesses streamline operations and achieve their goals through our weighing and solar solutions.
+                        Our clients choose us for engineering expertise, dependable service, and long-term value creation across weighing systems and solar EPC projects.
                     </p>
                 </div>
 
