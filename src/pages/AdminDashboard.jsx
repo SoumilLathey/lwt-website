@@ -12,6 +12,7 @@ const AdminDashboard = () => {
     const [employees, setEmployees] = useState([]);
     const [projects, setProjects] = useState([]);
     const [users, setUsers] = useState([]);
+    const [admins, setAdmins] = useState([]);
     const [loading, setLoading] = useState(true);
     const [updateStatus, setUpdateStatus] = useState(null);
     const [showEmployeeForm, setShowEmployeeForm] = useState(false);
@@ -102,12 +103,13 @@ const AdminDashboard = () => {
                 ...getAuthHeader()
             };
 
-            const [complaintsRes, enquiriesRes, employeesRes, projectsRes, usersRes] = await Promise.all([
+            const [complaintsRes, enquiriesRes, employeesRes, projectsRes, usersRes, adminsRes] = await Promise.all([
                 fetch(`${API_URL}/api/complaints/all`, { headers }),
                 fetch(`${API_URL}/api/enquiries`, { headers }),
                 fetch(`${API_URL}/api/admin/employees`, { headers }),
                 fetch(`${API_URL}/api/projects`, { headers }),
-                fetch(`${API_URL}/api/admin/users`, { headers })
+                fetch(`${API_URL}/api/admin/users`, { headers }),
+                fetch(`${API_URL}/api/admin/admins`, { headers })
             ]);
 
             if (complaintsRes.ok) setComplaints(await complaintsRes.json());
@@ -115,6 +117,7 @@ const AdminDashboard = () => {
             if (employeesRes.ok) setEmployees(await employeesRes.json());
             if (projectsRes.ok) setProjects(await projectsRes.json());
             if (usersRes.ok) setUsers(await usersRes.json());
+            if (adminsRes.ok) setAdmins(await adminsRes.json());
         } catch (error) {
             console.error('Error fetching admin data:', error);
         } finally {
@@ -185,11 +188,37 @@ const AdminDashboard = () => {
     };
 
     const resetEmployeePassword = async (employeeId, employeeName) => {
-        const newPassword = prompt(`Enter new password for ${employeeName}:`);
+        const newPassword = prompt(`Enter new password for employee ${employeeName}:`);
         if (!newPassword) return;
 
         try {
             const response = await fetch(`${API_URL}/api/admin/employees/${employeeId}/reset-password`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...getAuthHeader()
+                },
+                body: JSON.stringify({ password: newPassword })
+            });
+
+            if (response.ok) {
+                alert('Password reset successfully!');
+            } else {
+                const data = await response.json();
+                alert(data.error || 'Failed to reset password');
+            }
+        } catch (error) {
+            console.error('Error resetting password:', error);
+            alert('Failed to reset password');
+        }
+    };
+
+    const resetUserPassword = async (userId, userName) => {
+        const newPassword = prompt(`Enter new password for user/admin ${userName}:`);
+        if (!newPassword) return;
+
+        try {
+            const response = await fetch(`${API_URL}/api/admin/users/${userId}/reset-password`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -721,6 +750,13 @@ const AdminDashboard = () => {
                     >
                         <UserCheck size={18} />
                         Users ({users.length})
+                    </button>
+                    <button
+                        className={`tab ${activeTab === 'admins' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('admins')}
+                    >
+                        <Key size={18} />
+                        Admins ({admins.length})
                     </button>
                 </div>
 
@@ -1742,6 +1778,66 @@ const AdminDashboard = () => {
                                                                     style={{ background: '#dbeafe', color: '#1e40af' }}
                                                                 >
                                                                     <Scale size={16} /> Equipment
+                                                                </button>
+                                                                <button
+                                                                    className="action-btn"
+                                                                    onClick={() => resetUserPassword(user.id, user.name)}
+                                                                    title="Reset Password"
+                                                                    style={{ background: '#fce7f3', color: '#be185d' }}
+                                                                >
+                                                                    <Key size={16} />
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                )}
+                            </div>
+                        </motion.div>
+                    )}
+
+                    {activeTab === 'admins' && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="users-section"
+                        >
+                            <h2>Admin Management</h2>
+                            <div className="users-list">
+                                {admins.length === 0 ? (
+                                    <div className="empty-state">
+                                        <Users size={48} />
+                                        <p>No admins found</p>
+                                    </div>
+                                ) : (
+                                    <div className="table-responsive">
+                                        <table className="admin-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Email</th>
+                                                    <th>Phone</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {admins.map((admin) => (
+                                                    <tr key={admin.id}>
+                                                        <td>{admin.name} {admin.id === JSON.parse(atob(localStorage.getItem('token').split('.')[1])).id ? '(You)' : ''}</td>
+                                                        <td>{admin.email}</td>
+                                                        <td>{admin.phone || '-'}</td>
+                                                        <td>
+                                                            <div className="action-buttons" style={{ display: 'flex', gap: '8px' }}>
+                                                                <button
+                                                                    className="action-btn"
+                                                                    onClick={() => resetUserPassword(admin.id, admin.name)}
+                                                                    title="Reset Password"
+                                                                    style={{ background: '#fce7f3', color: '#be185d' }}
+                                                                >
+                                                                    <Key size={16} /> Reset Password
                                                                 </button>
                                                             </div>
                                                         </td>

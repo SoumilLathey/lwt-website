@@ -467,6 +467,39 @@ router.put('/users/:id', authenticateToken, isAdmin, async (req, res) => {
     }
 });
 
+// Get all admins (admin only)
+router.get('/admins', authenticateToken, isAdmin, async (req, res) => {
+    try {
+        const admins = await allQuery(
+            'SELECT id, email, name, phone, isAdmin, isVerified, createdAt FROM users WHERE isAdmin = 1 ORDER BY name ASC'
+        );
+        res.json(admins);
+    } catch (error) {
+        console.error('Get admins error:', error);
+        res.status(500).json({ error: 'Failed to fetch admins' });
+    }
+});
+
+// Reset user/admin password (admin only)
+router.patch('/users/:id/reset-password', authenticateToken, isAdmin, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { password } = req.body;
+
+        if (!password) {
+            return res.status(400).json({ error: 'New password is required' });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        await runQuery('UPDATE users SET password = ? WHERE id = ?', [hashedPassword, id]);
+
+        res.json({ message: 'Password reset successfully' });
+    } catch (error) {
+        console.error('Reset user password error:', error);
+        res.status(500).json({ error: 'Failed to reset password' });
+    }
+});
+
 // Get solar installations for a specific user (admin only)
 router.get('/solar-installations/user/:userId', authenticateToken, isAdmin, async (req, res) => {
     try {
