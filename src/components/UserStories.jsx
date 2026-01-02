@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import './UserStories.css';
 
 const UserStories = () => {
@@ -13,31 +13,34 @@ const UserStories = () => {
         },
         {
             id: 2,
-            name: "Operations Head",
-            role: "Manufacturing Industry",
-            quote: "The accuracy, reliability, and technical support provided by Lathey Weigh Trix have significantly improved our operations.",
-            initials: "OH"
+            name: "Mahesh Chand Gupta",
+            role: "Retired IAS",
+            quote: "The solar plant is operating reliably, and the performance metrics are in line with the estimates provided at the time of installation.",
+            initials: "MG",
+            image: "/images/testimonials/mahesh-chand-gupta.jpg"
         },
         {
-            id: 3,
-            name: "Vikram Singh",
-            role: "Director, Green Fields Logistics",
-            quote: "We've been using their industrial scales for over 5 years. The support and service are excellent, and the product quality speaks for itself.",
-            initials: "VS"
+            id: 9,
+            name: "Kanti Prasad",
+            role: "Directorate of Veterinary Services",
+            quote: "Reliable products and great service. The team at Lathey Weigh Trix is very professional and helpful.",
+            initials: "KP",
+            image: "/images/testimonials/kanti-prasad.jpg"
         },
         {
             id: 4,
             name: "Amit Kumar",
             role: "CEO, TechBuild Construct",
-            quote: "Outstanding service quality. The weighbridge installation was done in record time without disrupting our daily operations.",
+            quote: "The installation was executed professionally, and the solar system is delivering consistent performance with noticeable savings on energy costs.",
             initials: "AK"
         },
         {
             id: 5,
-            name: "Sarah Johnson",
-            role: "Facility Manager, Global Exports",
-            quote: "The solar installation has reduced our energy costs by 40%. The ROI calculation was accurate, and the system is performing perfectly.",
-            initials: "SJ"
+            name: "Rajat Bhattar",
+            role: "Architect",
+            quote: "The solar installation has reduced our energy costs by nearly 40%. The ROI calculation was accurate, and the system is performing perfectly.",
+            initials: "RB",
+            image: "/images/testimonials/rajat-bhattar.jpg"
         },
         {
             id: 6,
@@ -48,10 +51,11 @@ const UserStories = () => {
         },
         {
             id: 7,
-            name: "Anita Desai",
-            role: "Logistics Coordinator, FastTrack",
-            quote: "We needed a custom weighing solution for our specific requirements, and LWT delivered exactly what we needed. Great customization capabilities.",
-            initials: "AD"
+            name: "Umakant Agrawal",
+            role: "Charted Accountant",
+            quote: "We are extremely pleased with the quality of service and the performance of the products delivered by Lathey Weigh Trix.",
+            initials: "U",
+            image: "/images/testimonials/umakant.jpg"
         },
         {
             id: 8,
@@ -59,6 +63,13 @@ const UserStories = () => {
             role: "Owner, Irfan Agro",
             quote: "Best solar water pump solution in the market. It has solved our irrigation problems completely. Thank you Lathey Weigh Trix team.",
             initials: "MI"
+        },
+        {
+            id: 3,
+            name: "Vikram Singh",
+            role: "Director, Green Fields Logistics",
+            quote: "We've been using their industrial scales for over 5 years. The support and service are excellent, and the product quality speaks for itself.",
+            initials: "VS"
         }
     ];
 
@@ -122,41 +133,25 @@ const UserStories = () => {
                         <div
                             className="stories-track"
                             style={{
-                                transform: `translateX(-${currentIndex * (100 / itemsPerView + (2 / itemsPerView))}%)`,
-                                // Explanation: 100% / itemsPerView is the width of one item. 
-                                // But we also have a gap of 2rem. 
-                                // Simpler approach: translateX(-currentIndex * (100/itemsPerView)) if we account for gap in width calculation OR
-                                // use a simpler calc.
-
-                                // Actually, with gap it's tricky. 
-                                // Let's simplify: translateX of ( -currentIndex * (100 / itemsPerView) ) % 
-                                // and hope flex-basis takes care of gap.
-                                // If we use gap: 2rem, the movement needs to include the gap.
-                                // Let's rely on the card width calc in CSS being accurate.
-                                // transform: `translateX(calc(-${currentIndex} * (100% / ${itemsPerView} + ${2/itemsPerView}rem)))` 
-                                // But the rem unit is mixed with %.
-
-                                // Alternate robust strategy: 
-                                // Move by 100% of the item width (including gap).
-                                // Width of item = (100% - (itemsPerView - 1) * 2rem) / itemsPerView.
-                                // That is complicated.
-
-                                // Easiest: Use specific % gap if possible, or just use 100% translation for single items.
-                                // Here we are sliding one item at a time.
-                                // Let's try to match the index.
-                                // If we have 3 items:
-                                // Item width ~ 31%. Gap ~ 2%.
-                                // Move 1 item = 33.33%.
                                 transform: `translateX(calc(-${currentIndex} * (100% / ${itemsPerView} + (2rem / ${itemsPerView}))))`
                             }}
                         >
                             {stories.map((story) => (
                                 <div key={story.id} className="story-card">
                                     <div className="quote-icon">“</div>
+                                    <div className="stars" style={{ display: 'flex', gap: '2px', marginBottom: '1rem' }}>
+                                        {[...Array(5)].map((_, i) => (
+                                            <Star key={i} size={16} fill="#FFD700" color="#FFD700" />
+                                        ))}
+                                    </div>
                                     <p className="story-text">{story.quote}</p>
                                     <div className="client-info">
                                         <div className="client-avatar">
-                                            {story.initials}
+                                            {story.image ? (
+                                                <img src={story.image} alt={story.name} />
+                                            ) : (
+                                                story.initials
+                                            )}
                                         </div>
                                         <div className="client-details">
                                             <h4>{story.name}</h4>
