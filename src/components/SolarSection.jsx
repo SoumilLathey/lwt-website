@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Sun, Leaf, Battery, Zap, ArrowRight } from 'lucide-react';
+import { Sun, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import './SolarSection.css';
 
@@ -62,47 +62,7 @@ const SolarSection = () => {
                         <li>Transition to sustainable power</li>
                     </motion.ul>
 
-                    <div className="benefits-grid">
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.3 }}
-                            className="benefit-item"
-                        >
-                            <div className="benefit-icon"><Leaf size={24} /></div>
-                            <div className="benefit-text">
-                                <h4>Eco-Friendly</h4>
-                                <p>Reduce carbon footprint with clean, renewable solar energy</p>
-                            </div>
-                        </motion.div>
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.4 }}
-                            className="benefit-item"
-                        >
-                            <div className="benefit-icon"><Battery size={24} /></div>
-                            <div className="benefit-text">
-                                <h4>Cost Efficient</h4>
-                                <p>Lower long-term energy expenses with optimized solar power systems</p>
-                            </div>
-                        </motion.div>
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.5 }}
-                            className="benefit-item"
-                        >
-                            <div className="benefit-icon"><Zap size={24} /></div>
-                            <div className="benefit-text">
-                                <h4>High Performance</h4>
-                                <p>Engineered for maximum energy generation and durability</p>
-                            </div>
-                        </motion.div>
-                    </div>
+
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'flex-start' }}>
                         <Link to="/solar-epc" className="btn btn-secondary">

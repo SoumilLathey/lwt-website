@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import ScrollToTop from './components/ScrollToTop';
 import { AuthProvider, ProtectedRoute } from './context/AuthContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -14,6 +15,7 @@ import Automation from './pages/Automation';
 import AMC from './pages/AMC';
 import SolarEPC from './pages/SolarEPC';
 import AllProducts from './pages/AllProducts';
+import SolarSolutionDetail from './pages/SolarSolutionDetail';
 import UserDashboard from './pages/UserDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import EmployeeLogin from './pages/EmployeeLogin';
@@ -23,6 +25,7 @@ import SolarROI from './pages/SolarROI';
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <AuthProvider>
         <div className="app-container">
           <Header />
@@ -36,6 +39,7 @@ function App() {
               <Route path="/amc" element={<AMC />} />
               <Route path="/products" element={<AllProducts />} />
               <Route path="/solar-epc" element={<SolarEPC />} />
+              <Route path="/solar-epc/:id" element={<SolarSolutionDetail />} />
               <Route path="/solar-roi" element={<SolarROI />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/login" element={<Login />} />

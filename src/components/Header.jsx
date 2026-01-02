@@ -22,10 +22,11 @@ const Header = () => {
         <header className="header-main">
             <div className="container header-container">
                 {/* Logo */}
-                <Link to="/" className="logo-group no-underline hover:opacity-90 transition-opacity">
-                    <span style={{ color: '#24528F', fontWeight: '900', fontSize: '28px', fontFamily: 'Outfit, sans-serif' }}>LWT</span>
-                    <span style={{ color: '#94a3b8', margin: '0 12px', fontWeight: '300', fontSize: '28px' }}>|</span>
-                    <span style={{ color: '#24528F', fontWeight: '600', fontSize: '20px', fontFamily: 'Outfit, sans-serif', letterSpacing: '0.5px' }}>Lathey Weigh Trix</span>
+                {/* Logo */}
+                <Link to="/" className="logo-wrap no-underline hover:opacity-90 transition-opacity">
+                    <span className="logo-text">LWT</span>
+                    <span className="divider"></span>
+                    <span className="brand-name">Lathey Weigh Trix</span>
                 </Link>
 
                 {/* Desktop Navigation */}
@@ -39,7 +40,6 @@ const Header = () => {
                         </span>
                         {/* Dropdown */}
                         <div className="dropdown-menu">
-                            <Link to="/products" className="dropdown-link">All Products</Link>
                             <Link to="/weighbridges" className="dropdown-link">Weighbridges</Link>
                             <Link to="/scales" className="dropdown-link">Industrial Scales</Link>
                             <Link to="/amc" className="dropdown-link">AMC (Annual Maintenance Contracts)</Link>

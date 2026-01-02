@@ -67,67 +67,70 @@ const Scales = () => {
         <div className="page-scales">
             <PageHeader
                 title="Industrial Scales for Accurate & Efficient Operations"
-                description="Lathey Weigh Trix offers industrial digital scales designed for precise weight measurement, operational efficiency, and long-term reliability across manufacturing, warehousing, and quality-control environments. Built with robust components and precision sensors, our industrial scales deliver consistent accuracy even in high-usage industrial conditions."
+                description="Lathey Weigh Trix offers industrial digital scales designed for precise weight measurement, operational efficiency, and long-term reliability across manufacturing, warehousing, and quality-control environments."
+                image="/images/scales-bg.jpg"
             />
 
             {/* Problem Statement */}
-            <section className="section bg-slate-50">
-                <div className="container max-w-4xl">
+            <section className="section section-light">
+                <div className="container">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-center"
                     >
-                        <h2 className="text-3xl font-bold text-primary mb-6">Designed for Accuracy Where It Matters Most</h2>
-                        <p className="text-muted text-lg mb-4">
-                            In industrial workflows, inaccurate weighing can result in:
+                        <h2 className="text-3xl font-bold text-primary">Designed for Accuracy Where It Matters Most</h2>
+                        <p className="section-desc">
+                            In industrial workflows, inaccurate weighing can result in production inconsistencies and operational delays.
                         </p>
-                        <ul className="text-muted text-lg space-y-2 text-left max-w-2xl mx-auto">
-                            {problems.map((problem, index) => (
-                                <li key={index} className="flex items-start gap-3">
-                                    <span className="text-red-500 mt-1">•</span>
-                                    <span>{problem}</span>
-                                </li>
-                            ))}
-                        </ul>
-                        <p className="text-muted text-lg mt-6">
-                            Our industrial weighing scales are engineered to provide stable, repeatable measurements, helping businesses maintain accuracy at every stage of operation.
-                        </p>
+
+                        <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100 max-w-3xl">
+                            <h4 className="text-xl font-bold text-primary mb-4">Common Risks of Inaccurate Weighing:</h4>
+                            <ul className="space-y-2">
+                                {problems.map((problem, index) => (
+                                    <li key={index} className="list-item">
+                                        <span className="text-red-500 font-bold">•</span>
+                                        <span className="text-muted">{problem}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </motion.div>
                 </div>
             </section>
 
             {/* Applications */}
-            <section className="section container">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="max-w-4xl mx-auto"
-                >
-                    <h2 className="text-3xl font-bold text-primary mb-6">Applications Across Industries</h2>
-                    <p className="text-muted text-lg mb-6">
-                        Our industrial scales are suitable for a wide range of applications, including:
-                    </p>
-                    <div className="grid md:grid-cols-2 gap-4">
-                        {applications.map((app, index) => (
-                            <div key={index} className="flex items-center gap-3">
-                                <CheckCircle className="text-secondary flex-shrink-0" size={20} />
-                                <span className="text-muted">{app}</span>
-                            </div>
-                        ))}
-                    </div>
-                </motion.div>
+            <section className="section section-white">
+                <div className="container">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                    >
+                        <h2 className="text-3xl font-bold text-primary">Applications Across Industries</h2>
+                        <p className="section-desc">
+                            Our industrial scales are suitable for a wide range of applications.
+                        </p>
+                        <div className="grid-2">
+                            {applications.map((app, index) => (
+                                <div key={index} className="list-item">
+                                    <CheckCircle className="text-secondary flex-shrink-0" size={20} />
+                                    <span className="text-muted text-lg">{app}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </motion.div>
+                </div>
             </section>
 
             {/* Key Features */}
-            <section className="section bg-white">
+            <section className="section section-light">
                 <div className="container">
-                    <div className="text-center mb-12">
-                        <h2 className="text-3xl font-bold text-primary mb-4">Key Features</h2>
+                    <div className="mb-10">
+                        <h2 className="text-3xl font-bold text-primary">Key Features</h2>
+                        <p className="section-desc">Engineered to provide stable, repeatable measurements.</p>
                     </div>
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                    <div className="card-grid">
                         {features.map((feature, index) => (
                             <motion.div
                                 key={index}
@@ -137,9 +140,9 @@ const Scales = () => {
                                 transition={{ delay: index * 0.1 }}
                                 className="card"
                             >
-                                <div className="flex items-start gap-3 mb-3">
-                                    <CheckCircle className="text-secondary flex-shrink-0 mt-1" size={24} />
-                                    <h4 className="text-xl font-bold text-primary">{feature.title}</h4>
+                                <div className="flex items-center gap-3 mb-4">
+                                    <CheckCircle className="text-secondary flex-shrink-0" size={24} />
+                                    <h4 className="text-xl font-bold text-primary m-0">{feature.title}</h4>
                                 </div>
                                 <p className="text-muted">{feature.description}</p>
                             </motion.div>
@@ -149,96 +152,93 @@ const Scales = () => {
             </section>
 
             {/* Types */}
-            <section className="section container">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="max-w-4xl mx-auto"
-                >
-                    <h2 className="text-3xl font-bold text-primary mb-6">Types of Industrial Scales</h2>
-                    <p className="text-muted text-lg mb-6">
-                        We provide a range of industrial scale solutions, configured based on capacity, application, and environment:
-                    </p>
-                    <div className="space-y-3">
-                        {types.map((type, index) => (
-                            <div key={index} className="flex items-center gap-3">
-                                <CheckCircle className="text-secondary flex-shrink-0" size={20} />
-                                <span className="text-muted text-lg">{type}</span>
-                            </div>
-                        ))}
-                    </div>
-                    <p className="text-muted text-lg mt-6">
-                        Each solution is selected or engineered to meet specific operational requirements.
-                    </p>
-                </motion.div>
-            </section>
-
-            {/* Installation & Support */}
-            <section className="section bg-slate-50">
-                <div className="container max-w-4xl">
+            <section className="section section-white">
+                <div className="container">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                     >
-                        <h2 className="text-3xl font-bold text-primary mb-6">Installation, Calibration & Support</h2>
-                        <p className="text-muted text-lg mb-6">
-                            Our support extends beyond supply. We provide:
+                        <h2 className="text-3xl font-bold text-primary">Types of Industrial Scales</h2>
+                        <p className="section-desc">
+                            We provide a range of solution configurations based on capacity, application, and environment.
                         </p>
-                        <div className="grid md:grid-cols-2 gap-4 mb-6">
-                            {services.map((service, index) => (
-                                <div key={index} className="flex items-center gap-3">
+                        <div className="grid-2">
+                            {types.map((type, index) => (
+                                <div key={index} className="list-item">
                                     <CheckCircle className="text-secondary flex-shrink-0" size={20} />
-                                    <span className="text-muted">{service}</span>
+                                    <span className="text-muted text-lg">{type}</span>
                                 </div>
                             ))}
                         </div>
-                        <p className="text-muted text-lg">
-                            This ensures consistent performance and compliance over the life of the equipment.
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* Installation & Support */}
+            <section className="section section-light">
+                <div className="container">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                    >
+                        <h2 className="text-3xl font-bold text-primary">Installation, Calibration & Support</h2>
+                        <p className="section-desc">
+                            Our support extends beyond supply to ensure consistent performance.
                         </p>
+                        <div className="grid-2">
+                            {services.map((service, index) => (
+                                <div key={index} className="list-item">
+                                    <CheckCircle className="text-secondary flex-shrink-0" size={20} />
+                                    <span className="text-muted text-lg">{service}</span>
+                                </div>
+                            ))}
+                        </div>
                     </motion.div>
                 </div>
             </section>
 
             {/* Why Choose Us */}
-            <section className="section container">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="max-w-4xl mx-auto"
-                >
-                    <h2 className="text-3xl font-bold text-primary mb-6">Why Choose Lathey Weigh Trix Industrial Scales?</h2>
-                    <div className="space-y-3">
-                        {whyChoose.map((reason, index) => (
-                            <div key={index} className="flex items-center gap-3">
-                                <CheckCircle className="text-secondary flex-shrink-0" size={20} />
-                                <span className="text-muted text-lg">{reason}</span>
-                            </div>
-                        ))}
-                    </div>
-                </motion.div>
-            </section>
-
-            {/* CTA */}
-            <section className="section bg-primary text-white">
-                <div className="container max-w-4xl text-center">
+            <section className="section section-white">
+                <div className="container">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                     >
-                        <h2 className="text-3xl font-bold mb-4">Need an industrial scale solution tailored to your application?</h2>
-                        <p className="text-lg mb-8 opacity-90">
+                        <h2 className="text-3xl font-bold text-primary">Why Choose Lathey Weigh Trix?</h2>
+                        <p className="section-desc">Precision-engineered industrial weighing solutions.</p>
+                        <div className="grid-2">
+                            {whyChoose.map((reason, index) => (
+                                <div key={index} className="list-item">
+                                    <CheckCircle className="text-secondary flex-shrink-0" size={20} />
+                                    <span className="text-muted text-lg">{reason}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* CTA */}
+            <section className="section bg-primary text-white text-center">
+                <div className="container">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                    >
+                        <h2 className="text-3xl font-bold mb-4 text-white">Need an industrial scale solution tailored to your application?</h2>
+                        <p className="text-lg mb-8 opacity-90 text-white max-w-2xl mx-auto">
                             Get expert consultation and technical specifications
                         </p>
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                        <div className="flex justify-center gap-4">
                             <Link to="/contact" className="btn bg-white text-primary hover:bg-slate-100">
-                                Request Industrial Scale Consultation <ArrowRight size={18} />
+                                Request Consultation <ArrowRight size={18} />
                             </Link>
                             <Link to="/contact" className="btn btn-outline border-white text-white hover:bg-white hover:text-primary">
-                                Get Technical Specifications
+                                Technical Specs
                             </Link>
                         </div>
                     </motion.div>

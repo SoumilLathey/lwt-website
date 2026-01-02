@@ -1,6 +1,10 @@
 /* Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap');
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   /* Brand Colors */
   --color-primary: #24528F;
@@ -61,6 +65,7 @@ body {
   color: var(--text-main);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 h1,
@@ -87,17 +92,86 @@ button {
   background: none;
 }
 
-/* Utilities */
+/* Layout System Updates */
 .container {
-  max-width: var(--container-width);
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 20px;
 }
 
 .section {
-  padding: 80px 0;
+  padding: 80px 0 !important;
 }
 
+.section-sm {
+  padding: 50px 0 !important;
+}
+
+/* Backgrounds */
+.section-light {
+  background-color: #f8fafc;
+}
+
+.section-white {
+  background-color: #ffffff;
+}
+
+/* Grids */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+/* Card Standardization */
+.card {
+  background: var(--bg-card);
+  border-radius: var(--border-radius);
+  padding: 32px;
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.card h4 {
+  margin-bottom: 12px;
+}
+
+.card p {
+  flex-grow: 1;
+}
+
+/* List Item Alignment */
+.list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+/* Typography Helpers */
+.text-narrow {
+  max-width: 800px;
+}
+
+.section-desc {
+  max-width: 700px;
+  margin-bottom: 40px;
+  color: var(--text-muted);
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+/* Existing Utilities (Preserved/Modified) */
 .flex {
   display: flex;
 }
@@ -126,21 +200,27 @@ button {
   gap: 32px;
 }
 
-.grid {
-  display: grid;
+@media (max-width: 1024px) {
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
-.grid-cols-1 {
-  grid-template-columns: repeat(1, 1fr);
+@media (max-width: 768px) {
+  .section {
+    padding: 60px 0 !important;
+  }
+
+  .card-grid,
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .container {
+    padding: 0 16px;
+  }
 }
 
-.grid-cols-2 {
-  grid-template-columns: repeat(2, 1fr);
-}
-
-.grid-cols-3 {
-  grid-template-columns: repeat(3, 1fr);
-}
 
 @media (max-width: 768px) {
   .section {
@@ -235,4 +315,219 @@ button {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+/* Utility Overrides & Failsafes */
+.bg-primary {
+  background-color: var(--color-primary) !important;
+}
+
+.text-white {
+  color: #ffffff !important;
+}
+
+.text-white h1,
+.text-white h2,
+.text-white h3,
+.text-white h4,
+.text-white h5,
+.text-white h6 {
+  color: #ffffff !important;
+}
+
+.text-white p,
+.text-white span,
+.text-white div {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.border-white {
+  border-color: #ffffff !important;
+}
+
+.btn-outline.border-white {
+  border: 1px solid white;
+  color: white;
+}
+
+.btn-outline.border-white:hover {
+  background-color: white;
+  color: var(--color-primary) !important;
+}
+
+/* =========================================
+   ENTERPRISE INDUSTRIAL COMPACT THEME
+   Strict spacing overrides for information density
+   ========================================= */
+
+/* Reduce excessive vertical spacing site-wide */
+section,
+.section,
+.container,
+.wrapper,
+.content,
+.block {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-top: 24px !important;
+  padding-bottom: 24px !important;
+}
+
+@media (min-width: 1024px) {
+
+  section,
+  .section {
+    padding: 32px 0 !important;
+  }
+}
+
+/* Tighten headings */
+h1,
+h2,
+h3,
+h4 {
+  margin-bottom: 12px !important;
+  margin-top: 0 !important;
+  /* Managed by flow, but resetting top helps */
+  line-height: 1.3 !important;
+}
+
+/* Reduce paragraph spacing */
+p {
+  margin-bottom: 10px !important;
+  line-height: 1.5;
+}
+
+/* Reduce list spacing */
+ul,
+li {
+  margin-bottom: 6px;
+}
+
+/* Ensure clean flex alignment for lists with icons */
+li.flex {
+  align-items: flex-start;
+}
+
+/* Cards / feature boxes spacing - Compact */
+.card,
+.box,
+.feature {
+  padding: 16px !important;
+  /* Slightly more than 16px to breathe but not 32px */
+  margin-bottom: 16px !important;
+  /* Grid handles gaps */
+}
+
+/* Helper to override Tailwind's large gaps if needed site-wide */
+.space-y-12>*+* {
+  margin-top: 1.5rem !important;
+  /* Override 3rem */
+}
+
+.text-muted {
+  color: #475569 !important;
+  /* Slightly darker for better contrast/readability */
+}
+
+/* Installation & Support Fix */
+.installation-support p,
+.installation-support li {
+  line-height: 1.5 !important;
+  margin-bottom: 10px !important;
+}
+
+/* =========================================
+   Weighbridge Page Specific Styles
+   ========================================= */
+
+/* Hero Image Section */
+.section-hero {
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+  border-radius: 16px;
+  margin: 40px 0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  /* Soft shadow */
+}
+
+/* Type Layouts (Grid) */
+.type {
+  display: grid;
+  grid-template-columns: 1.2fr 2fr;
+  /* Image left, text right default */
+  gap: 28px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.type.reverse {
+  grid-template-columns: 2fr 1.2fr;
+  /* Text left, image right */
+}
+
+/* Ensure images in type layout have consistent style */
+.type img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  object-fit: cover;
+  max-height: 300px;
+  /* Prevent overly tall images */
+}
+
+/* Feature Card enhanced with Image */
+.feature-card-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.feature-card-image {
+  width: 110px;
+  height: 110px;
+  /* Fixed square for consistency */
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+/* Installation Full Width Image */
+.section-image {
+  width: 100%;
+  max-height: 320px;
+  object-fit: cover;
+  border-radius: 14px;
+  margin: 20px 0 30px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* Mobile Responsiveness for new layouts */
+@media (max-width: 768px) {
+
+  .type,
+  .type.reverse {
+    grid-template-columns: 1fr;
+    /* Stack on mobile */
+    gap: 16px;
+  }
+
+  .section-hero {
+    height: 250px;
+  }
+
+  .feature-card-content {
+    flex-direction: column-reverse;
+    /* Image top or bottom? User wants small image. Let's keep it simple. */
+  }
+
+  .feature-card-image {
+    width: 100%;
+    /* Full width on very small screens? Or keep small? */
+    height: 150px;
+    width: 100%;
+  }
 }

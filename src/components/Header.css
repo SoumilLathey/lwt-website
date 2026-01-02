@@ -17,89 +17,49 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    flex-wrap: nowrap;
+    padding: 0 12px;
 }
 
-.logo-group {
+.logo-wrap {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-left: -20px;
+    white-space: nowrap;
+    margin-right: 60px;
 }
 
-.logo-icon {
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(135deg, var(--color-primary) 0%, #1e40af 100%);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    box-shadow: var(--shadow-md);
-    transition: all 0.3s ease;
+.logo-text,
+.brand-name {
+    display: inline-block;
 }
 
-.logo-group:hover .logo-icon {
-    transform: rotate(10deg);
-}
-
-.logo-text h1 {
-    font-size: 20px;
+.logo-text {
+    font-size: 28px;
     font-weight: 700;
-    color: var(--color-primary);
-    margin: 0;
+    color: #24528F;
+    font-family: 'Outfit', sans-serif;
 }
 
-.logo-text p {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--color-secondary);
-    letter-spacing: 1px;
-    margin: 0;
-    text-transform: uppercase;
-}
-
-.logo-icon {
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(135deg, var(--color-primary) 0%, #1e40af 100%);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    box-shadow: var(--shadow-md);
-    transition: all 0.3s ease;
-}
-
-.logo-group:hover .logo-icon {
-    transform: rotate(10deg);
-}
-
-.logo-text h1 {
+.brand-name {
     font-size: 20px;
-    font-weight: 700;
-    color: var(--color-primary);
-    margin: 0;
-}
-
-.logo-text p {
-    font-size: 11px;
     font-weight: 600;
-    color: var(--color-secondary);
-    letter-spacing: 1px;
-    margin: 0;
-    text-transform: uppercase;
+    color: #24528F;
+    font-family: 'Outfit', sans-serif;
 }
 
-
-
-
+.divider {
+    width: 1px;
+    height: 28px;
+    background: #cbd5e1;
+}
 
 .nav-desktop {
     display: flex;
     align-items: center;
     gap: 32px;
+    margin-left: auto;
+    margin-right: 32px;
 }
 
 .nav-link {
@@ -176,6 +136,10 @@
 .btn-secondary:hover {
     background: var(--color-primary);
     color: white;
+}
+
+.auth-buttons .btn {
+    white-space: nowrap;
 }
 
 .btn-outline-secondary {
@@ -295,25 +259,22 @@
 }
 
 @media (max-width: 768px) {
-    .logo-group {
-        margin-left: 0;
+    .logo-wrap {
         gap: 8px;
         flex-shrink: 0;
         max-width: calc(100% - 60px);
-        /* Leave space for mobile toggle */
     }
 
-    .logo-group span {
-        font-size: 18px !important;
-        white-space: nowrap;
+    .logo-text {
+        font-size: 22px;
     }
 
-    .logo-group span:first-child {
-        font-size: 22px !important;
+    .brand-name {
+        font-size: 16px;
     }
 
-    .logo-group span:last-child {
-        font-size: 14px !important;
+    .divider {
+        height: 20px;
     }
 
     .nav-desktop,
@@ -333,19 +294,11 @@
 }
 
 @media (max-width: 480px) {
-    .logo-group span {
-        font-size: 16px !important;
+    .logo-text {
+        font-size: 20px;
     }
 
-    .logo-group span:first-child {
-        font-size: 20px !important;
-    }
-
-    .logo-group span:last-child {
-        font-size: 12px !important;
-    }
-
-    .logo-group .logo-separator {
-        margin: 0 6px !important;
+    .brand-name {
+        font-size: 14px;
     }
 }

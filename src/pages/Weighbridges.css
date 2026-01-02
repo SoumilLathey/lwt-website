@@ -1,0 +1,84 @@
+.installation-img,
+.type img {
+    width: 100%;
+    height: auto;
+    max-height: 450px;
+    object-fit: contain;
+    border-radius: 14px;
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.08);
+    display: block;
+    background: #f9f9f9;
+    /* Subtle background for handled aspect ratios */
+    margin: 20px 0;
+}
+
+.type {
+    display: grid;
+    grid-template-columns: 1.2fr 2fr;
+    gap: 30px;
+    align-items: center;
+    margin: 40px 0;
+}
+
+@media (max-width: 768px) {
+    .type {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}
+
+/* Premium Weighbridge Card Styles */
+.weighbridge-type-card {
+    display: grid;
+    grid-template-columns: 45% 55%;
+    gap: 32px;
+    align-items: center;
+    background: #ffffff;
+    padding: 32px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    margin-bottom: 40px;
+}
+
+.weighbridge-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.weighbridge-content h4 {
+    font-size: 22px;
+    margin-bottom: 12px;
+    color: #0f2f5c;
+    font-weight: 700;
+}
+
+.weighbridge-content p {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 16px;
+}
+
+.weighbridge-content ul {
+    padding-left: 18px;
+    color: #444;
+}
+
+.badge {
+    display: inline-block;
+    background: #eef4ff;
+    color: #1f4f8a;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+    .weighbridge-type-card {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        padding: 24px;
+    }
+}

@@ -12,10 +12,10 @@ const About = () => {
             />
 
             <section className="section container">
-                <div className="grid grid-cols-2 gap-8 items-center">
+                <div className="max-w-4xl mx-auto">
                     <motion.div
-                        initial={{ opacity: 0, x: -50 }}
-                        whileInView={{ opacity: 1, x: 0 }}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6 }}
                     >
@@ -27,18 +27,6 @@ const About = () => {
                         <p className="text-muted">
                             As industries increasingly moved toward cleaner energy, we extended our engineering expertise into solar EPC services, offering complete solutions for solar rooftop installations and ground-mounted solar power systems. Today, we operate across both precision engineering and clean energy, supporting diverse industrial requirements.
                         </p>
-                    </motion.div>
-                    <motion.div
-                        initial={{ opacity: 0, x: 50 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6 }}
-                        className="relative"
-                    >
-                        {/* Placeholder for About Image, using a colored block for now if image missing */}
-                        <div className="rounded-lg overflow-hidden shadow-xl bg-slate-200 h-80 flex items-center justify-center">
-                            <span className="text-muted">Office / Factory Image</span>
-                        </div>
                     </motion.div>
                 </div>
             </section>

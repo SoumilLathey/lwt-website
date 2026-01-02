@@ -60,9 +60,11 @@ router.post('/', authenticateToken, async (req, res) => {
             return res.status(400).json({ error: 'Subject and description are required' });
         }
 
+        const closureOtp = Math.floor(100000 + Math.random() * 900000).toString();
+
         const result = await runQuery(
-            'INSERT INTO complaints (userId, subject, description) VALUES (?, ?, ?)',
-            [req.user.userId, subject, description]
+            'INSERT INTO complaints (userId, subject, description, closureOtp) VALUES (?, ?, ?, ?)',
+            [req.user.userId, subject, description, closureOtp]
         );
 
         res.status(201).json({
@@ -212,9 +214,11 @@ router.post('/admin', authenticateToken, isAdmin, async (req, res) => {
             }
         }
 
+        const closureOtp = Math.floor(100000 + Math.random() * 900000).toString();
+
         const result = await runQuery(
-            'INSERT INTO complaints (userId, subject, description, createdBy) VALUES (?, ?, ?, ?)',
-            [user.id, subject, description, req.user.userId]
+            'INSERT INTO complaints (userId, subject, description, createdBy, closureOtp) VALUES (?, ?, ?, ?, ?)',
+            [user.id, subject, description, req.user.userId, closureOtp]
         );
 
         res.status(201).json({

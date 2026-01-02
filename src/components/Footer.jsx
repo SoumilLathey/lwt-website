@@ -26,7 +26,7 @@ const Footer = () => {
                         <ul className="footer-links">
                             <li><Link to="/" className="footer-link">Home</Link></li>
                             <li><Link to="/about" className="footer-link">About Us</Link></li>
-                            <li><Link to="/products" className="footer-link">Products</Link></li>
+                            <li><Link to="/products" className="footer-link">Weighing Equipments</Link></li>
                             <li><Link to="/solar-epc" className="footer-link text-secondary"><Sun size={14} /> Solar EPC</Link></li>
                             <li><Link to="/contact" className="footer-link">Contact</Link></li>
                         </ul>
@@ -38,7 +38,7 @@ const Footer = () => {
                         <ul className="footer-links">
                             <li><Link to="/weighbridges" className="footer-link">Weighbridges</Link></li>
                             <li><Link to="/scales" className="footer-link">Platform Scales</Link></li>
-                            <li><Link to="/automation" className="footer-link">Weighing Automation</Link></li>
+                            <li><Link to="/amc" className="footer-link">AMC</Link></li>
                             <li><Link to="/solar-epc" className="footer-link">Solar Power Plants</Link></li>
                             <li><Link to="/accessories" className="footer-link">Accessories</Link></li>
                         </ul>
@@ -49,11 +49,11 @@ const Footer = () => {
                         <h3>Get in Touch</h3>
                         <div className="footer-contact-item">
                             <MapPin size={20} className="shrink-0 text-secondary" />
-                            <span>123 Industrial Area, Phase II,<br />New Delhi, India - 110020</span>
+                            <span>40, Prem Prayag colony, Garh road,<br />Meerut, Uttar Pradesh, India - 250004</span>
                         </div>
                         <div className="footer-contact-item">
                             <Phone size={20} className="shrink-0 text-secondary" />
-                            <span>+91 98765 43210</span>
+                            <span>+91 92591 60644</span>
                         </div>
                         <div className="footer-contact-item">
                             <Mail size={20} className="shrink-0 text-secondary" />

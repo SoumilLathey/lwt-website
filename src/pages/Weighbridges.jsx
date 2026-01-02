@@ -3,6 +3,7 @@ import PageHeader from '../components/PageHeader';
 import { motion } from 'framer-motion';
 import { CheckCircle, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import './Weighbridges.css';
 
 const Weighbridges = () => {
     const features = [
@@ -60,73 +61,76 @@ const Weighbridges = () => {
         <div className="page-weighbridges">
             <PageHeader
                 title="Precision Weighbridges for Industrial Accuracy"
-                description="Lathey Weigh Trix designs and manufactures high-performance electronic weighbridges built to deliver accurate, reliable, and repeatable vehicle weighing across demanding industrial environments. Our weighbridges are engineered to handle heavy loads, continuous usage, and harsh operating conditions, making them ideal for industries where accuracy directly impacts cost control, compliance, and operational efficiency."
+                description="Lathey Weigh Trix designs and manufactures high-performance electronic weighbridges built to deliver accurate, reliable, and repeatable vehicle weighing across demanding industrial environments."
+                image="/images/weighbridge-bg.jpg"
             />
 
             {/* Problem Statement */}
-            <section className="section bg-slate-50">
-                <div className="container max-w-4xl">
+            <section className="section section-light">
+                <div className="container">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-center"
                     >
-                        <h2 className="text-3xl font-bold text-primary mb-6">Built for High-Load, High-Usage Environments</h2>
-                        <p className="text-muted text-lg mb-4">
-                            In industrial operations, inaccurate vehicle weighing can lead to:
+                        <h2 className="text-3xl font-bold text-primary">Built for High-Load, High-Usage Environments</h2>
+                        <p className="section-desc">
+                            In industrial operations, inaccurate vehicle weighing can lead to material loss, compliance issues, and inefficiency.
                         </p>
-                        <ul className="text-muted text-lg space-y-2 text-left max-w-2xl mx-auto">
-                            <li className="flex items-start gap-3">
-                                <span className="text-red-500 mt-1">•</span>
-                                <span>Material loss and billing discrepancies</span>
-                            </li>
-                            <li className="flex items-start gap-3">
-                                <span className="text-red-500 mt-1">•</span>
-                                <span>Compliance and audit challenges</span>
-                            </li>
-                            <li className="flex items-start gap-3">
-                                <span className="text-red-500 mt-1">•</span>
-                                <span>Inefficient logistics and inventory control</span>
-                            </li>
-                        </ul>
-                        <p className="text-muted text-lg mt-6">
-                            Our industrial weighbridges are designed to eliminate these risks through robust construction, precision load cells, and stable digital systems.
-                        </p>
+
+                        <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100 max-w-3xl">
+                            <h4 className="text-xl font-bold text-primary mb-4">Common Risks of Poor Weighing:</h4>
+                            <ul className="space-y-2">
+                                <li className="list-item">
+                                    <span className="text-red-500 font-bold">•</span>
+                                    <span className="text-muted">Material loss and billing discrepancies</span>
+                                </li>
+                                <li className="list-item">
+                                    <span className="text-red-500 font-bold">•</span>
+                                    <span className="text-muted">Compliance and audit challenges</span>
+                                </li>
+                                <li className="list-item">
+                                    <span className="text-red-500 font-bold">•</span>
+                                    <span className="text-muted">Inefficient logistics and inventory control</span>
+                                </li>
+                            </ul>
+                        </div>
                     </motion.div>
                 </div>
             </section>
 
             {/* Capacity Range */}
-            <section className="section container">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="max-w-4xl mx-auto"
-                >
-                    <h2 className="text-3xl font-bold text-primary mb-6">Weighbridge Capacity Range</h2>
-                    <p className="text-muted text-lg mb-6">
-                        We manufacture and supply electronic weighbridges ranging from <strong>5 to 200 tonnes</strong>, suitable for a wide variety of applications, including:
-                    </p>
-                    <div className="grid md:grid-cols-2 gap-4">
-                        {applications.map((app, index) => (
-                            <div key={index} className="flex items-center gap-3">
-                                <CheckCircle className="text-secondary flex-shrink-0" size={20} />
-                                <span className="text-muted">{app}</span>
-                            </div>
-                        ))}
-                    </div>
-                </motion.div>
+            <section className="section section-white">
+                <div className="container">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                    >
+                        <h2 className="text-3xl font-bold text-primary">Weighbridge Capacity Range</h2>
+                        <p className="section-desc">
+                            We manufacture and supply electronic weighbridges ranging from <strong>5 to 200 tonnes</strong>, suitable for a wide variety of applications.
+                        </p>
+                        <div className="grid-2">
+                            {applications.map((app, index) => (
+                                <div key={index} className="list-item">
+                                    <CheckCircle className="text-secondary flex-shrink-0" size={20} />
+                                    <span className="text-muted text-lg">{app}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </motion.div>
+                </div>
             </section>
 
             {/* Key Features */}
-            <section className="section bg-white">
+            <section className="section section-light">
                 <div className="container">
-                    <div className="text-center mb-12">
-                        <h2 className="text-3xl font-bold text-primary mb-4">Key Features</h2>
+                    <div className="mb-10">
+                        <h2 className="text-3xl font-bold text-primary">Key Features</h2>
+                        <p className="section-desc">Engineered for accuracy, durability, and ease of use.</p>
                     </div>
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                    <div className="card-grid">
                         {features.map((feature, index) => (
                             <motion.div
                                 key={index}
@@ -136,9 +140,9 @@ const Weighbridges = () => {
                                 transition={{ delay: index * 0.1 }}
                                 className="card"
                             >
-                                <div className="flex items-start gap-3 mb-3">
-                                    <CheckCircle className="text-secondary flex-shrink-0 mt-1" size={24} />
-                                    <h4 className="text-xl font-bold text-primary">{feature.title}</h4>
+                                <div className="flex items-center gap-3 mb-4">
+                                    <CheckCircle className="text-secondary flex-shrink-0" size={24} />
+                                    <h4 className="text-xl font-bold text-primary m-0">{feature.title}</h4>
                                 </div>
                                 <p className="text-muted">{feature.description}</p>
                             </motion.div>
@@ -148,94 +152,131 @@ const Weighbridges = () => {
             </section>
 
             {/* Types */}
-            <section className="section container">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="max-w-4xl mx-auto"
-                >
-                    <h2 className="text-3xl font-bold text-primary mb-6">Types of Weighbridges</h2>
-                    <p className="text-muted text-lg mb-6">
-                        We offer weighbridge solutions tailored to different site and operational requirements, including:
-                    </p>
-                    <div className="space-y-3">
-                        {types.map((type, index) => (
-                            <div key={index} className="flex items-center gap-3">
-                                <CheckCircle className="text-secondary flex-shrink-0" size={20} />
-                                <span className="text-muted text-lg">{type}</span>
-                            </div>
-                        ))}
-                    </div>
-                    <p className="text-muted text-lg mt-6">
-                        Each system is configured based on site conditions, traffic volume, and operational needs.
-                    </p>
-                </motion.div>
-            </section>
-
-            {/* Installation & Support */}
-            <section className="section bg-slate-50">
-                <div className="container max-w-4xl">
+            <section className="section section-white">
+                <div className="container">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                     >
-                        <h2 className="text-3xl font-bold text-primary mb-6">Installation & Support</h2>
-                        <p className="text-muted text-lg mb-6">
-                            Our services extend beyond manufacturing. We provide:
+                        <h2 className="text-3xl font-bold text-primary">Types of Weighbridges</h2>
+                        <p className="section-desc">
+                            We offer weighbridge solutions tailored to different site and operational requirements.
                         </p>
-                        <div className="grid md:grid-cols-2 gap-4 mb-6">
+
+                        <div className="flex flex-col gap-8">
+                            <div className="weighbridge-type-card">
+                                <div className="weighbridge-image">
+                                    <img src="/images/pitless-weighbridge.jpg" alt="Pitless Electronic Weighbridge Installation" />
+                                </div>
+
+                                <div className="weighbridge-content">
+                                    <span className="badge">Actual Site Installation</span>
+                                    <h4>Pitless Electronic Weighbridges</h4>
+                                    <p>
+                                        Pitless weighbridges are installed above ground level, offering easy maintenance,
+                                        better drainage, and faster installation. They are ideal for industries requiring frequent
+                                        cleaning and inspection.
+                                    </p>
+                                    <ul className="list-disc pl-5">
+                                        <li>Easy maintenance & cleaning</li>
+                                        <li>Superior drainage system</li>
+                                        <li>Faster site installation</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div className="weighbridge-type-card">
+                                <div className="weighbridge-image">
+                                    <img src="/images/pit-type-weighbridge.png" alt="Pit Type Weighbridge Installation" />
+                                </div>
+
+                                <div className="weighbridge-content">
+                                    <span className="badge">Actual Site Installation</span>
+                                    <h4>Pit-Type Weighbridges</h4>
+                                    <p>
+                                        Pit-type weighbridges are installed level with the ground, making them ideal for sites with limited space where vehicles need to move freely across the weighing area from multiple directions.
+                                    </p>
+
+                                    <ul className="list-disc pl-5">
+                                        <li>Flush ground installation</li>
+                                        <li>Ideal for space-constrained sites</li>
+                                        <li>Heavy-duty industrial design</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* Installation & Support */}
+            <section className="section section-light">
+                <div className="container">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                    >
+                        <h2 className="text-3xl font-bold text-primary">Installation & Support</h2>
+                        <p className="section-desc">
+                            Our services extend beyond manufacturing. We provide comprehensive support throughout the lifecycle of your weighing system.
+                        </p>
+
+                        <div className="grid-2">
                             {services.map((service, index) => (
-                                <div key={index} className="flex items-center gap-3">
+                                <div key={index} className="list-item">
                                     <CheckCircle className="text-secondary flex-shrink-0" size={20} />
-                                    <span className="text-muted">{service}</span>
+                                    <span className="text-muted text-lg">{service}</span>
                                 </div>
                             ))}
                         </div>
-                        <p className="text-muted text-lg">
-                            For long-term reliability, we also offer <Link to="/amc" className="text-secondary font-semibold hover:underline">Annual Maintenance Contracts (AMC)</Link> to ensure uninterrupted performance.
-                        </p>
+
+                        <div className="mt-8 bg-white p-6 rounded-lg border-l-4 border-secondary shadow-sm">
+                            <p className="text-muted text-lg m-0">
+                                For long-term reliability, we also offer <Link to="/amc" className="text-secondary font-semibold hover:underline">Annual Maintenance Contracts (AMC)</Link> to ensure uninterrupted performance.
+                            </p>
+                        </div>
                     </motion.div>
                 </div>
             </section>
 
             {/* Why Choose Us */}
-            <section className="section container">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="max-w-4xl mx-auto"
-                >
-                    <h2 className="text-3xl font-bold text-primary mb-6">Why Choose Lathey Weigh Trix Weighbridges?</h2>
-                    <div className="space-y-3">
-                        {whyChoose.map((reason, index) => (
-                            <div key={index} className="flex items-center gap-3">
-                                <CheckCircle className="text-secondary flex-shrink-0" size={20} />
-                                <span className="text-muted text-lg">{reason}</span>
-                            </div>
-                        ))}
-                    </div>
-                </motion.div>
-            </section>
-
-            {/* CTA */}
-            <section className="section bg-primary text-white">
-                <div className="container max-w-4xl text-center">
+            <section className="section section-white">
+                <div className="container">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                     >
-                        <h2 className="text-3xl font-bold mb-4">Looking for a reliable industrial weighbridge solution?</h2>
-                        <p className="text-lg mb-8 opacity-90">
+                        <h2 className="text-3xl font-bold text-primary">Why Choose Lathey Weigh Trix?</h2>
+                        <p className="section-desc">Proven expertise and commitment to quality.</p>
+
+                        <div className="grid-2">
+                            {whyChoose.map((reason, index) => (
+                                <div key={index} className="list-item">
+                                    <CheckCircle className="text-secondary flex-shrink-0" size={20} />
+                                    <span className="text-muted text-lg">{reason}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* CTA */}
+            <section className="section bg-primary text-white text-center">
+                <div className="container">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                    >
+                        <h2 className="text-3xl font-bold mb-4 text-white">Looking for a reliable industrial weighbridge solution?</h2>
+                        <p className="text-lg mb-8 opacity-90 text-white max-w-2xl mx-auto">
                             Get expert consultation tailored to your operational needs
                         </p>
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <Link to="/contact" className="btn bg-white text-primary hover:bg-slate-100">
-                                Get a Weighbridge Consultation <ArrowRight size={18} />
-                            </Link>
+                        <div className="flex justify-center">
                             <Link to="/contact" className="btn btn-outline border-white text-white hover:bg-white hover:text-primary">
                                 Request Technical Specifications
                             </Link>

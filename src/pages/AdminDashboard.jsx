@@ -224,6 +224,13 @@ const AdminDashboard = () => {
 
     const createEmployee = async (e) => {
         e.preventDefault();
+
+        const headers = getAuthHeader();
+        if (!headers.Authorization) {
+            alert('Session expired. Please log out and log in again.');
+            return;
+        }
+
         try {
             const formData = new FormData();
             formData.append('email', newEmployee.email);

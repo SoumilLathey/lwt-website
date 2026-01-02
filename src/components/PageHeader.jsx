@@ -2,11 +2,11 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import './PageHeader.css';
 
-const PageHeader = ({ title, description, badge, image = "/hero-bg.png" }) => {
+const PageHeader = ({ title, description, badge, image = "/hero-bg.png", imagePosition = "center" }) => {
     return (
         <div className="page-header">
             <div className="page-header-bg">
-                <img src={image} alt={title} className="page-header-img" />
+                <img src={image} alt={title} className="page-header-img" style={{ objectPosition: imagePosition }} />
                 <div className="page-header-overlay"></div>
             </div>
             <div className="page-header-content">

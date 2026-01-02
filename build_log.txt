@@ -1,0 +1,15 @@
+
+> lwtsite@0.0.0 build
+> vite build
+
+[36mvite v7.3.0 [32mbuilding client environment for production...[36m[39m
+transforming...
+[32m✓[39m 3 modules transformed.
+[31m✗[39m Build failed in 62ms
+[31merror during build:
+[31mCould not resolve "./index.css" from "src/main.jsx"[31m
+file: [36mC:/Users/soumi/OneDrive/Documents/LWT_Site/src/main.jsx[31m
+    at getRollupError (file:///C:/Users/soumi/OneDrive/Documents/LWT_Site/node_modules/rollup/dist/es/shared/parseAst.js:401:41)
+    at error (file:///C:/Users/soumi/OneDrive/Documents/LWT_Site/node_modules/rollup/dist/es/shared/parseAst.js:397:42)
+    at ModuleLoader.handleInvalidResolvedId (file:///C:/Users/soumi/OneDrive/Documents/LWT_Site/node_modules/rollup/dist/es/shared/node-entry.js:21628:24)
+    at file:///C:/Users/soumi/OneDrive/Documents/LWT_Site/node_modules/rollup/dist/es/shared/node-entry.js:21588:26[39m

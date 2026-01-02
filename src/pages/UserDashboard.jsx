@@ -340,6 +340,25 @@ const UserDashboard = () => {
                                                 </div>
                                                 <p className="complaint-description">{complaint.description}</p>
 
+                                                {complaint.closureOtp && (
+                                                    <div className="otp-display" style={{
+                                                        marginTop: '15px',
+                                                        padding: '15px',
+                                                        background: '#fffbeb',
+                                                        border: '1px solid #fcd34d',
+                                                        borderRadius: '8px',
+                                                        color: '#92400e',
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        alignItems: 'center',
+                                                        gap: '5px'
+                                                    }}>
+                                                        <span style={{ fontSize: '0.9em', textTransform: 'uppercase', fontWeight: '600', letterSpacing: '0.5px' }}>Closure OTP</span>
+                                                        <span style={{ fontSize: '1.8em', letterSpacing: '4px', fontWeight: 'bold', fontFamily: 'monospace' }}>{complaint.closureOtp}</span>
+                                                        <span style={{ fontSize: '0.85em', opacity: 0.9 }}>Share this code with the technician only when the issue is resolved.</span>
+                                                    </div>
+                                                )}
+
                                                 {complaint.assignedEmployeeName && (
                                                     <div style={{
                                                         backgroundColor: '#f8f9fa',

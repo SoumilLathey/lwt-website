@@ -1,0 +1,43 @@
+/* Solar EPC Page Styles */
+
+/* Solar Card Styling */
+.solar-card {
+    position: relative;
+    overflow: hidden;
+    /* Keep this to prevent image overflow on hover */
+}
+
+.solar-card img {
+    transition: transform 0.5s ease;
+}
+
+.solar-card:hover img {
+    transform: scale(1.05);
+}
+
+/* Responsive Grid for Solar Solutions */
+@media (max-width: 900px) {
+    .solar-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* Additional mobile optimizations */
+@media (max-width: 768px) {
+    .solar-grid {
+        gap: 24px !important;
+    }
+
+    /* Adjust padding on mobile */
+    .solar-card>div {
+        padding: 20px !important;
+    }
+
+    .solar-card h3 {
+        font-size: 20px !important;
+    }
+
+    .solar-card p {
+        font-size: 14px !important;
+    }
+}

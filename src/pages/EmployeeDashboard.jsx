@@ -170,10 +170,23 @@ const EmployeeDashboard = () => {
     };
 
     const updateStatus = async (type, id, status) => {
+        let otp = null;
+        if (type === 'complaint' && (status === 'Resolved' || status === 'Closed')) {
+            otp = prompt('Please enter the closure OTP provided by the client to verify resolution:');
+            if (otp === null) return; // User cancelled prompt
+            if (!otp.trim()) {
+                alert('OTP is required to resolve the complaint.');
+                return;
+            }
+        }
+
         try {
             const endpoint = type === 'complaint'
                 ? `${API_URL}/api/employees/complaints/${id}/status`
                 : `${API_URL}/api/employees/enquiries/${id}/status`;
+
+            const body = { status };
+            if (otp) body.otp = otp;
 
             const response = await fetch(endpoint, {
                 method: 'PATCH',
@@ -181,14 +194,19 @@ const EmployeeDashboard = () => {
                     'Content-Type': 'application/json',
                     ...getAuthHeader()
                 },
-                body: JSON.stringify({ status })
+                body: JSON.stringify(body)
             });
 
             if (response.ok) {
                 fetchData();
+                alert('Status updated successfully!');
+            } else {
+                const data = await response.json();
+                alert(data.error || 'Failed to update status');
             }
         } catch (error) {
             console.error('Update status error:', error);
+            alert('Failed to update status');
         }
     };
 

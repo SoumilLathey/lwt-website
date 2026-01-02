@@ -268,6 +268,18 @@ router.patch('/complaints/:id/status', authenticateToken, async (req, res) => {
             return res.status(404).json({ error: 'Complaint not found or not assigned to you' });
         }
 
+        const { otp } = req.body;
+
+        // Require OTP for closing/resolving
+        if (status === 'Resolved' || status === 'Closed') {
+            if (!otp) {
+                return res.status(400).json({ error: 'Closure OTP is required to close the complaint' });
+            }
+            if (String(otp).trim() !== String(complaint.closureOtp).trim()) {
+                return res.status(400).json({ error: 'Invalid OTP. Please ask the client for the correct code.' });
+            }
+        }
+
         await runQuery(
             'UPDATE complaints SET status = ?, updatedAt = CURRENT_TIMESTAMP WHERE id = ?',
             [status, id]

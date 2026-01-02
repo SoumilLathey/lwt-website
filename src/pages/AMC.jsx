@@ -65,154 +65,157 @@ const AMC = () => {
         <div className="page-amc">
             <PageHeader
                 title="Annual Maintenance Contracts for Uninterrupted Accuracy"
-                description="Lathey Weigh Trix offers Annual Maintenance Contracts (AMC) designed to ensure the continued accuracy, reliability, and performance of industrial weighing systems. Our AMC services help businesses minimize downtime, maintain compliance, and extend the operational life of weighbridges and industrial scales."
+                description="Lathey Weigh Trix offers Annual Maintenance Contracts (AMC) designed to ensure the continued accuracy, reliability, and performance of industrial weighing systems."
+                image="/images/amc-bg.jpg"
+                imagePosition="center 70%"
             />
 
             {/* Why Maintenance Matters */}
-            <section className="section bg-slate-50">
-                <div className="container max-w-4xl">
+            <section className="section section-light">
+                <div className="container">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-center"
                     >
-                        <h2 className="text-3xl font-bold text-primary mb-6">Why Maintenance Matters in Industrial Weighing</h2>
-                        <p className="text-muted text-lg mb-4">
-                            Over time, continuous usage, environmental conditions, and mechanical stress can affect weighing accuracy and system performance. Without regular maintenance, this can lead to:
+                        <h2 className="text-3xl font-bold text-primary">Why Maintenance Matters in Industrial Weighing</h2>
+                        <p className="section-desc">
+                            Continuous usage and environmental conditions can affect weighing accuracy. Without regular maintenance, risks increase significantly.
                         </p>
-                        <ul className="text-muted text-lg space-y-2 text-left max-w-2xl mx-auto">
-                            {problems.map((problem, index) => (
-                                <li key={index} className="flex items-start gap-3">
-                                    <span className="text-red-500 mt-1">•</span>
-                                    <span>{problem}</span>
-                                </li>
-                            ))}
-                        </ul>
-                        <p className="text-muted text-lg mt-6">
-                            Our weighbridge AMC services address these risks through scheduled maintenance and proactive support.
-                        </p>
+
+                        <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100 max-w-3xl">
+                            <h4 className="text-xl font-bold text-primary mb-4">Risks of Neglected Maintenance:</h4>
+                            <ul className="space-y-2">
+                                {problems.map((problem, index) => (
+                                    <li key={index} className="list-item">
+                                        <span className="text-red-500 font-bold">•</span>
+                                        <span className="text-muted">{problem}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </motion.div>
                 </div>
             </section>
 
             {/* What Our AMC Covers */}
-            <section className="section container">
-                <div className="text-center mb-12">
-                    <h2 className="text-3xl font-bold text-primary mb-4">What Our AMC Covers</h2>
-                    <p className="text-muted text-lg max-w-3xl mx-auto">
-                        Our Annual Maintenance Contracts are structured to provide complete peace of mind:
-                    </p>
-                </div>
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                    {coverage.map((item, index) => (
-                        <motion.div
-                            key={index}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: index * 0.1 }}
-                            className="card text-center"
-                        >
-                            <div className="inline-flex p-4 rounded-full bg-blue-50 text-secondary mb-4">
-                                <item.icon size={32} />
-                            </div>
-                            <h4 className="text-xl font-bold text-primary mb-3">{item.title}</h4>
-                            <p className="text-muted">{item.description}</p>
-                        </motion.div>
-                    ))}
+            <section className="section section-white">
+                <div className="container">
+                    <div className="mb-10">
+                        <h2 className="text-3xl font-bold text-primary">What Our AMC Covers</h2>
+                        <p className="section-desc">
+                            Our Annual Maintenance Contracts are structured to provide complete peace of mind.
+                        </p>
+                    </div>
+                    <div className="card-grid">
+                        {coverage.map((item, index) => (
+                            <motion.div
+                                key={index}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: index * 0.1 }}
+                                className="card"
+                            >
+                                <div className="inline-flex p-3 rounded-lg bg-blue-50 text-secondary mb-4 w-fit">
+                                    <item.icon size={28} />
+                                </div>
+                                <h4 className="text-xl font-bold text-primary">{item.title}</h4>
+                                <p className="text-muted">{item.description}</p>
+                            </motion.div>
+                        ))}
+                    </div>
                 </div>
             </section>
 
             {/* Equipment Covered */}
-            <section className="section bg-white">
-                <div className="container max-w-4xl">
+            <section className="section section-light">
+                <div className="container">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                     >
-                        <h2 className="text-3xl font-bold text-primary mb-6">Equipment Covered Under AMC</h2>
-                        <p className="text-muted text-lg mb-6">
-                            Our AMC services are available for:
+                        <h2 className="text-3xl font-bold text-primary">Equipment Covered Under AMC</h2>
+                        <p className="section-desc">
+                            Contracts can be tailored based on equipment type and usage intensity.
                         </p>
-                        <div className="space-y-3">
+                        <div className="grid-2">
                             {equipment.map((item, index) => (
-                                <div key={index} className="flex items-center gap-3">
+                                <div key={index} className="list-item">
                                     <CheckCircle className="text-secondary flex-shrink-0" size={20} />
                                     <span className="text-muted text-lg">{item}</span>
                                 </div>
                             ))}
                         </div>
-                        <p className="text-muted text-lg mt-6">
-                            Contracts can be tailored based on equipment type, usage intensity, and operational requirements.
-                        </p>
                     </motion.div>
                 </div>
             </section>
 
             {/* Benefits */}
-            <section className="section container">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="max-w-4xl mx-auto"
-                >
-                    <h2 className="text-3xl font-bold text-primary mb-6">Benefits of Choosing Our AMC Services</h2>
-                    <div className="grid md:grid-cols-2 gap-4">
-                        {benefits.map((benefit, index) => (
-                            <div key={index} className="flex items-center gap-3">
-                                <CheckCircle className="text-secondary flex-shrink-0" size={20} />
-                                <span className="text-muted text-lg">{benefit}</span>
-                            </div>
-                        ))}
-                    </div>
-                </motion.div>
-            </section>
-
-            {/* Why Choose Us */}
-            <section className="section bg-slate-50">
-                <div className="container max-w-4xl">
+            <section className="section section-white">
+                <div className="container">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                     >
-                        <h2 className="text-3xl font-bold text-primary mb-6">Why Choose Lathey Weigh Trix AMC?</h2>
-                        <div className="space-y-3 mb-6">
+                        <h2 className="text-3xl font-bold text-primary">Benefits of Our AMC Services</h2>
+                        <p className="section-desc">Maximize uptime and ensure compliance.</p>
+                        <div className="grid-2">
+                            {benefits.map((benefit, index) => (
+                                <div key={index} className="list-item">
+                                    <CheckCircle className="text-secondary flex-shrink-0" size={20} />
+                                    <span className="text-muted text-lg">{benefit}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* Why Choose Us */}
+            <section className="section section-light">
+                <div className="container">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                    >
+                        <h2 className="text-3xl font-bold text-primary">Why Choose Lathey Weigh Trix AMC?</h2>
+                        <p className="section-desc">
+                            Our preventive care approach helps businesses operate without disruption.
+                        </p>
+                        <div className="grid-2">
                             {whyChoose.map((reason, index) => (
-                                <div key={index} className="flex items-center gap-3">
+                                <div key={index} className="list-item">
                                     <CheckCircle className="text-secondary flex-shrink-0" size={20} />
                                     <span className="text-muted text-lg">{reason}</span>
                                 </div>
                             ))}
                         </div>
-                        <p className="text-muted text-lg">
-                            Our approach focuses on <strong>preventive care</strong> rather than reactive repairs, helping businesses operate without disruption.
-                        </p>
                     </motion.div>
                 </div>
             </section>
 
             {/* CTA */}
-            <section className="section bg-primary text-white">
-                <div className="container max-w-4xl text-center">
+            <section className="section bg-primary text-white text-center">
+                <div className="container">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                     >
-                        <h2 className="text-3xl font-bold mb-4">Looking to protect your investment and ensure reliable performance?</h2>
-                        <p className="text-lg mb-8 opacity-90">
+                        <h2 className="text-3xl font-bold mb-4 text-white">Looking to protect your investment?</h2>
+                        <p className="text-lg mb-8 opacity-90 text-white max-w-2xl mx-auto">
                             Get in touch to learn about our AMC plans and schedule a maintenance assessment
                         </p>
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                        <div className="flex justify-center gap-4">
                             <Link to="/contact" className="btn bg-white text-primary hover:bg-slate-100">
-                                Enquire About AMC Plans <ArrowRight size={18} />
+                                Enquire About AMC <ArrowRight size={18} />
                             </Link>
                             <Link to="/contact" className="btn btn-outline border-white text-white hover:bg-white hover:text-primary">
-                                Schedule a Maintenance Assessment
+                                Schedule Assessment
                             </Link>
                         </div>
                     </motion.div>

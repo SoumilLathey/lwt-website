@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import PageHeader from '../components/PageHeader';
 import SolarPopup from '../components/SolarPopup';
 import { motion } from 'framer-motion';
-import { Sun, Check, Zap, Home, Factory, Building2, ArrowRight, ChevronDown, ChevronUp } from 'lucide-react';
+import { Check, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import './SolarEPC.css';
+import { solarSolutions } from '../data/solarSolutions';
 
 const SolarEPC = () => {
-    const [openFAQ, setOpenFAQ] = useState(null);
+
 
     const epcServices = [
         {
@@ -31,34 +33,12 @@ const SolarEPC = () => {
         }
     ];
 
-    const solutions = [
-        {
-            icon: Factory,
-            title: "Industrial Rooftop Solar Systems",
-            description: "High-capacity rooftop solar plants designed for factories and industrial facilities to reduce energy costs and improve power reliability."
-        },
-        {
-            icon: Building2,
-            title: "Commercial Rooftop Solar Systems",
-            description: "Optimized solar rooftop solutions for commercial buildings, offices, institutions, and business parks.",
-            idealFor: ["Commercial complexes", "Offices and IT parks", "Educational and healthcare facilities"],
-            benefits: ["Reduced electricity expenses", "Predictable energy costs", "Efficient use of rooftop space"]
-        },
-        {
-            icon: Home,
-            title: "Residential Rooftop Solar Systems",
-            description: "Smart rooftop solar solutions designed for homes, villas, and residential buildings.",
-            idealFor: ["Individual homes", "Residential societies", "Independent houses"],
-            benefits: ["Lower monthly electricity bills", "Clean and sustainable energy", "Long-term savings with minimal maintenance"]
-        }
-    ];
-
     const whyChoose = [
-        "End-to-end EPC expertise under one roof",
-        "Engineering-driven system design",
-        "Use of high-quality, trusted solar components",
-        "Professional installation and commissioning",
-        "Long-term support and maintenance capability"
+        { text: "End-to-end EPC expertise under one roof" },
+        { text: "Engineering-driven system design" },
+        { text: "Use of high-quality, trusted solar components" },
+        { text: "Professional installation and commissioning" },
+        { text: "Long-term support and maintenance capability" }
     ];
 
     const faqs = [
@@ -76,11 +56,11 @@ const SolarEPC = () => {
         },
         {
             question: "How much space is required for a rooftop solar system?",
-            answer: "The required space depends on the plant size. On average, 1 kW of solar capacity requires 80–100 sq. ft. of shadow-free rooftop area."
+            answer: "The required space depends on the plant size. On average, 1 kW of solar capacity requires 30–40 sq. ft. of shadow-free rooftop area."
         },
         {
             question: "How long does it take to install a solar power system?",
-            answer: "Most rooftop solar installations are completed within 2–4 weeks, depending on system size, site readiness, and approvals."
+            answer: "Most rooftop solar installations are completed within 2–3 days (upto 10KW), depending on system size, site readiness, and approvals."
         },
         {
             question: "What is the typical lifespan of a solar power plant?",
@@ -102,90 +82,152 @@ const SolarEPC = () => {
             <PageHeader
                 title="Solar EPC Services"
                 description="Lathey Weigh Trix provides comprehensive Solar EPC (Engineering, Procurement, and Construction) services for industrial, commercial, and residential energy requirements. As an empanelled channel partner, we deliver reliable solar power systems designed for performance, cost efficiency, and long-term sustainability—from initial assessment to final commissioning."
+                image="/images/solar-farm-bg.jpg"
             />
 
-            {/* Concept to Commissioning */}
-            <section className="section container">
-                <div className="max-w-4xl mx-auto">
+            {/* Concept to Commissioning - Text Section */}
+            <section className="section bg-white">
+                <div className="container max-w-4xl">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
+                        className="mb-8"
                     >
-                        <h2 className="text-3xl font-bold text-primary mb-6 text-center">Concept to Commissioning</h2>
-                        <p className="text-muted text-lg mb-8 text-center">
+                        <h2 className="text-3xl font-bold text-primary mb-6">Concept to Commissioning</h2>
+                        <h3 className="text-xl font-semibold text-secondary mb-6">Complete Solar EPC Execution</h3>
+                        <p className="text-slate-600 text-lg leading-loose mb-8">
                             We manage the entire solar project lifecycle to ensure smooth execution, technical accuracy, and dependable outcomes.
                         </p>
-                        <div className="space-y-4">
-                            {epcServices.map((service, index) => (
-                                <motion.div
-                                    key={index}
-                                    initial={{ opacity: 0, x: -20 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ delay: index * 0.1 }}
-                                    className="flex items-start gap-4 p-4 bg-white rounded-lg shadow-sm"
-                                >
-                                    <Check className="text-green-500 flex-shrink-0 mt-1" size={24} />
-                                    <div>
-                                        <h4 className="font-bold text-primary mb-1">{service.title}</h4>
-                                        <p className="text-muted">{service.description}</p>
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </div>
+                        <p className="font-bold text-slate-800 mb-8 text-lg">Our Solar EPC services include:</p>
                     </motion.div>
+
+                    <ul className="list-none space-y-10">
+                        {epcServices.map((service, index) => (
+                            <motion.li
+                                key={index}
+                                initial={{ opacity: 0, x: -20 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: index * 0.1 }}
+                                className="relative pl-8"
+                            >
+                                {/* Custom Bullet Point */}
+                                <span className="absolute left-0 top-[0.6rem] w-3 h-3 bg-secondary rounded-full"></span>
+
+                                <h4 className="text-xl font-bold text-slate-800 mb-3 leading-relaxed">{service.title}</h4>
+                                <p className="text-slate-600 text-lg leading-loose">
+                                    {service.description}
+                                </p>
+                            </motion.li>
+                        ))}
+                    </ul>
                 </div>
             </section>
 
             {/* Solar Solutions We Offer */}
             <section className="section bg-slate-50">
-                <div className="container">
-                    <div className="text-center mb-12">
-                        <h2 className="text-3xl font-bold text-primary mb-4">Solar Solutions We Offer</h2>
+                <div className="container" style={{ maxWidth: '1280px', margin: 'auto', padding: '40px 24px' }}>
+                    <div className="text-center mb-16">
+                        <h2 className="text-2xl font-bold text-primary mb-2">Solar Solutions We Offer</h2>
+                        <p className="text-sm text-muted">Click on any solution to learn more</p>
                     </div>
-                    <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                        {solutions.map((solution, index) => (
-                            <motion.div
-                                key={index}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: index * 0.1 }}
-                                className="card"
-                            >
-                                <div className="inline-flex p-4 rounded-full bg-amber-50 text-amber-500 mb-4">
-                                    <solution.icon size={32} />
-                                </div>
-                                <h3 className="text-xl font-bold text-primary mb-3">{solution.title}</h3>
-                                <p className="text-muted mb-4">{solution.description}</p>
-                                {solution.idealFor && (
-                                    <>
-                                        <p className="font-semibold text-primary text-sm mb-2">Ideal for:</p>
-                                        <ul className="text-muted text-sm space-y-1 mb-4">
-                                            {solution.idealFor.map((item, idx) => (
-                                                <li key={idx} className="flex items-start gap-2">
-                                                    <span className="text-secondary mt-1">•</span>
-                                                    <span>{item}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </>
-                                )}
-                                {solution.benefits && (
-                                    <>
-                                        <p className="font-semibold text-primary text-sm mb-2">Benefits:</p>
-                                        <ul className="text-muted text-sm space-y-1">
-                                            {solution.benefits.map((item, idx) => (
-                                                <li key={idx} className="flex items-start gap-2">
-                                                    <Check className="text-green-500 flex-shrink-0 mt-0.5" size={14} />
-                                                    <span>{item}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </>
-                                )}
-                            </motion.div>
+                    <div
+                        style={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(2, 1fr)',
+                            gap: '40px',
+                            alignItems: 'stretch'
+                        }}
+                        className="solar-grid"
+                    >
+                        {solarSolutions.map((solution, index) => (
+                            <Link to={`/solar-epc/${solution.id}`} key={index}>
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: index * 0.1 }}
+                                    className="solar-card group relative cursor-pointer transform transition-all duration-300 hover:shadow-2xl h-full flex flex-col"
+                                    style={{
+                                        borderRadius: '16px',
+                                        boxShadow: '0 8px 24px rgba(0,0,0,0.08)',
+                                        background: '#ffffff'
+                                    }}
+                                >
+                                    {/* Background Image */}
+                                    <div className="overflow-hidden rounded-t-2xl">
+                                        <img
+                                            src={solution.heroImage}
+                                            alt={solution.title}
+                                            className="w-full transition-transform duration-500 group-hover:scale-105"
+                                            style={{
+                                                height: '260px',
+                                                objectFit: 'cover',
+                                                display: 'block'
+                                            }}
+                                        />
+                                    </div>
+
+                                    {/* White Content Section Below Image */}
+                                    <div
+                                        style={{
+                                            padding: '24px',
+                                            background: '#ffffff',
+                                            borderRadius: '0 0 16px 16px',
+                                            flex: 1,
+                                            display: 'flex',
+                                            flexDirection: 'column'
+                                        }}
+                                    >
+                                        <div className="mb-4 w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center">
+                                            {React.createElement(solution.icon, {
+                                                size: 24,
+                                                className: "text-[#005f99]" // Using primary blue color directly or use text-primary if defined in CSS
+                                            })}
+                                        </div>
+
+                                        <h3
+                                            style={{
+                                                fontSize: '22px',
+                                                fontWeight: '700',
+                                                marginBottom: '8px',
+                                                color: '#0f172a'
+                                            }}
+                                        >
+                                            {solution.title}
+                                        </h3>
+
+                                        <p
+                                            style={{
+                                                fontSize: '15px',
+                                                color: '#475569',
+                                                lineHeight: '1.6',
+                                                marginBottom: '16px',
+                                                flex: 1
+                                            }}
+                                        >
+                                            {solution.subtitle}
+                                        </p>
+
+                                        <div
+                                            className="transition-all duration-300 group-hover:scale-110"
+                                            style={{
+                                                width: '40px',
+                                                height: '40px',
+                                                borderRadius: '50%',
+                                                background: '#f59e0b',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                marginTop: 'auto'
+                                            }}
+                                        >
+                                            <ArrowRight size={18} color="white" />
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            </Link>
                         ))}
                     </div>
                 </div>
@@ -204,7 +246,7 @@ const SolarEPC = () => {
                         {whyChoose.map((reason, index) => (
                             <div key={index} className="flex items-center gap-3">
                                 <Check className="text-secondary flex-shrink-0" size={20} />
-                                <span className="text-muted text-lg">{reason}</span>
+                                <span className="text-muted text-lg">{reason.text}</span>
                             </div>
                         ))}
                     </div>
@@ -214,8 +256,10 @@ const SolarEPC = () => {
                 </motion.div>
             </section>
 
+
+
             {/* Authorised Reseller */}
-            <section className="section bg-slate-50">
+            <section className="section bg-slate-50 overflow-hidden">
                 <div className="container">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -229,43 +273,64 @@ const SolarEPC = () => {
                             We work with leading and trusted solar brands to ensure quality, performance, and reliability across every project.
                         </p>
                     </motion.div>
+                </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
-                        {[
-                            { name: 'Waaree', logo: '/waaree-logo.png' },
-                            { name: 'Reliance New Energy', logo: '/reliance-logo.png' },
-                            { name: 'Tata Power Solar', logo: '/tata-logo.png' },
-                            { name: 'Havells', logo: '/havells-logo.png' },
-                            { name: 'Adani Solar', logo: '/adani-logo.png' },
-                            { name: 'Deye', logo: '/deye-logo.png' },
-                            { name: 'Hitachi Energy', logo: '/hitachi-logo.png' },
-                            { name: 'Solis', logo: '/solis-logo.png' }
-                        ].map((brand, index) => (
-                            <motion.div
-                                key={index}
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: index * 0.05 }}
-                                whileHover={{ scale: 1.05 }}
-                                className="bg-white p-6 rounded-xl shadow-sm flex items-center justify-center min-h-[100px]"
-                            >
-                                <img
-                                    src={brand.logo}
-                                    alt={brand.name}
-                                    className="max-w-full max-h-16 object-contain"
-                                />
-                            </motion.div>
-                        ))}
+                <div className="relative w-full overflow-hidden py-8">
+                    <div className="absolute left-0 top-0 bottom-0 w-24 z-10 bg-gradient-to-r from-slate-50 to-transparent pointer-events-none"></div>
+                    <div className="absolute right-0 top-0 bottom-0 w-24 z-10 bg-gradient-to-l from-slate-50 to-transparent pointer-events-none"></div>
+
+                    <div className="flex justify-center">
+                        <motion.div
+                            className="flex gap-24 items-center w-max"
+                            animate={{
+                                x: [0, -2688]
+                            }}
+                            transition={{
+                                x: {
+                                    repeat: Infinity,
+                                    repeatType: "loop",
+                                    duration: 30,
+                                    ease: "linear"
+                                }
+                            }}
+                        >
+                            {/* Triple set of logos for extra smooth infinite loop */}
+                            {[...Array(3)].map((_, setIndex) => (
+                                <div key={setIndex} className="flex gap-24">
+                                    {[
+                                        { name: 'Brand 1', logo: '/brands/brand-1.png' },
+                                        { name: 'Brand 2', logo: '/brands/brand-2.png' },
+                                        { name: 'Brand 3', logo: '/brands/brand-3.png' },
+                                        { name: 'Brand 4', logo: '/brands/brand-4.png' },
+                                        { name: 'Brand 5', logo: '/brands/brand-5.png' },
+                                        { name: 'Brand 6', logo: '/brands/brand-6.png' },
+                                        { name: 'Brand 7', logo: '/brands/brand-7.png' },
+                                        { name: 'Brand 8', logo: '/brands/brand-8.png' }
+                                    ].map((brand, index) => (
+                                        <div
+                                            key={`${setIndex}-${index}`}
+                                            className="bg-white p-4 rounded-lg shadow-sm border border-slate-200 flex items-center justify-center h-[140px] w-[240px] flex-shrink-0"
+                                        >
+                                            <img
+                                                src={brand.logo}
+                                                alt={brand.name}
+                                                className="h-[90px] w-[180px] object-contain"
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            ))}
+                        </motion.div>
                     </div>
                 </div>
             </section>
 
             {/* FAQs */}
+            {/* FAQs */}
             <section className="section container">
-                <div className="max-w-3xl mx-auto">
-                    <h2 className="text-3xl font-bold text-primary mb-8 text-center">Frequently Asked Questions</h2>
-                    <div className="space-y-4">
+                <div className="max-w-4xl mx-auto">
+                    <h2 className="text-3xl font-bold text-primary mb-8 text-center">Recently Asked Questions</h2>
+                    <div className="space-y-6">
                         {faqs.map((faq, index) => (
                             <motion.div
                                 key={index}
@@ -273,24 +338,17 @@ const SolarEPC = () => {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.05 }}
-                                className="bg-white rounded-lg shadow-sm overflow-hidden"
+                                className="bg-white rounded-lg shadow-sm border border-slate-100 p-6"
                             >
-                                <button
-                                    onClick={() => setOpenFAQ(openFAQ === index ? null : index)}
-                                    className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-slate-50 transition-colors"
-                                >
-                                    <span className="font-semibold text-primary">{faq.question}</span>
-                                    {openFAQ === index ? (
-                                        <ChevronUp className="text-secondary flex-shrink-0" size={20} />
-                                    ) : (
-                                        <ChevronDown className="text-secondary flex-shrink-0" size={20} />
-                                    )}
-                                </button>
-                                {openFAQ === index && (
-                                    <div className="px-6 pb-4">
-                                        <p className="text-muted">{faq.answer}</p>
-                                    </div>
-                                )}
+                                <div className="mb-4">
+                                    <h3 className="text-lg font-semibold text-slate-800">Q. {faq.question}</h3>
+                                </div>
+
+                                <div className="bg-slate-50 rounded-lg p-4 border border-slate-100">
+                                    <p className="text-slate-600 text-sm leading-relaxed">
+                                        {faq.answer}
+                                    </p>
+                                </div>
                             </motion.div>
                         ))}
                     </div>
