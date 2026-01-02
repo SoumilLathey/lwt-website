@@ -470,9 +470,11 @@ router.put('/users/:id', authenticateToken, isAdmin, async (req, res) => {
 // Get all admins (admin only)
 router.get('/admins', authenticateToken, isAdmin, async (req, res) => {
     try {
+        console.log('Fetching admins...');
         const admins = await allQuery(
             'SELECT id, email, name, phone, isAdmin, isVerified, createdAt FROM users WHERE isAdmin = 1 ORDER BY name ASC'
         );
+        console.log('Admins found:', admins);
         res.json(admins);
     } catch (error) {
         console.error('Get admins error:', error);
