@@ -5,11 +5,12 @@ import './UserStories.css';
 const UserStories = () => {
     const stories = [
         {
-            id: 1,
-            name: "Rahul Sharma",
-            role: "Plant Manager, ABC Industries",
-            quote: "Lathey Weigh Trix provided us with a weighbridge solution that has significantly improved our logistics efficiency. The precision and durability are unmatched.",
-            initials: "RS"
+            id: 8,
+            name: "Vijay Sharma",
+            role: "G.M, Delhi Electric Company",
+            quote: "A robust and precise weighing solution that supports our daily cable production and logistics efficiently.",
+            initials: "VS",
+            image: "/images/testimonials/vijay-sharma.png"
         },
         {
             id: 2,
@@ -27,13 +28,7 @@ const UserStories = () => {
             initials: "KP",
             image: "/images/testimonials/kanti-prasad.jpg"
         },
-        {
-            id: 4,
-            name: "Amit Kumar",
-            role: "CEO, TechBuild Construct",
-            quote: "The installation was executed professionally, and the solar system is delivering consistent performance with noticeable savings on energy costs.",
-            initials: "AK"
-        },
+
         {
             id: 5,
             name: "Rajat Bhattar",
@@ -44,10 +39,11 @@ const UserStories = () => {
         },
         {
             id: 6,
-            name: "Rajesh Verma",
-            role: "MD, Verma Transport",
-            quote: "Reliable, accurate, and robust. That's how I describe their weighing scales. Their after-sales support is also very responsive.",
-            initials: "RV"
+            name: "K.B. Sharma",
+            role: "VP Cane LH Sugar Factories, Pilibhit",
+            quote: "We have been using LWT’s weighing solutions in our sugar industry operations since 2007. Their equipment has consistently delivered accuracy and dependable performance.",
+            initials: "KS",
+            image: "/images/testimonials/kb-sharma.jpg"
         },
         {
             id: 7,
@@ -58,18 +54,12 @@ const UserStories = () => {
             image: "/images/testimonials/umakant.jpg"
         },
         {
-            id: 8,
-            name: "Mohd. Irfan",
-            role: "Owner, Irfan Agro",
-            quote: "Best solar water pump solution in the market. It has solved our irrigation problems completely. Thank you Lathey Weigh Trix team.",
-            initials: "MI"
-        },
-        {
-            id: 3,
-            name: "Vikram Singh",
-            role: "Director, Green Fields Logistics",
-            quote: "We've been using their industrial scales for over 5 years. The support and service are excellent, and the product quality speaks for itself.",
-            initials: "VS"
+            id: 1,
+            name: "Modi Sugar Industries",
+            role: "Public Limited Company",
+            quote: "The products are reliable, accurate, and well-engineered. The team provides professional service and dependable long-term support.",
+            initials: "MS",
+            image: "/images/testimonials/modi-sugar.png"
         }
     ];
 
